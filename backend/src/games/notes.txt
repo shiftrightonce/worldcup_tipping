@@ -1,0 +1,70 @@
+Stages:
+  - group stage
+  - round 16
+  - round (quarter finals) 8
+  - round (Semi final) 4
+  - third place
+  - final
+
+- Qatar time zone:
+  - Arabia Standard Time
+  - utc + 3
+  - AST Arabia
+
+Betting strategy
+  - Each bet should not be on the day of the game.
+  - If one penalty prediction is high, you loose all the points 
+  - if one penalty prediction is low or equal to the goals you get the points
+  - Add the ability for the system to generate random entry for each tip entry.
+  - At the cut off time, generate a random entry for tips that are unfilled. This should happen for only or at most 5 matches.
+
+Stages info:
+    - group stage:
+      - date: Monday 21 November to Friday 2 December
+      - user can bet on:
+         - who will win each match: 1pts
+         - how many goals each team will score in a match: 1pts for each correct prediction per team
+         - final position in the group: 5pt for each correct correct ans
+
+    - round 16:
+      - date: Saturday 3 December to Tuesday 6 December
+      - user can bet on:
+         - who will win each match: 10pts
+         - how many goals each team will score in a match: 20pts for each correct prediction
+         - will end with a penalty kick off: 10pts
+         - penalty goal by each team: 10pts for each each correct prediction
+
+    - round (quarter finals) 8 
+      - date: Friday 9 December to Saturday 10 December
+      - user can bet on:
+         - who will win each match: 10pts
+         - how many goals each team will score in a match: 25pts for each correct prediction
+         - will end with a penalty kick off: 5pts
+         - penalty goal by each team: 25pts for each each correct prediction
+    
+    - round (Semi final) 4
+      - date: Tuesday 13 December to Wednesday 14 December
+      - user can bet on:
+         - who will win each match: 10pts
+         - how many goals each team will score in a match: 25pts for each correct prediction
+         - will end with a penalty kick off: 5pts
+         - penalty goal by each team: 30pts for each each correct prediction
+
+    - third place
+      - date: Saturday 17 December to Saturday 17 December
+      - user can bet on:
+         - who will win each match: 10pts
+         - how many goals each team will score in a match: 25pts for each correct prediction
+         - will end with a penalty kick off: 5pts
+         - penalty goal by each team: 35pts for each each correct prediction
+    - final 
+      - date: Saturday 18 December to Saturday 19 December
+      - user can bet on:
+         - who will win each match: 10pts
+         - how many goals each team will score in a match: 25pts for each correct prediction
+         - will end with a penalty kick off: 10pts
+         - penalty goal by each team: 40pts for each each correct prediction
+
+  
+Group stage qualifying
+The two teams finishing first and second in each group qualify for the round of 16.

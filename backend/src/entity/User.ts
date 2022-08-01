@@ -6,13 +6,16 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    firstName: string
+    @Column({ length: 255 })
+    username: string
 
-    @Column()
-    lastName: string
+    @Column({ length: 255, default: ''})
+    email: string;
 
-    @Column()
-    age: number
+    @Column({length: 128 })
+    password: string;
+
+    @Column({length: 64 })
+    token: string
 
 }

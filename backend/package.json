@@ -19,6 +19,8 @@
    "scripts": {
       "start": "ts-node src/index.ts",
       "start:dev": "npx nodemon -w './src/**' -e 'js,mjs,json,ts' -x npx ts-node ./src/index.ts",
+      "p:test": "ts-node src/games/parser/test.ts",
+      "db:setup": "ts-node src/tools/setup.ts",
       "typeorm": "typeorm-ts-node-commonjs"
    }
 }
