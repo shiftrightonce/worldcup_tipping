@@ -1,3 +1,7 @@
+Data info:
+Date should be in the format: YYYY-MM-DD 
+Time should be in teh format: HH:MMZ or HH:MM[+,-]Offset
+
 Stages:
   - group stage
   - round 16

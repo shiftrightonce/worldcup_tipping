@@ -4,8 +4,8 @@ export default [
   {
     number: 63,
     match: "Looser:61 v. Looser:62",
-    date: '12/17/2022',
-    time: '19:00',
+    date: '2022-12-17',
+    time: '19:00+03:00',
     penalty: true
   }
 ];
