@@ -44,7 +44,6 @@ const setupGroupMatches = async (yearData: YearData) => {
     const matches = getParsedGroupMatches(yearData);
     for (const entry of matches) {
       const match = new Match();
-      match.date = new Date(entry.date);
       match.countryA = countries[entry.countries[0]];
       match.countryB = countries[entry.countries[1]];
       match.match = entry.match;
@@ -52,11 +51,8 @@ const setupGroupMatches = async (yearData: YearData) => {
       match.penalty = entry.penalty;
       match.year = year;
       match.number = entry.number;
+      match.setDateAndTime(entry.date, entry.time);
 
-      const pices = entry.time.split(':');
-      pices[0] = (parseInt(pices[0], 10) + 3).toString();
-
-      match.time = `${pices[0]}:${pices[1]}`;
       await matchRepo.save(match)
     }
   }
