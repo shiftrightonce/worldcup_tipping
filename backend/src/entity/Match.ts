@@ -52,11 +52,11 @@ export class Match {
   @Column({ length: 128 })
   match: string; // match as a string eg: A1 vs A2
 
-  @ManyToMany(() => Country, { nullable: true } )
+  @ManyToMany(() => Country, { nullable: true })
   @JoinColumn()
   countryA: Country;
 
-  @ManyToMany(() => Country, { nullable: true } )
+  @ManyToMany(() => Country, { nullable: true })
   @JoinColumn()
   countryB: Country;
 
@@ -73,12 +73,19 @@ export class Match {
   countryAPenaltyGoals: number;
 
   @Column({ default: 0 })
-  countryBPenaltyGoals: number; 
+  countryBPenaltyGoals: number;
 
-  @ManyToMany(() => Country, { nullable: true } )
+  @ManyToMany(() => Country, { nullable: true })
   @JoinColumn()
-  winner: Country; 
+  winner: Country;
 
   @Column({ type: 'date', nullable: true })
   toConfigureOn: Date
+
+  setDateAndTime (date: string, time: string): this {
+    const dt = new Date(new Date(`${date}T${time}`).toUTCString());
+    this.date = dt;
+    this.time = `${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
+    return this;
+  }
 }
