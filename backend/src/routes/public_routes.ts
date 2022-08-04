@@ -8,6 +8,7 @@ const baseEndpoint = '/';
 
 const routes = [
   buildRoute(PublicController, 'loginAction', 'post', '/user/login'),
+  buildRoute(PublicController, 'logoutAction', 'get', '/user/logout'),
 ];
 
 export default function setup (app: Application) {
