@@ -1,11 +1,37 @@
-import { UsingJoinColumnIsNotAllowedError } from "typeorm";
 import { AppDataSource } from "../data-source"
 import { Country } from "../entity/Country";
 import { Match, MatchRound, MatchStatus } from "../entity/Match";
-import { getParsedGroupMatches, getParsedCountries, getData, year, YearData } from '../games/parser'
+import { User, UserRole } from "../entity/User";
+import {
+  getParsedGroupMatches,
+  getParsedCountries,
+  getData,
+  year,
+  YearData,
+  Match as ParsedMatchType,
+  getParsedRound16Matches,
+  getParsedRound8Matches,
+  getParsedRound4Matches,
+  getParsedThirdPlaceMatches,
+  getParsedFinalMatches
+} from '../games/parser'
 
 
 const countries = {};
+
+const setupAdminUser = async () => {
+  const userRepo = AppDataSource.getRepository(User);
+  let existing = await userRepo.findOneBy({ username: 'admin' });
+  if (!existing) {
+    const user = new User();
+    user.email = 'admin@example.com';
+    user.role = UserRole.ADMIN;
+    user.username = 'admin';
+    user.password = 'changeme';
+
+    await userRepo.save(user);
+  }
+}
 
 const setupCountries = async (yearData: YearData) => {
   const countryRepo = AppDataSource.getRepository(Country);
@@ -33,6 +59,32 @@ const setupCountries = async (yearData: YearData) => {
   });
 }
 
+export const insertMatches = async (matches: Array<ParsedMatchType & { countries: string[] }>, round: MatchRound) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  for (const entry of matches) {
+    const match = new Match();
+    if (entry.countries.length === 2) {
+      match.countryA = countries[entry.countries[0]];
+      match.countryB = countries[entry.countries[1]];
+    }
+
+    match.match = entry.match;
+    match.status = MatchStatus.PENDING;
+    match.penalty = entry.penalty;
+    match.year = year;
+    match.number = entry.number;
+    match.round = round;
+    match.setDateAndTime(entry.date, entry.time);
+
+    if (round !== MatchRound.GROUP) {
+      const configDate = new Date(match.date.toUTCString());
+      configDate.setDate(configDate.getDate() - 2);  // configuration is two days before the match
+      match.toConfigureOn = configDate;
+    }
+
+    await matchRepo.save(match)
+  }
+}
 const setupGroupMatches = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
 
@@ -42,25 +94,74 @@ const setupGroupMatches = async (yearData: YearData) => {
 
   if (totalGroupMatches === 0) {
     const matches = getParsedGroupMatches(yearData);
-    for (const entry of matches) {
-      const match = new Match();
-      match.countryA = countries[entry.countries[0]];
-      match.countryB = countries[entry.countries[1]];
-      match.match = entry.match;
-      match.status = MatchStatus.PENDING;
-      match.penalty = entry.penalty;
-      match.year = year;
-      match.number = entry.number;
-      match.setDateAndTime(entry.date, entry.time);
-
-      await matchRepo.save(match)
-    }
+    await insertMatches(matches, MatchRound.GROUP);
   }
 
 }
 
+const setupRound16Matches = async (yearData: YearData) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  const totalRound16Matches = await matchRepo.countBy({
+    round: MatchRound.ROUND_16
+  });
+
+  if (totalRound16Matches === 0) {
+    const fakeGroupWin = { fake: { winner: '', runnerUp: '' } }; // we don't have any group match winners at this point
+    return await insertMatches(getParsedRound16Matches(fakeGroupWin, yearData), MatchRound.ROUND_16);
+  }
+}
+
+const setupRound8Matches = async (yearData: YearData) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  const total = await matchRepo.countBy({
+    round: MatchRound.ROUND_8
+  });
+
+  if (total === 0) {
+    const fakeRound16Winners = {}
+    return await insertMatches(getParsedRound8Matches(fakeRound16Winners, yearData), MatchRound.ROUND_8)
+  }
+}
+
+const setupRound4Matches = async (yearData: YearData) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  const total = await matchRepo.countBy({
+    round: MatchRound.ROUND_4
+  });
+  if (total === 0) {
+    const fakeRound8Winners = {}
+    return await insertMatches(getParsedRound4Matches(fakeRound8Winners, yearData), MatchRound.ROUND_4);
+  }
+}
+
+const setup3rdPlaceMatch = async (yearData: YearData) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  const total = await matchRepo.countBy({
+    round: MatchRound.THIRD_PLACE
+  });
+  if (total === 0) {
+    const fakeRound4WinnersAndLoosers = { 1000: { winner: '', looser: '' } };
+    return await insertMatches(getParsedThirdPlaceMatches(fakeRound4WinnersAndLoosers, yearData), MatchRound.THIRD_PLACE);
+  }
+}
+
+const setupFinalMatch = async (yearData: YearData) => {
+  const matchRepo = AppDataSource.getRepository(Match)
+  const total = await matchRepo.countBy({
+    round: MatchRound.FINAL
+  });
+
+  if (total === 0) {
+    const fakeRound4WinnersAndLoosers = { 1000: { winner: '', looser: '' } };
+    return await insertMatches(getParsedFinalMatches(fakeRound4WinnersAndLoosers, yearData), MatchRound.FINAL);
+  }
+}
+
 AppDataSource.initialize().then(async (dataSource) => {
   const yearData = await getData();
+
+  // 0. setup user
+  await setupAdminUser();
 
   // 1. setup countries
   await setupCountries(yearData);
@@ -68,7 +169,20 @@ AppDataSource.initialize().then(async (dataSource) => {
   // 2. setup group matches
   await setupGroupMatches(yearData);
 
-  // console.log(getParsedGroupMatches(yearData))
+  // 3. setup round 16 matches. A cron/schedule job will update the countries after group matches
+  await setupRound16Matches(yearData);
+
+  // 4. sertup round 8 matches. A cron/schedule job will update the countries after round 16 matches
+  await setupRound8Matches(yearData);
+
+  // 5. setup round 4 matches. A cron/schedule job will update the countries after round 8 matches
+  await setupRound4Matches(yearData);
+
+  // 6. setup third place matches. A cron/scedule job will update the countries after round 4
+  await setup3rdPlaceMatch(yearData);
+
+  // 7. setup final match. A cron/schedule job will update the countries after round 4
+  await setupFinalMatch(yearData);
 
   // completed
   dataSource.destroy();
