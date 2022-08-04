@@ -18,6 +18,9 @@ export class Country {
   @Column({ length: 5 })
   short: string;
 
+  @Column({ default: 0 })
+  groupPoints: number;
+
   @Column()
   image: string;
 
