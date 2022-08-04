@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from "typeorm"
+import { generateToken, hashPassword } from "../service/user_service";
+
+export enum UserRole {
+    USER = 'user',
+    ADMIN = 'admin'
+}
 
 @Entity()
 export class User {
