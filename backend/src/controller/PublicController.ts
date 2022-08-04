@@ -1,5 +1,4 @@
-import { NextFunction, Request, Response } from "express"
-import { AppDataSource } from '../data-source'
+import { NextFunction, Request, Response, CookieOptions } from "express"
 import { checkPassword, generateAuthCookie, getUserRepo } from "../service/user_service";
 
 export class PublicController {
@@ -14,8 +13,13 @@ export class PublicController {
     });
 
     if (user && checkPassword(user, password)) {
+      const cookieOptions: CookieOptions = {
+        sameSite: 'none',
+        secure: true,
+        signed: true
+      }
       const cookie = generateAuthCookie(user);
-      res.cookie('_t', cookie).json({
+      res.cookie('_t', cookie, cookieOptions).json({
         success: true,
         user
       });
@@ -27,5 +31,17 @@ export class PublicController {
       code: 'posted_data_incorrect',
       message: errorMessage
     });
+  }
+
+  public logoutAction (_: Request, res: Response) {
+    const cookieOptions: CookieOptions = {
+      sameSite: 'none',
+      secure: true,
+      signed: true
+    }
+    res.clearCookie('_t', cookieOptions)
+      .json({
+        success: 'true'
+      })
   }
 }
