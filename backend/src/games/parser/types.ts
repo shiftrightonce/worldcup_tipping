@@ -23,6 +23,10 @@ export type YearData = {
   final: Match[]
 }
 
+export type ParsedMatch = Match & {
+  countries: string[]
+}
+
 export type GroupWinnerAndRunnerUp = {
   [group: string]: {
     winner: string,

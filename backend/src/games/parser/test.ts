@@ -1,3 +1,4 @@
+import { generateRandomGroupPoints } from '../../bot/group_round_bot';
 import { getParsedRound8Matches } from './parsed_round_8';
 import { getData } from './parse_config'
 import { getParsedCountries } from './parse_countries';
@@ -6,11 +7,11 @@ import { getParsedGroupMatches } from './parse_group_matches';
 import { getParsedRound16Matches } from './parse_round_16';
 import { getParsedRound4Matches } from './parse_round_4';
 import { getParsedThirdPlaceMatches } from './parse_third_place';
-import { Country, Match, YearData } from './types';
+import { Country, Match, YearData, ParsedMatch } from './types';
 
 const generateRandomGroupWins = (yearData: YearData) => {
   const winnerAndRunnerUp = {};
-  const temp = { ...yearData.groups };
+  const temp = JSON.parse(JSON.stringify(yearData.groups));
 
   for (const group in temp) {
     const groups = [];
@@ -35,7 +36,7 @@ const generateRandomGroupWins = (yearData: YearData) => {
   return winnerAndRunnerUp
 }
 
-const generateRandomRound16Wins = (round16ParsedMatches: Array<Match & { countries: string[] }>) => {
+const generateRandomRound16Wins = (round16ParsedMatches: ParsedMatch[]) => {
   const wins: { [key: string]: string } = {}
   round16ParsedMatches.forEach((match) => {
     const countries = [...match.countries];
@@ -46,7 +47,7 @@ const generateRandomRound16Wins = (round16ParsedMatches: Array<Match & { countri
   return wins;
 }
 
-const generateRandomRound8Wins = (round8ParsedMatches: Array<Match & { countries: string[] }>) => {
+const generateRandomRound8Wins = (round8ParsedMatches: ParsedMatch[]) => {
   const wins: { [key: string]: string } = {}
   round8ParsedMatches.forEach((match) => {
     const countries = [...match.countries];
@@ -108,5 +109,6 @@ const generateRandomFinalWins = (finalParsedMatches: Array<Match & { countries: 
   const finalMatches = getParsedFinalMatches(round4Winners, yearData);
   const finalWinner = generateRandomFinalWins(finalMatches);
 
-  console.log(finalWinner);
+  console.log(groupMatches);
+
 })()

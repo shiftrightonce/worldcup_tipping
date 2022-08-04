@@ -1,9 +1,9 @@
 import { getParsedCountries } from "./parse_countries";
-import { YearData, Match } from "./types";
+import { YearData, Match, ParsedMatch } from "./types";
 
 export const getParsedGroupMatches = (yearData: YearData) => {
   const countries = getParsedCountries(yearData);
-  const matches: Array<Match & { countries: string[] }> = [];
+  const matches: ParsedMatch[] = [];
 
   yearData.groupMatches.forEach((entry) => {
     const countryIds = entry.match.toLowerCase().split('v.').map((c) => c.trim().toUpperCase());

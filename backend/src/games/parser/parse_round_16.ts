@@ -20,14 +20,18 @@ export const getParsedRound16Matches = (winnerAndRunnerUp: GroupWinnerAndRunnerU
 
       switch (position) {
         case 'WINNER':
-          tmp.countries.push(winnerAndRunnerUp[group].winner)
+          if (winnerAndRunnerUp[group].winner) {
+            tmp.countries.push(winnerAndRunnerUp[group].winner)
+          }
           break;
         case 'RUNNER-UP':
-          tmp.countries.push(winnerAndRunnerUp[group].runnerUp)
+          if (winnerAndRunnerUp[group].runnerUp) {
+            tmp.countries.push(winnerAndRunnerUp[group].runnerUp)
+          }
           break;
       }
     })
-      matches.push(tmp)
+    matches.push(tmp)
   })
 
   return matches;

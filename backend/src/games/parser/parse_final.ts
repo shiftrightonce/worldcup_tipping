@@ -14,9 +14,7 @@ export const getParsedFinalMatches = (round4WinnersAndLoosers: { [key: number]: 
       }
     });
 
-    if (tmp.countries.length === 2) {
-      matches.push(tmp)
-    }
+    matches.push(tmp)
   });
 
   return matches;

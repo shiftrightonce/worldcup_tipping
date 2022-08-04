@@ -5,7 +5,7 @@ export default [
     number: 49,
     match: "Winner:A v. Runner-up:B",
     date: '2022-12-03',
-    time: '18:00+03:00+03:00',
+    time: '18:00+03:00',
     penalty: true
   },
   {
