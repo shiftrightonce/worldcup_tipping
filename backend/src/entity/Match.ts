@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, ManyToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
 import { Country } from "./Country";
 
 export enum MatchStatus {
@@ -52,12 +52,10 @@ export class Match {
   @Column({ length: 128 })
   match: string; // match as a string eg: A1 vs A2
 
-  @ManyToMany(() => Country, { nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Country, { nullable: true, eager: true })
   countryA: Country;
 
-  @ManyToMany(() => Country, { nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Country, { nullable: true, eager: true })
   countryB: Country;
 
   @Column({ default: false })
@@ -75,8 +73,7 @@ export class Match {
   @Column({ default: 0 })
   countryBPenaltyGoals: number;
 
-  @ManyToMany(() => Country, { nullable: true })
-  @JoinColumn()
+  @ManyToOne(() => Country, { nullable: true, eager: true })
   winner: Country;
 
   @Column({ type: 'date', nullable: true })
