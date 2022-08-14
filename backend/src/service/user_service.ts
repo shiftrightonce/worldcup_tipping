@@ -2,10 +2,14 @@ import { AppDataSource } from "../data-source"
 import * as bcrypt from 'bcrypt'
 import { randomBytes, createCipheriv, createDecipheriv, createHash } from 'crypto'
 import { User } from "../entity/User";
+import { Request } from "express";
 
-const userRepo = AppDataSource.getRepository(User);
 export const getUserRepo = () => {
-  return userRepo;
+  return AppDataSource.getRepository(User);
+}
+
+export const pluckUserFromRequest = (req: Request) => {
+  return (req as unknown as { authUser: User }).authUser;
 }
 
 export const hashPassword = async (rawPassword: string) => {
@@ -62,10 +66,11 @@ export const authenticate = async (user: bigint | User, password: string, roleIn
 
 
 export const authenticateToken = async (rawToken: string, roleInternalId = '') => {
-  const user = await getUserRepo().findOneBy({
+  const userRepo = AppDataSource.getRepository(User);
+  const user = await userRepo.findOneBy({
     token: rawToken
   });
-  return user || false 
+  return user || false
 }
 
 export const authenticateAuthCookie = async (token: string) => {
@@ -81,4 +86,8 @@ export const authenticateAuthCookie = async (token: string) => {
   // const activeRole = rawData[1] // not in use
 
   return authenticateToken(userToken);
+}
+
+export const getUserById = async (userId: number) => {
+  return await getUserRepo().findOneBy({ id: userId })
 }

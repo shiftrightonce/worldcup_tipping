@@ -12,7 +12,7 @@ export class PublicController {
       username
     });
 
-    if (user && checkPassword(user, password)) {
+    if (user && await checkPassword(user, password)) {
       const cookieOptions: CookieOptions = {
         sameSite: 'none',
         secure: true,
@@ -21,7 +21,11 @@ export class PublicController {
       const cookie = generateAuthCookie(user);
       res.cookie('_t', cookie, cookieOptions).json({
         success: true,
-        user
+        user: {
+          id: user.id,
+          token: user.token,
+          role: user.role
+        }
       });
       return null;
     }

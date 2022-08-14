@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 import { Country } from "./Country";
+import { Tip } from "./Tip";
 
 export enum MatchStatus {
   PENDING = 'pending', // The match is not ready for anything
@@ -73,7 +74,7 @@ export class Match {
   @Column({ default: 0 })
   countryBPenaltyGoals: number;
 
-  @ManyToOne(() => Country, { nullable: true, eager: true })
+  @ManyToOne(() => Country, (winner) => winner.wins, { nullable: true, eager: true })
   winner: Country;
 
   @Column({ type: 'date', nullable: true })
@@ -85,4 +86,7 @@ export class Match {
     this.time = `${dt.getUTCHours()}:${dt.getUTCMinutes()}`;
     return this;
   }
+
+  @OneToMany(() => Tip, (tip) => tip.match)
+  tips: Tip[]
 }

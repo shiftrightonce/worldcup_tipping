@@ -4,13 +4,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }]
+    children: [
+      { path: '', component: () => import('pages/IndexPage.vue'), name: 'home' },
+      { path: '/forgot-login', component: () => import('pages/ForgotLoginPage.vue'), name: 'forgot-login' }
+    ]
   },
   {
-    path: '/tips',
+    path: '/secure',
     component: () => import('layouts/PlaneLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/TipIndexPage.vue'), name: 'tip-index' }
+      { path: '', component: () => import('pages/ScoreBoardPage.vue'), name: 'scoreboard' },
+      { path: '/active-matches', component: () => import('pages/ActiveMatchesPage.vue'), name: 'active-matches' },
+      { path: '/past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' },
+      { path: '/group-chat', component: () => import('pages/GroupChatPage.vue'), name: 'group-chat' }
     ]
   },
 

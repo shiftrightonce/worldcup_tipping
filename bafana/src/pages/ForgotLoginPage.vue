@@ -1,9 +1,8 @@
 <template>
-  <div>
-    Group ordering
-  </div>
+<div>
+ Forgot Login
+</div>
 </template>
 
 <script lang="ts">
-
 </script>

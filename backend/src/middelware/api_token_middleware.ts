@@ -41,7 +41,7 @@ export default (router: Router) => {
         message: 'Permission denied'
       });
     } catch (e) {
-      return res.json({
+      return res.status(500).json({
         success: false,
         code: 'authentication_failed',
         message: 'authentication by token failed'

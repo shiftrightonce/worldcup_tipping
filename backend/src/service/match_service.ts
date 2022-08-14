@@ -1,33 +1,61 @@
-import { MoreThan } from 'typeorm'
+import { MoreThan, MoreThanOrEqual } from 'typeorm'
 import { AppDataSource } from "../data-source"
 import { Match, MatchStatus } from "../entity/Match";
 
-export const getTodayMatches = async () => {
- // const date = new Date();
+export const getMatchRepo = () => {
+  return AppDataSource.getRepository(Match)
+}
 
- // @todo remove after testing.
- const date = new Date('2022-11-21');
-  return await AppDataSource.getRepository(Match).findBy({
+export const getTodayMatches = async () => {
+  const date = new Date();
+  return await getMatchRepo().findBy({
     date
   })
 }
 
 export const getTodayOpenMatches = async () => {
-  // const date = new Date();
-  // const time = `${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
-
-  //@todo remove after testing. for testing only
-  const date = new Date('2022-11-21');
-  const time = `10:00:00`;
-
-  return await AppDataSource.getRepository(Match).find({
+  const date = new Date();
+  const time = `${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
+  return await getMatchRepo().find({
     where: {
-      date,
+      date: MoreThanOrEqual(date),
       status: MatchStatus.OPEN,
-      time: MoreThan(time)
+      time: MoreThan(time),
     },
     order: {
       number: 'ASC'
     }
   })
+
+}
+
+export const getMatchesByStatus = async (status: MatchStatus) => {
+  return await getMatchRepo().find({
+    where: {
+      status
+    },
+    order: {
+      number: 'DESC'
+    }
+  })
+}
+
+export const getMatchById = async (matchId: number) => {
+  return await getMatchRepo().findOne({ where: { id: matchId }})
+}
+
+export const matchHasNotExpire = (match: Match) => {
+  const now = new Date()
+  const matchDateTime = new Date(`${match.date}T${match.time}`);
+
+  now.setUTCHours(matchDateTime.getUTCHours())
+  now.setUTCMinutes(matchDateTime.getUTCMinutes())
+  now.setUTCSeconds(matchDateTime.getUTCSeconds())
+  now.setMilliseconds(0)
+
+  if((matchDateTime.getUTCDate() >= now.getUTCDate()) && (matchDateTime.getTime() > now.getTime())) {
+    return true;
+  }
+
+  return false;
 }

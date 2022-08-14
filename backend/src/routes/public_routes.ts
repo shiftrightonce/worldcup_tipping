@@ -4,7 +4,7 @@ import { buildRoute, registerHandlers } from "../service/routing_service";
 
 const router = Router();
 
-const baseEndpoint = '/';
+const baseEndpoint = '/api';
 
 const routes = [
   buildRoute(PublicController, 'loginAction', 'post', '/user/login'),

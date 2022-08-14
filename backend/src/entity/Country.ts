@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Match } from "./Match";
+import { Tip } from "./Tip";
 
 @Entity()
 export class Country {
@@ -24,4 +26,9 @@ export class Country {
   @Column()
   image: string;
 
+  @OneToMany(() => Tip, (tip) => tip.toWin)
+  tipWins: Tip[]
+
+  @OneToMany(() => Match, (wins) => wins.winner)
+  wins: Match[];
 }
