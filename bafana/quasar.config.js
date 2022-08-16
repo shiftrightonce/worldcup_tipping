@@ -99,6 +99,12 @@ module.exports = configure(function (/* ctx */) {
       proxy: {
         '/api': {
           target: process.env.BACKEND_URL
+        },
+        '/static': {
+          target: process.env.BACKEND_URL
+        },
+        'socket.io': {
+          target: process.env.BACKEND_URL
         }
       }
     },
