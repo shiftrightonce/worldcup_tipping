@@ -102,7 +102,7 @@ const groupD = [
     id: "D4",
     name: "Australia",
     short: "AUS",
-    image: "AUS_australia"
+    image: "AUS_australia.png"
   }
 ];
 
@@ -117,7 +117,7 @@ const groupE = [
     id: "E2",
     name: "Germany",
     short: "GER",
-    image: "GER_germany"
+    image: "GER_germany.png"
   },
   {
     id: "E3",
