@@ -15,7 +15,7 @@
       </q-input>
     </div>
      <div class="col-xs-6 q-pl-lg q-pr-lg q-mb-md">
-        <q-btn label="Sign up" color="secondary" align="left" ></q-btn>
+        <q-btn label="Sign up" color="secondary" align="left" :to="{ name: 'signup'}" ></q-btn>
      </div>
      <div class="col-xs-6 q-pl-lg q-pr-lg q-mb-md">
         <q-btn label="Sign in" color="primary" class="float-right" @click="onSignin" ></q-btn>
