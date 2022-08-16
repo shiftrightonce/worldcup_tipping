@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { LocalStorage } from 'quasar'
 import axios, { AxiosInstance } from 'axios'
 import { Tip } from './match-store'
+import { io, Socket } from 'socket.io-client'
 
 const tokenKey = '_t'
 const userKey = '_user'
@@ -22,7 +23,8 @@ export const useUserStore = defineStore('userStore', {
     activeToken: LocalStorage.getItem(tokenKey),
     activeUser: LocalStorage.getItem(userKey) as User | null,
     _api: null as AxiosInstance | null,
-    tips: {} as { [key: number]: { tip: Tip, state: UserTipState } }
+    tips: {} as { [key: number]: { tip: Tip, state: UserTipState } },
+    socket: null as Socket | null
   }),
   getters: {
     isLogin: (state) => !!state.activeToken,
@@ -66,6 +68,12 @@ export const useUserStore = defineStore('userStore', {
         return false
       } catch (e) {
         return false
+      }
+    },
+    setupSocket () {
+      if (!this.socket) {
+        console.log('socket: connecting...')
+        this.socket = io('http://localhost:3000')
       }
     },
     async logout () {
