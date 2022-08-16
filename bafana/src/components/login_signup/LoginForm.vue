@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <div class="col-xs-12 q-pl-lg q-pr-lg q-mb-md">
+    <div class="col-xs-12 col-md-6 q-pl-lg q-pr-lg q-mb-md">
       <q-input v-model="username" label="Username" outlined @update:model-value="onInput"></q-input>
     </div>
-    <div class="col-xs-12 q-pl-lg q-pr-lg q-mb-md">
+    <div class="col-xs-12 col-md-6 q-pl-lg q-pr-lg q-mb-md">
       <q-input v-model="password" label="Password" outlined @update:model-value="onInput" :type="isPassword ? 'password' : 'text'">
         <template v-slot:append>
           <q-icon
