@@ -9,6 +9,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'http'
 import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
+import setupSocketIO from './socketio'
 
 
 AppDataSource.initialize().then(async () => {
@@ -27,9 +28,7 @@ AppDataSource.initialize().then(async () => {
     const socketIOSubClient = socketIOPubClient.duplicate()
     io.adapter(createAdapter(socketIOPubClient, socketIOSubClient))
 
-    io.on("connection", (socket) => {
-        console.log("connection: " + socket.id)
-    })
+    setupSocketIO(io)
 
     app.use(cors({
         origin: true,
@@ -47,7 +46,6 @@ AppDataSource.initialize().then(async () => {
 
     // start express server
     const PORT = env('SERVER_PORT', 3000);
-    // app.listen(PORT)
 
     httpServer.listen(PORT)
 
