@@ -73,7 +73,7 @@ export const useUserStore = defineStore('userStore', {
     setupSocket () {
       if (!this.socket) {
         console.log('socket: connecting...')
-        this.socket = io('http://localhost:3000')
+        this.socket = io()
       }
     },
     async logout () {
