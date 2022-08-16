@@ -3,6 +3,9 @@ import * as bcrypt from 'bcrypt'
 import { randomBytes, createCipheriv, createDecipheriv, createHash } from 'crypto'
 import { User } from "../entity/User";
 import { Request } from "express";
+import { toPng } from 'jdenticon'
+import * as fs from 'fs/promises'
+import * as path from 'path'
 
 export const getUserRepo = () => {
   return AppDataSource.getRepository(User);
@@ -90,4 +93,12 @@ export const authenticateAuthCookie = async (token: string) => {
 
 export const getUserById = async (userId: number) => {
   return await getUserRepo().findOneBy({ id: userId })
+}
+
+export const generateAvatar = async (value: string) => {
+  const size = 200;
+  const png = toPng(value, size)
+  const fileName = value.split(' ').join('').toLocaleLowerCase() + '.png'
+  await fs.writeFile(path.join(path.basename(path.dirname(__dirname)), 'public', 'user', fileName), png)
+  return fileName
 }
