@@ -12,6 +12,7 @@
       "typescript": "4.5.2"
    },
    "dependencies": {
+      "@socket.io/redis-adapter": "^7.2.0",
       "bcrypt": "^5.0.1",
       "body-parser": "^1.19.1",
       "cookie-parser": "^1.4.6",
@@ -19,8 +20,11 @@
       "dotenv": "^16.0.1",
       "express": "^4.17.2",
       "mysql": "^2.14.1",
+      "redis": "^4.2.0",
       "reflect-metadata": "^0.1.13",
-      "typeorm": "0.3.7"
+      "socket.io": "^4.5.1",
+      "typeorm": "0.3.7",
+      "uWebSockets.js": "uNetworking/uWebSockets.js"
    },
    "scripts": {
       "start": "ts-node src/index.ts",
