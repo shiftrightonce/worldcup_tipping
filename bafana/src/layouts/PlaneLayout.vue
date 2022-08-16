@@ -52,7 +52,7 @@
 <script lang="ts">
 import { useMenuStore } from 'src/stores/menu-store'
 import { useUserStore } from 'src/stores/user-store'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLayoutStore } from '../stores/layout-store'
 
