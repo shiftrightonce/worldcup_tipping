@@ -1,8 +1,8 @@
 <template>
   <transition
     appear
-    enter-active-class="animated backInDown"
-    leave-active-class="animated backOutUp"
+    enter-active-class="animated slideInLeft"
+    leave-active-class="animated slideOutRight"
   >
     <div class="row">
       <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id">
@@ -23,7 +23,11 @@ export default defineComponent({
   setup () {
     const matchStore = useMatchStore()
     const { isReady, state } = matchStore.fetchCompletedMatches()
-    useLayoutStore().setTitle('Past Matches')
+    const layoutStore = useLayoutStore()
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.setTitle('Past Matches')
+
     return {
       isReady,
       state

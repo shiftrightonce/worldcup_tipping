@@ -1,8 +1,8 @@
 <template>
   <transition
     appear
-    enter-active-class="animated backInDown"
-    leave-active-class="animated backOutUp"
+    enter-active-class="animated slideInLeft"
+    leave-active-class="animated slideOutRight"
   >
     <div class="row">
       <div class="col-md-4 col-xs-12">
@@ -35,10 +35,12 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   setup () {
     const layoutStore = useLayoutStore()
-    layoutStore.setTitle('Scoreboard')
     const { isLoading, isReady, state } = useTipStore().fetchScoreboard()
     let currentPosition = 1
     const positions: {[key:string]: number } = {}
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.setTitle('Scoreboard')
 
     const getPosition = (points: string | number): number => {
       if (positions[points]) {
