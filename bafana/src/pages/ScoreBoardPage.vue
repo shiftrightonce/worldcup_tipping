@@ -11,7 +11,7 @@
            <q-item-section avatar>
               <q-avatar>
                 <q-badge floating :label="getPosition(score.totalPoints)" color="teal" />
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                <img :src="'/static/user/'+ score.user.username + '.png'">
               </q-avatar>
               </q-item-section>
               <q-item-section>
