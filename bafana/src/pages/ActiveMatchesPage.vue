@@ -17,13 +17,20 @@
 import { useMatchStore } from 'src/stores/match-store'
 import { defineComponent } from 'vue'
 import ActiveTipCard from '../components/match/ActiveTipCard.vue'
+import { useLayoutStore } from '../stores/layout-store'
 
 export default defineComponent({
   setup () {
-    const matchStore = useMatchStore();
+    const matchStore = useMatchStore()
+    const layoutStore = useLayoutStore();
+
     (async () => {
       await matchStore.getTodayMatches()
     })()
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.setTitle('Active Matches')
+
     return {
       matchStore
     }
