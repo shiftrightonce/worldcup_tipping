@@ -15,6 +15,13 @@
             {{ match.countryA.name }} vs {{ match.countryB.name }}
           </q-item-label>
         </q-item-section>
+        <q-space />
+          <q-btn
+          flat
+          round
+          :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+          @click="(state)?state.state.expanded = !state.state.expanded: ''"
+          ></q-btn>
       </q-item>
         <div class="q-ma-md">
           <slot>
