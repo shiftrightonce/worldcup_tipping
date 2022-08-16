@@ -1,5 +1,4 @@
 <template>
-    <!-- card-->
     <transition
   appear
   enter-active-class="animated backInDown"
@@ -12,8 +11,6 @@
       </div>
     </div>
     </transition>
-    <!--// card-->
-
 </template>
 
 <script lang="ts">
