@@ -265,6 +265,8 @@ export default defineComponent({
 
     if (!userStore.isLogin) {
       router.push({ name: 'home' })
+    } else {
+      userStore.setupSocket()
     }
 
     function toggleLeftDrawer () {
