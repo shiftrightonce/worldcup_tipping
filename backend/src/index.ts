@@ -10,6 +10,7 @@ import { createServer } from 'http'
 import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
 import setupSocketIO from './socketio'
+const path = require('path')
 
 
 AppDataSource.initialize().then(async () => {
@@ -37,6 +38,7 @@ AppDataSource.initialize().then(async () => {
     app.use(bodyParser.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser(process.env.COOKIE_SECRET || `random${Date.now()}`));
+    app.use('/static', express.static(path.join(__dirname, 'public')));
 
     // register api routes
     setupApiRoutes(app);
