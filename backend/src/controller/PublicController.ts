@@ -24,7 +24,8 @@ export class PublicController {
         user: {
           id: user.id,
           token: user.token,
-          role: user.role
+          role: user.role,
+          username: user.username
         }
       });
       return null;
