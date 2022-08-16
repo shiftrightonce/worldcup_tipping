@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from "typeorm"
-import { generateToken, hashPassword } from "../service/user_service";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert } from "typeorm"
+import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
 
 export enum UserRole {
     USER = 'user',
@@ -32,11 +32,16 @@ export class User {
     token: string
 
     @BeforeInsert()
-    async handeBeoreInsert () {
+    async handeBeforeInsert () {
         if (this.password) {
             this.password = await hashPassword(this.password);
         }
         this.token = generateToken();
+    }
+
+    @AfterInsert()
+    async handleAfterInsert () {
+        await generateAvatar(this.username)
     }
 
 }
