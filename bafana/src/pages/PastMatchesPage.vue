@@ -5,7 +5,7 @@
     leave-active-class="animated backOutUp"
   >
     <div class="row">
-      <div class="cold-md-4 col-xs-12" v-for="match in state" :key="match.id">
+      <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id">
         <activeTipCard :match="match"></activeTipCard>
       </div>
     </div>
