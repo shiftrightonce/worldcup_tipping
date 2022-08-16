@@ -6,17 +6,23 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue'), name: 'home' },
-      { path: '/forgot-login', component: () => import('pages/ForgotLoginPage.vue'), name: 'forgot-login' }
+      { path: 'forgot-login', component: () => import('pages/ForgotLoginPage.vue'), name: 'forgot-login' }
     ]
   },
   {
     path: '/secure',
     component: () => import('layouts/PlaneLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/ScoreBoardPage.vue'), name: 'scoreboard' },
-      { path: '/active-matches', component: () => import('pages/ActiveMatchesPage.vue'), name: 'active-matches' },
-      { path: '/past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' },
-      { path: '/group-chat', component: () => import('pages/GroupChatPage.vue'), name: 'group-chat' }
+      { path: 'scoreboard', component: () => import('pages/ScoreBoardPage.vue'), name: 'scoreboard' },
+      { path: 'active-matches', component: () => import('pages/ActiveMatchesPage.vue'), name: 'active-matches' },
+      { path: 'past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' }
+    ]
+  },
+  {
+    path: '/secure/chat',
+    component: () => import('layouts/GroupChatLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/GroupChatPage.vue'), name: 'group-chat' }
     ]
   },
 
