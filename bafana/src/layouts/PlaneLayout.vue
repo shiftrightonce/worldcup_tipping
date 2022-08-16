@@ -3,7 +3,7 @@
 
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn dense flat round icon="menu" @click="layoutStore.toggleLeftDrawer" v-if="layoutStore.isLeftDrawerEnabled" />
 
         <q-toolbar-title>
           <q-avatar>
@@ -12,15 +12,15 @@
           {{ layoutStore.title }}
         </q-toolbar-title>
 
-        <q-btn dense flat round icon="menu" @click="toggleRightDrawer" />
+        <q-btn dense flat round icon="menu" @click="layoutStore.toggleRighDrawer" v-if="layoutStore.isRightDrawerEnabled" />
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer show-if-above v-model="layoutStore.leftDrawer"  v-if="layoutStore.isLeftDrawerEnabled"  side="left" bordered>
       <!-- drawer content -->
     </q-drawer>
 
-    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+    <q-drawer show-if-above v-model="layoutStore.rightDrawer" v-if="layoutStore.isRightDrawerEnabled"  side="right" bordered>
      <q-toolbar>
        <q-toolbar-title>Main Menu</q-toolbar-title>
      </q-toolbar>
@@ -59,11 +59,10 @@ import { useLayoutStore } from '../stores/layout-store'
 export default defineComponent({
   name: 'PlaneLayout',
   setup () {
-    const leftDrawerOpen = ref(false)
-    const rightDrawerOpen = ref(false)
     const router = useRouter()
     const userStore = useUserStore()
     const menuStore = useMenuStore()
+    const layoutStore = useLayoutStore()
 
     if (!userStore.isLogin) {
       router.push({ name: 'home' })
@@ -72,17 +71,8 @@ export default defineComponent({
     }
 
     return {
-      leftDrawerOpen,
-      layoutStore: useLayoutStore(),
-      menuStore,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-
-      rightDrawerOpen,
-      toggleRightDrawer () {
-        rightDrawerOpen.value = !rightDrawerOpen.value
-      }
+      layoutStore,
+      menuStore
     }
   }
 })
