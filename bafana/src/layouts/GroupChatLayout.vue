@@ -64,7 +64,7 @@
       >
         <q-toolbar>
           <q-avatar class="cursor-pointer">
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" />
+            <ProfileImage></ProfileImage>
           </q-avatar>
 
           <q-space />
@@ -199,6 +199,7 @@ import { useMenuStore } from 'src/stores/menu-store'
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import ProfileImage from '../components/user/ProfileImage.vue'
 
 const conversations = [
   {
@@ -241,7 +242,7 @@ const conversations = [
 
 export default defineComponent({
   name: 'GroupChatLayout',
-
+  components: { ProfileImage },
   setup () {
     const $q = useQuasar()
 

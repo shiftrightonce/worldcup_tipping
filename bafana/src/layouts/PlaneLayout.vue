@@ -7,7 +7,7 @@
 
         <q-toolbar-title>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+            <ProfileImage></ProfileImage>
           </q-avatar>
           {{ layoutStore.title }}
         </q-toolbar-title>
@@ -55,9 +55,11 @@ import { useUserStore } from 'src/stores/user-store'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLayoutStore } from '../stores/layout-store'
+import ProfileImage from '../components/user/ProfileImage.vue'
 
 export default defineComponent({
   name: 'PlaneLayout',
+  components: { ProfileImage },
   setup () {
     const router = useRouter()
     const userStore = useUserStore()
@@ -72,7 +74,8 @@ export default defineComponent({
 
     return {
       layoutStore,
-      menuStore
+      menuStore,
+      userStore
     }
   }
 })
