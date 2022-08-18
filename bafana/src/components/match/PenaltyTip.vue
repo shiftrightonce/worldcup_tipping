@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, Ref, watch } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import { Match, Tip, MatchRound, MatchStatus } from 'src/stores/match-store'
 import { UserTipState } from 'src/stores/user-store'
 import { useUserTipStore } from 'src/stores/user-tip-store'
