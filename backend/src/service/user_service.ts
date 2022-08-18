@@ -95,6 +95,16 @@ export const getUserById = async (userId: number) => {
   return await getUserRepo().findOneBy({ id: userId })
 }
 
+export const createUser = async (username: string, email: string, password: string) => {
+  const user = new User()
+
+  user.email = email
+  user.username = username
+  user.password = password
+
+  return await getUserRepo().save(user)
+}
+
 export const generateAvatar = async (value: string) => {
   const size = 200;
   const png = toPng(value, size)
