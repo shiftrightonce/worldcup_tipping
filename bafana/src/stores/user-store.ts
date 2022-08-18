@@ -73,7 +73,17 @@ export const useUserStore = defineStore('userStore', {
     setupSocket () {
       if (!this.socket) {
         console.log('socket: connecting...')
-        this.socket = io()
+        this.socket = io({
+          auth: {
+            token: this.token
+          }
+        })
+        this.socket.io.on('open', () => {
+          console.log('we are connected')
+        })
+        this.socket.on('server:time', (data) => {
+          console.log('server time', data)
+        })
       }
     },
     async logout () {
