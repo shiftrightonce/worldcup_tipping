@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, CookieOptions } from "express"
-import { checkPassword, generateAuthCookie, getUserRepo } from "../service/user_service";
+import { User } from "../entity/User";
+import { checkPassword, createUser, generateAuthCookie, getUserRepo } from "../service/user_service";
 
 export class PublicController {
 
@@ -13,21 +14,7 @@ export class PublicController {
     });
 
     if (user && await checkPassword(user, password)) {
-      const cookieOptions: CookieOptions = {
-        sameSite: 'none',
-        secure: true,
-        signed: true
-      }
-      const cookie = generateAuthCookie(user);
-      res.cookie('_t', cookie, cookieOptions).json({
-        success: true,
-        user: {
-          id: user.id,
-          token: user.token,
-          role: user.role,
-          username: user.username
-        }
-      });
+      this.sendLoginResonse(res, user)
       return null;
     }
 
@@ -48,5 +35,23 @@ export class PublicController {
       .json({
         success: 'true'
       })
+  }
+
+  private sendLoginResonse (res: Response, user: User) { 
+      const cookieOptions: CookieOptions = {
+        sameSite: 'none',
+        secure: true,
+        signed: true
+      }
+      const cookie = generateAuthCookie(user);
+      res.cookie('_t', cookie, cookieOptions).json({
+        success: true,
+        user: {
+          id: user.id,
+          token: user.token,
+          role: user.role,
+          username: user.username
+        }
+      });
   }
 }
