@@ -10,6 +10,7 @@ import { createServer } from 'http'
 import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
 import setupSocketIO from './socketio'
+import { getRedisConnection } from "./redis_client"
 const path = require('path')
 
 
@@ -21,15 +22,15 @@ AppDataSource.initialize().then(async () => {
     const io = new Server(httpServer, {
         cors: {
             origin: env('SOCKETIO_CORS', '').split(',')
-        }
-    })
+        },
+    });
 
     // redis adapter
-    const socketIOPubClient = createClient({ url: env('REDIS_URL', 'redis://redisdbbad') })
-    const socketIOSubClient = socketIOPubClient.duplicate()
+    const socketIOPubClient = await getRedisConnection()
+    const socketIOSubClient = socketIOPubClient.duplicate();
     io.adapter(createAdapter(socketIOPubClient, socketIOSubClient))
 
-    setupSocketIO(io)
+    await setupSocketIO(io);
 
     app.use(cors({
         origin: true,
