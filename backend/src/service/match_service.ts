@@ -20,7 +20,7 @@ export const getTodayOpenMatches = async () => {
     where: {
       date: MoreThanOrEqual(date),
       status: MatchStatus.OPEN,
-      time: MoreThan(time),
+      // time: MoreThan(time),
     },
     order: {
       number: 'ASC'
