@@ -33,7 +33,22 @@ export const useMenuStore = defineStore('menu', {
         icon: 'message',
         color: 'primary'
       }
-    ] as MenuItem[]
+    ] as MenuItem[],
+    user: [
+      {
+        label: 'Account',
+        to: { name: 'account' },
+        icon: 'account_circle',
+        color: 'primary'
+      },
+      {
+        label: 'Logout',
+        to: { name: 'logout' },
+        icon: 'logout',
+        color: 'primary'
+      }
+    ] as MenuItem[],
+    admin: [] as MenuItem[]
   }),
   getters: {
     mainMenuItems: (state) => state.main
