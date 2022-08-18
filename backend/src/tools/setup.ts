@@ -15,6 +15,7 @@ import {
   getParsedThirdPlaceMatches,
   getParsedFinalMatches
 } from '../games/parser'
+import { createChatGroup, findChatGroupByName } from "../service/chat_group_service";
 
 
 const countries = {};
@@ -157,6 +158,16 @@ const setupFinalMatch = async (yearData: YearData) => {
   }
 }
 
+
+const setupGeneralRoom = async () => {
+  const name = 'General';
+  const existing = await findChatGroupByName(name);
+
+  if (!existing) {
+    await createChatGroup(name)
+  }
+}
+
 AppDataSource.initialize().then(async (dataSource) => {
   const yearData = await getData();
 
@@ -183,6 +194,9 @@ AppDataSource.initialize().then(async (dataSource) => {
 
   // 7. setup final match. A cron/schedule job will update the countries after round 4
   await setupFinalMatch(yearData);
+
+  // 8. setup "general" chat room
+  await setupGeneralRoom()
 
   // completed
   dataSource.destroy();
