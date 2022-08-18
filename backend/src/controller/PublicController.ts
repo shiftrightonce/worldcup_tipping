@@ -25,6 +25,26 @@ export class PublicController {
     });
   }
 
+  public async signupAction (req: Request, res: Response) {
+    const { username, password, email } = req.body as {
+      username: string,
+      password: string,
+      email: string
+    }
+
+    try {
+      const user = await createUser(username, email, password)
+      this.sendLoginResonse(res, user)
+    } catch (e) {
+      res.status(401).json({
+        succes: false,
+        code: 'create_user_failed',
+        message: e.message
+      })
+    }
+
+  }
+
   public logoutAction (_: Request, res: Response) {
     const cookieOptions: CookieOptions = {
       sameSite: 'none',
