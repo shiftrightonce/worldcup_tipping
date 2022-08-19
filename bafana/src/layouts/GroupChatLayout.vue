@@ -153,18 +153,9 @@
       show-if-above
        v-model="rightDrawerOpen"
       :breakpoint="690"
-     side="right" bordered>
-     <q-toolbar>
-       <q-toolbar-title>Main Menu</q-toolbar-title>
-     </q-toolbar>
-      <q-list padding class="rounded-borders text-primary">
-        <q-item clickable v-ripple v-for="item in menuStore.main" :key="item.label" :to="item.to">
-          <q-item-section avatar>
-            <q-icon :name="item.icon"></q-icon>
-          </q-item-section>
-          <q-item-section>{{item.label}}</q-item-section>
-        </q-item>
-      </q-list>
+      side="right" bordered
+    >
+      <MainMenu></MainMenu>
     </q-drawer>
 
       <q-page-container>
@@ -200,8 +191,20 @@ import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import ProfileImage from '../components/user/ProfileImage.vue'
+import MainMenu from '../components/general/MainMenu.vue'
+import { useChatStore } from 'src/stores/chat-store'
 
 const conversations = [
+  {
+    id: 11,
+    person: 'General',
+    avatar: 'https://cdn.quasar.dev/team/razvan_stoenescu.jpeg',
+    caption: 'I\'m working on Quasar!',
+    time: '15:00',
+    sent: true,
+    deleted: true,
+    type: 'group'
+  },
   {
     id: 1,
     person: 'Razvan Stoenescu',
@@ -242,7 +245,7 @@ const conversations = [
 
 export default defineComponent({
   name: 'GroupChatLayout',
-  components: { ProfileImage },
+  components: { ProfileImage, MainMenu },
   setup () {
     const $q = useQuasar()
 
@@ -255,6 +258,7 @@ export default defineComponent({
     const search = ref('')
     const message = ref('')
     const currentConversationIndex = ref(0)
+    const chatStore = useChatStore()
 
     const currentConversation = computed(() => {
       return conversations[currentConversationIndex.value]
@@ -281,6 +285,10 @@ export default defineComponent({
     function setCurrentConversation (index: number) {
       currentConversationIndex.value = index
     }
+
+    (async () => {
+      await chatStore.fetchRooms()
+    })()
 
     return {
       leftDrawerOpen,
