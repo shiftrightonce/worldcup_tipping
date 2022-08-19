@@ -18,11 +18,8 @@ export const useTipStore = defineStore('useTipStore', {
       return useAsyncState(new Promise<Score[]>((resolve, reject) => {
         useUserStore().api.get(`${tipEndpoint}/scoreboard`)
           .then((response) => {
-            console.log('scoreboard response data', response.data)
-            console.log('scoreboard response', response)
             resolve(response.data.scoreboard as Array<Score>)
           }).catch((e) => {
-            console.log('error scoreboard fetching', e)
             reject(e)
           })
       }), [])
