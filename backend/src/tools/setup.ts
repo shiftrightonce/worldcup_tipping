@@ -15,7 +15,7 @@ import {
   getParsedThirdPlaceMatches,
   getParsedFinalMatches
 } from '../games/parser'
-import { createChatGroup, findChatGroupByName } from "../service/chat_group_service";
+import { createChatRoom, findChatRoomByName } from "../service/chat_room_service";
 
 
 const countries = {};
@@ -161,10 +161,10 @@ const setupFinalMatch = async (yearData: YearData) => {
 
 const setupGeneralRoom = async () => {
   const name = 'General';
-  const existing = await findChatGroupByName(name);
+  const existing = await findChatRoomByName(name);
 
   if (!existing) {
-    await createChatGroup(name)
+    await createChatRoom(name)
   }
 }
 
