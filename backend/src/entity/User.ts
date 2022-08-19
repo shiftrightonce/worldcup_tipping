@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany } from "typeorm"
 import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
+import { ChatMessage } from "./ChatMessage";
+import { UserChatRoom } from "./UserChatRoom";
 
 export enum UserRole {
     USER = 'user',
@@ -30,6 +32,12 @@ export class User {
 
     @Column({ length: 64 })
     token: string
+
+    @OneToMany(() => ChatMessage, (message) => message.from)
+    sentMessages: ChatMessage[]
+
+    @OneToMany(() => UserChatRoom, (room) => room.user)
+    chatRooms: UserChatRoom[]
 
     @BeforeInsert()
     async handeBeforeInsert () {
