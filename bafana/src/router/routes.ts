@@ -16,7 +16,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: 'scoreboard', component: () => import('pages/ScoreBoardPage.vue'), name: 'scoreboard' },
       { path: 'active-matches', component: () => import('pages/ActiveMatchesPage.vue'), name: 'active-matches' },
-      { path: 'past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' }
+      { path: 'past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' },
+      { path: 'logout', component: () => import('pages/LogoutPage.vue'), name: 'logout' }
     ]
   },
   {
