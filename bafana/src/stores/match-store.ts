@@ -44,6 +44,9 @@ export type Match = {
   countryBGoals: number,
   countryAPenaltyGoals: number,
   countryBPenaltyGoals: number,
+  timestamp?: number,
+  isMatchOpen: boolean,
+  countdown: string
 }
 
 export type Tip = {
@@ -62,6 +65,8 @@ export type Tip = {
 
 export const matchEndpoint = '/api/v1/match'
 
+let intervalId: ReturnType<typeof setInterval> | null = null
+
 export const useMatchStore = defineStore('matchStore', {
   state: () => ({
     activeMatches: [] as Match[],
@@ -76,6 +81,36 @@ export const useMatchStore = defineStore('matchStore', {
       const userStore = useUserStore()
       const response = await userStore.api.get(`${matchEndpoint}/todays`)
       this.activeMatches = response.data as Match[]
+      this.activeMatches.forEach((match) => {
+        const matchDate = new Date(`${match.date}T${match.time}`)
+        const today = new Date()
+        match.timestamp = matchDate.getTime() - today.getTime()
+        match.countdown = ''
+        match.isMatchOpen = match.status === MatchStatus.OPEN
+      })
+
+      if (!intervalId) {
+        intervalId = setInterval(() => {
+          this.activeMatches.forEach((match) => {
+            if (!match.timestamp) {
+              return
+            }
+            match.timestamp -= 1000
+
+            if (match.timestamp <= 0) {
+              match.isMatchOpen = false
+              match.countdown = 'close'
+            }
+
+            const days = Math.floor(match.timestamp / (1000 * 60 * 60 * 24))
+            const hours = Math.floor(match.timestamp % (1000 * 60 * 60 * 24) / (1000 * 60 * 60))
+            const mins = Math.floor((match.timestamp % (1000 * 60 * 60)) / (1000 * 60))
+            const secs = Math.floor((match.timestamp % (1000 * 60)) / 1000)
+            match.countdown = `${days}d.${hours}h.${mins}m.${secs}s`
+          })
+        }, 1000)
+      }
+
       return this.today
     },
     fetchCompletedMatches () {
