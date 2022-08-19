@@ -114,7 +114,7 @@ module.exports = configure(function (/* ctx */) {
       config: {
         dark: true,
         loadingBar: {
-          url: '/api',
+          url: '/api'
         }
       },
       cssAddon: true,
