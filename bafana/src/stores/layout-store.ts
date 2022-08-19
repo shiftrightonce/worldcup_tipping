@@ -3,12 +3,12 @@ import { ref, computed } from 'vue'
 
 const APP_VERSION = '0.0.1'
 
-export const useLayoutStore = defineStore('layoutTitle', {
+export const useLayoutStore = defineStore('layoutStore', {
   state: () => ({
     layoutTitle: 'Active Tips',
     version: APP_VERSION,
     leftDrawer: ref(true),
-    rightDrawer: ref(true),
+    rightDrawer: ref(false),
     enableLeftDrawer: ref(true),
     enableRightDrawer: ref(true)
   }),
