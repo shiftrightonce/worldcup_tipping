@@ -1,15 +1,14 @@
 <template>
     <transition
-  appear
-  enter-active-class="animated slideInLeft"
-  leave-active-class="animated slideOutRight"
->
-    <div class="row"
+      appear
+      enter-active-class="animated slideInLeft"
+      leave-active-class="animated slideOutRight"
     >
-      <div class="col-md-4 col-xs-12" v-for="match in matchStore.today" :key="match.id">
-        <ActiveTipCard :match="match"></ActiveTipCard>
+      <div class="row">
+        <div class="col-md-4 col-xs-12" v-for="match in matchStore.today" :key="match.id">
+          <ActiveTipCard :match="match"></ActiveTipCard>
+        </div>
       </div>
-    </div>
     </transition>
 </template>
 
