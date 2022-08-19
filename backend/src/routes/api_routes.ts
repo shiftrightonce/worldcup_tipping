@@ -1,4 +1,5 @@
 import { Application, Router } from 'express'
+import { ChatController } from '../controller/ChatController';
 import { MatchController } from '../controller/MatchController';
 import { TipController } from '../controller/TipController';
 import { UserController } from '../controller/UserController';
@@ -25,6 +26,9 @@ const routes = [
   // - tip
   buildRoute(TipController, 'scoreboardAction', 'get', '/tip/scoreboard'),
   buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user'),
+
+  // - chat
+  buildRoute(ChatController, 'getMyRoomsAction', 'get', '/chat/my-rooms')
 
 ];
 
