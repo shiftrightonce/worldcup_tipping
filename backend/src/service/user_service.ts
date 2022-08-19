@@ -112,3 +112,12 @@ export const generateAvatar = async (value: string) => {
   await fs.writeFile(path.join(path.basename(path.dirname(__dirname)), 'public', 'user', fileName), png)
   return fileName
 }
+
+export const cleanUserData = (user: User) => {
+  delete user.email
+  delete user.token
+  delete user.password
+  delete user.role
+
+  return user;
+}
