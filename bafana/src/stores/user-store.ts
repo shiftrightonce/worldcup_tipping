@@ -72,7 +72,6 @@ export const useUserStore = defineStore('userStore', {
     },
     setupSocket () {
       if (!this.socket) {
-        console.log('socket: connecting...')
         this.socket = io({
           auth: {
             token: this.token
