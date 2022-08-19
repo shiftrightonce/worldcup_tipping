@@ -1,94 +1,62 @@
 <template>
-    <!-- card-->
-      <q-card class="q-mb-md q-mr-md-md" flat bordered v-if ="isReady && state">
-        <q-item>
-        <q-item-section avatar>
-          <GameTipPercentage
-            :match="match"
-            :user-tip-and-state="state"
-           ></GameTipPercentage>
-        </q-item-section>
+  <!-- card-->
+  <q-card class="q-mb-md q-mr-md-md" flat bordered v-if="isReady && state">
+    <q-item>
+      <q-item-section avatar>
+        <GameTipPercentage :match="match" :user-tip-and-state="state"></GameTipPercentage>
+      </q-item-section>
 
-        <q-item-section>
-          <q-item-label>Game {{ match.number }}</q-item-label>
-          <q-item-label caption>
-            {{ match.countryA.name }} vs {{ match.countryB.name }}
-          </q-item-label>
-        </q-item-section>
-        <q-space />
-          <q-btn
-          flat
-          round
-          :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-          @click="(state)?state.state.expanded = !state.state.expanded: ''"
-          ></q-btn>
-      </q-item>
-        <div class="q-ma-md">
-          <slot>
-            <VersesImage :match="match"></VersesImage>
-          </slot>
-        </div>
+      <q-item-section>
+        <q-item-label>Game {{ match.number }}</q-item-label>
+        <q-item-label caption>
+          {{ match.countryA.name }} vs {{ match.countryB.name }}
+        </q-item-label>
+      </q-item-section>
+      <q-space />
+      <q-btn flat round :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+        @click="(state) ? state.state.expanded = !state.state.expanded : ''"></q-btn>
+    </q-item>
+    <div class="q-ma-md">
+      <slot>
+        <VersesImage :match="match"></VersesImage>
+      </slot>
+    </div>
+    <q-separator />
+    <q-card-actions>
+      <div v-if="match.countdown" class="text-red-4 q-pl-sm text-bold">{{ match.countdown }}</div>
+      <q-space v-if="match.isMatchOpen" />
+      <BotTipBtn :match="match" :user-tip-and-state="state" @update:user-tip-and-state="onBotGenerate" class="q-mr-md">
+      </BotTipBtn>
+
+      <TipBtn :match="match" :user-tip-and-state="state"></TipBtn>
+
+      <q-space v-if="!match.isMatchOpen" />
+
+      <q-btn flat rounded v-if="!match.isMatchOpen" :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+        @click="(state) ? state.state.expanded = !state.state.expanded : ''" />
+    </q-card-actions>
+    <q-slide-transition>
+      <div v-show="state.state.expanded">
         <q-separator />
-      <q-card-actions>
-        <q-space
-          v-if="isMatchOpen"
-         />
-         <BotTipBtn
-          :match="match"
-          :user-tip-and-state="state"
-          @update:user-tip-and-state="onBotGenerate"
-          class="q-mr-md"
-         ></BotTipBtn>
-
-        <TipBtn
-          :match="match"
-          :user-tip-and-state="state"
-        ></TipBtn>
-
-        <q-space v-if="!isMatchOpen" />
-
-        <q-btn
-          flat
-          rounded
-          v-if="!isMatchOpen"
-          :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-          @click="(state)?state.state.expanded = !state.state.expanded: ''"
-        />
-      </q-card-actions>
-        <q-slide-transition>
-          <div v-show="state.state.expanded">
-            <q-separator />
-            <div v-if="isGroupRound" class="q-ma-md text-center">
-              Some tips are not available in group round
-            </div>
-            <q-card-section class="text-subitle2">
-            <GoalsTip
-              :match="match"
-              :user-tip-and-state="state"
-            >
-            </GoalsTip>
-            <PenaltyTip
-              :match="match"
-              :user-tip-and-state="state"
-             ></PenaltyTip>
-            <PenaltyGoalsTip
-              :match="match"
-              :user-tip-and-state="state"
-            ></PenaltyGoalsTip>
-            <WinnerTip
-             :match="match"
-             :user-tip-and-state="state"
-            ></WinnerTip>
-          </q-card-section>
+        <div v-if="isGroupRound" class="q-ma-md text-center">
+          Some tips are not available in group round
         </div>
-      </q-slide-transition>
-      <q-separator v-if="isDataChanged"></q-separator>
-      <q-card-actions v-if="isDataChanged">
-        <q-space></q-space>
-        <q-btn icon="check" round color="primary" @click="saveData" :loading="isSaving"></q-btn>
-      </q-card-actions>
-    </q-card>
-    <!--// card-->
+        <q-card-section class="text-subitle2">
+          <GoalsTip :match="match" :user-tip-and-state="state">
+          </GoalsTip>
+          <PenaltyTip :match="match" :user-tip-and-state="state"></PenaltyTip>
+          <PenaltyGoalsTip :match="match" :user-tip-and-state="state"></PenaltyGoalsTip>
+          <WinnerTip :match="match" :user-tip-and-state="state"></WinnerTip>
+        </q-card-section>
+      </div>
+    </q-slide-transition>
+    <q-separator v-if="isDataChanged"></q-separator>
+    <q-card-actions v-if="isDataChanged">
+      <q-space></q-space>
+      <q-btn icon="check" round color="primary" @click="saveData" :loading="isSaving"></q-btn>
+    </q-card-actions>
+  </q-card>
+  <!--// card-->
 </template>
 
 <script lang="ts">
@@ -115,8 +83,7 @@ export default defineComponent({
   setup (props) {
     const userTipStore = useUserTipStore()
     const matchStore = useMatchStore()
-    const isMatchOpen = props.match.status === MatchStatus.OPEN
-    const isGroupRound = props.match.round === MatchRound.GROUP
+    const isGroupRound = ref(props.match.round === MatchRound.GROUP)
     const isDataChanged = ref(false)
     const isSaving = ref(false)
     const { isReady, state } = userTipStore.fetchMatchTip(props.match.id)
@@ -156,7 +123,6 @@ export default defineComponent({
       isSaving.value = true;
       (async () => {
         const response = await matchStore.placeTip(props.match.id)
-        console.log(response.data)
         isSaving.value = false
         isDataChanged.value = false
       })()
@@ -169,7 +135,6 @@ export default defineComponent({
     return {
       isReady,
       state,
-      isMatchOpen,
       isGroupRound,
       isDataChanged,
       isSaving,
