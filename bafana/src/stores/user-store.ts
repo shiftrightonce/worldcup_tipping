@@ -80,6 +80,9 @@ export const useUserStore = defineStore('userStore', {
         this.socket.io.on('open', () => {
           console.log('we are connected')
         })
+        this.socket.on('connection_error', (error) => {
+          console.log('could not connect', error)
+        })
         this.socket.on('server:time', (data) => {
           console.log('server time', data)
         })
