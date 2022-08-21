@@ -1,13 +1,19 @@
-import { In } from "typeorm";
+import { In, Not } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { ChatRoom, ChatRoomType } from "../entity/ChatRoom";
+import { UserChatRoom } from "../entity/UserChatRoom";
 import { getRoomsLastMessage } from "./chat_message_service";
-import { cleanUserData } from "./user_service";
+import { cleanUserData, getUserRepo } from "./user_service";
 
 
 export const getChatRoomRepo = () => {
   return AppDataSource.getRepository(ChatRoom);
 }
+
+export const getUserChatRoomRepo = () => {
+  return AppDataSource.getRepository(UserChatRoom);
+}
+
 
 export const createChatRoom = async (name: string, type = ChatRoomType.PUBLIC) => {
   const group = new ChatRoom()
@@ -46,16 +52,38 @@ export const getUserRooms = async (userId: number) => {
 
   const ids = rooms.map((room) => room.id);
   const messages = (ids.length) ? await getRoomsLastMessage(ids) : {}
+  const roomMemberAvatar: { [id: number]: string } = {};
+
+  // room other users
+  (await getUserChatRoomRepo()
+    .createQueryBuilder("userroom")
+    .leftJoinAndSelect("userroom.user", "user")
+    .leftJoinAndSelect("userroom.room", "room")
+    .whereInIds(ids)
+    .where("userroom.userId != :userId", { userId })
+    .getMany()).forEach((room) => {
+    if (!roomMemberAvatar[room.room.id]) {
+      roomMemberAvatar[room.room.id] = room.user.avatar;
+    }
+  })
+
+  console.log('roomMemberAvatar',  roomMemberAvatar)
+  console.log('room ids', ids)
+  console.log('user id', userId)
 
   return rooms.map((room) => {
-    const built = { id: 0, name: '', type: ChatRoomType.PUBLIC, members: [], lastMessage: null }
-    built.id = room.id
-    built.name = room.name
-    built.type = room.type
-    built.members = room.members.filter((member) => member.user.id !== userId).map((member) => cleanUserData(member.user))
+    const built = { id: 0, name: '', type: ChatRoomType.PUBLIC, members: [], avatar: '', lastMessage: null }
+    built.id = room.id;
+    built.name = room.name;
+    built.type = room.type;
+    built.avatar = room.avatar;
 
-    built.lastMessage = messages[room.id] || null
+    if (room.type === ChatRoomType.ONE_TO_ONE && roomMemberAvatar[room.id]) {
+      built.avatar = roomMemberAvatar[room.id];
+    }
+  
+    built.lastMessage = messages[room.id] || null;
 
-    return built
+    return built;
   })
 }
