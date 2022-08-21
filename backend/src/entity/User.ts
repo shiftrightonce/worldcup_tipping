@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad } from "typeorm"
 import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
 import { ChatMessage } from "./ChatMessage";
 import { UserChatRoom } from "./UserChatRoom";
@@ -8,8 +8,15 @@ export enum UserRole {
     ADMIN = 'admin'
 }
 
+export enum UserType {
+    HUMAN = 'human',
+    BOT = 'bot'
+}
+
 @Entity()
 export class User {
+
+    avatar = '';
 
     @PrimaryGeneratedColumn()
     id: number
@@ -20,6 +27,13 @@ export class User {
         default: UserRole.USER
     })
     role: UserRole;
+
+    @Column({
+        type: 'enum',
+        enum: UserType,
+        default: UserType.HUMAN
+    })
+    type: UserType
 
     @Column({ length: 255 })
     username: string
@@ -52,4 +66,9 @@ export class User {
         await generateAvatar(this.username)
     }
 
+    @AfterLoad()
+    handleAfterLoad () {
+        // set avatar
+        this.avatar = this.type === UserType.HUMAN ? `/static/user/${this.username}.png` : '/static/chat/bot.png';
+    }
 }
