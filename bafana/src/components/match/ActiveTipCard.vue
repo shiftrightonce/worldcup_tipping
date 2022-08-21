@@ -7,7 +7,7 @@
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>Game {{ match.number }}</q-item-label>
+        <q-item-label>Game #{{ match.number }} <span v-if="match.isMatchOpen" style="font-size: 9px;"> - {{ match.fullDate?.toLocaleString() }}</span> </q-item-label>
         <q-item-label caption>
           {{ match.countryA.name }} vs {{ match.countryB.name }}
         </q-item-label>
@@ -66,7 +66,7 @@ import WinnerTip from './WinnerTip.vue'
 import GoalsTip from './GoalsTip.vue'
 import PenaltyTip from './PenaltyTip.vue'
 import PenaltyGoalsTip from './PenaltyGoalsTip.vue'
-import { Match, MatchRound, useMatchStore, MatchStatus } from 'src/stores/match-store'
+import { Match, MatchRound, useMatchStore } from 'src/stores/match-store'
 import GameTipPercentage from './GameTipPercentage.vue'
 import { useUserTipStore } from 'src/stores/user-tip-store'
 import BotTipBtn from './BotTipBtn.vue'
