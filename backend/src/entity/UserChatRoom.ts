@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn, Column } from "typeorm";
 import { ChatRoom } from "./ChatRoom";
 import { User } from "./User";
 
@@ -17,5 +17,11 @@ export class UserChatRoom {
 
   @ManyToOne(() => ChatRoom, (room) => room.members, { nullable: false })
   room: ChatRoom;
+
+  @Column({
+    length: 255,
+    default: ''
+  })
+  avatar: string;
 
 }
