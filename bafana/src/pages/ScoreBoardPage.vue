@@ -6,7 +6,7 @@
   >
     <div class="row">
       <div class="col-md-4 col-xs-12">
-        <q-list dense bordered padding v-if="state.length">
+        <q-list dense bordered separator padding v-if="state.length">
           <q-item v-for="score in state" :key="score.user.id">
            <q-item-section avatar>
               <q-avatar>
