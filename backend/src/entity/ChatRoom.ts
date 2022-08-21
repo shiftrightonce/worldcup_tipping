@@ -34,8 +34,4 @@ export class ChatRoom {
   @OneToMany(() => ChatMessage, (message) => message.room)
   messages: ChatMessage[];
 
-  @AfterLoad()
-  public onAfterLoad () {
-    this.avatar = (this.type === ChatRoomType.PUBLIC) ? this.avatar : '';
-  }
 }
