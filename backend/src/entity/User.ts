@@ -69,6 +69,10 @@ export class User {
     @AfterLoad()
     handleAfterLoad () {
         // set avatar
-        this.avatar = this.type === UserType.HUMAN ? `/static/user/${this.username}.png` : '/static/chat/bot.png';
+        this.avatar = this.getAvatar()
+    }
+
+    getAvatar () {
+        return this.type === UserType.HUMAN ? `/static/user/${this.username}.png` : '/static/chat/bot.png';
     }
 }
