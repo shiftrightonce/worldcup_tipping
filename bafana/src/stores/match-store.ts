@@ -82,11 +82,12 @@ export const useMatchStore = defineStore('matchStore', {
     async getTodayMatches () {
       const userStore = useUserStore()
       const response = await userStore.api.get(`${matchEndpoint}/todays`)
-      this.activeMatches = response.data as Match[]
+      this.activeMatches = response.data.todayMatches as Match[]
       this.activeMatches.forEach((match) => {
-        const matchDate = new Date(`${match.date}T${match.time}`)
+        const matchDate = new Date(`${match.date}T${match.time}Z`)
         const today = new Date()
         match.timestamp = matchDate.getTime() - today.getTime()
+        match.fullDate = matchDate
         match.countdown = ''
         match.isMatchOpen = match.status === MatchStatus.OPEN
       })
@@ -120,7 +121,7 @@ export const useMatchStore = defineStore('matchStore', {
         const userStore = useUserStore()
         userStore.api.get(`${matchEndpoint}/completed`)
           .then((response) => {
-            this.completedMatches = response.data as Match[]
+            this.completedMatches = response.data.completedMatches as Match[]
             resolve(this.completed)
           }).catch(reject)
       }), [])
