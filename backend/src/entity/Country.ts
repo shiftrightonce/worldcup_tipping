@@ -1,9 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, AfterLoad } from "typeorm"
 import { Match } from "./Match";
 import { Tip } from "./Tip";
 
 @Entity()
 export class Country {
+
+  imageSource = '';
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -31,4 +33,10 @@ export class Country {
 
   @OneToMany(() => Match, (wins) => wins.winner)
   wins: Match[];
+
+  @AfterLoad()
+  public handleAfterLoad() {
+    this.imageSource = `/static/flag/${this.image}`;
+  }
+
 }
