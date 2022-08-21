@@ -12,6 +12,7 @@ export type User = {
   id: number,
   token: string,
   username: string,
+  avatar: string
 }
 
 export type UserTipState = {
