@@ -18,10 +18,4 @@ export class UserChatRoom {
   @ManyToOne(() => ChatRoom, (room) => room.members, { nullable: false })
   room: ChatRoom;
 
-  @Column({
-    length: 255,
-    default: ''
-  })
-  avatar: string;
-
 }
