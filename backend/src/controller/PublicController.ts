@@ -70,7 +70,8 @@ export class PublicController {
           id: user.id,
           token: user.token,
           role: user.role,
-          username: user.username
+          username: user.username,
+          avatar: user.avatar
         }
       });
   }
