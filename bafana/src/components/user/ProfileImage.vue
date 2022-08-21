@@ -1,5 +1,5 @@
 <template>
-  <q-img v-if="userStore.user" :src="'/static/user/' + userStore.user.username + '.png' ">
+  <q-img v-if="userStore.user" :src="userStore.user.avatar">
   </q-img>
 </template>
 
