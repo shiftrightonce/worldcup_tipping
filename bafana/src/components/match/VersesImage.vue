@@ -5,7 +5,7 @@
           A
           <q-badge floating rounded color="green" v-if="aWins" />
       </q-btn><br/>
-      <q-img :src="'/images/' + match.countryA.image" width="60%" /><br/>
+      <q-img :src="match.countryA.imageSource" width="60%" /><br/>
       <strong>{{ match.countryA.name}}</strong>
     </div>
     <div class="col-1 text-center">
@@ -17,7 +17,7 @@
         <q-badge floating rounded color="green" v-if="bWins" />
       </q-btn>
       <br/>
-      <q-img :src="'/images/'+ match.countryB.image" width="60%" /><br/>
+      <q-img :src="match.countryB.imageSource" width="60%" /><br/>
       <strong>{{ match.countryB.name }}</strong>
     </div>
   </div>
