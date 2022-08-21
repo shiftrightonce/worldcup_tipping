@@ -7,6 +7,7 @@ export type Country = {
   id: number,
   groupPoints: number,
   image: string,
+  imageSource: string,
   name: string,
   short: string
 }
@@ -45,6 +46,7 @@ export type Match = {
   countryAPenaltyGoals: number,
   countryBPenaltyGoals: number,
   timestamp?: number,
+  fullDate?: Date,
   isMatchOpen: boolean,
   countdown: string
 }
