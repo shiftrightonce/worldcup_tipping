@@ -128,20 +128,22 @@
               </q-item-section>
 
               <q-item-section>
-                <q-item-label lines="1">
-                  {{ conversation.members.length ? conversation.members[0].username: ''}}
+                <q-item-label lines="2">
+                  {{ conversation.name }}
                 </q-item-label>
                 <q-item-label class="conversation__summary" caption>
-                  <!-- <q-icon name="check" v-if="conversation.sent" /> -->
+                  <q-icon name="check" vv-if="conversation.sent" />
                   <!-- <q-icon name="not_interested" v-if="conversation.deleted" /> -->
+                  <span style="font-size: 9px">The quick brown fox jumps...</span>
                 </q-item-label>
               </q-item-section>
 
               <q-item-section side>
                 <q-item-label caption>
-                  {{ conversation.lastMessage?.createdAt.toLocaleString() }}
+                 <!-- <span style="font-size: 9px">{{ conversation.lastMessage?.createdAt.toLocaleString() }}</span> -->
+                 <span>2W</span>
                 </q-item-label>
-                <q-icon name="keyboard_arrow_down" />
+                <q-badge rounded color="green" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -262,7 +264,6 @@ export default defineComponent({
 
     const currentConversation = computed(() => {
       return state.value[currentConversationIndex.value]
-      // return conversations[currentConversationIndex.value]
     })
 
     const style = computed(() => ({
@@ -318,6 +319,7 @@ export default defineComponent({
 .WAL
   width: 100%
   height: 100%
+  padding-top: 20px
   padding-bottom: 20px
 
   &__layout
