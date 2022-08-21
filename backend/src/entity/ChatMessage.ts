@@ -2,6 +2,12 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Up
 import { ChatRoom } from "./ChatRoom";
 import { User } from "./User";
 
+export enum ChatMessageType {
+  MESSAGE = 'message',
+  IMAGE   = 'image',
+  VIDEO = 'video'
+}
+
 @Entity()
 export class ChatMessage {
 
@@ -15,6 +21,13 @@ export class ChatMessage {
     length: 512
   })
   message: string;
+
+  @Column({
+    type: 'enum',
+    enum: ChatMessageType,
+    default: ChatMessageType.MESSAGE
+  })
+  type: ChatMessageType
 
   @ManyToOne(() => ChatRoom, (room) => room.messages, { nullable: false })
   room: ChatRoom;
