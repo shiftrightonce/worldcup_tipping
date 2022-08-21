@@ -8,11 +8,17 @@ import { pluckUserFromRequest } from "../service/user_service";
 export class MatchController {
 
   public async todayMatchesAction () {
-    return await getTodayOpenMatches()
+    return {
+      success: true,
+      todayMatches: await getTodayOpenMatches()
+    }
   }
 
   public async completedMatchesAction () {
-    return await getMatchesByStatus(MatchStatus.COMPLETED)
+    return {
+      success: true,
+      completedMatches: await getMatchesByStatus(MatchStatus.COMPLETED)
+    }
   }
 
   public async placeTipAction (req: Request, res: Response) {
