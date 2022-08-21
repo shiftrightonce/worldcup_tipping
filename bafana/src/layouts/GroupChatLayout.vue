@@ -1,6 +1,6 @@
 <template>
   <div class="WAL position-relative" :style="style">
-    <q-layout view="lHr lpR lFr" container>
+    <q-layout view="lHr lpR lFr" container v-if="isReady">
       <q-header elevated>
         <q-toolbar>
           <q-btn
@@ -18,7 +18,7 @@
           </q-btn>
 
           <span class="q-subtitle-1 q-pl-md">
-            {{ currentConversation.person }}
+            {{ currentConversation.name }}
           </span>
 
           <q-space/>
@@ -115,7 +115,7 @@
         <q-scroll-area style="height: calc(100% - 100px)">
           <q-list>
             <q-item
-              v-for="(conversation, index) in conversations"
+              v-for="(conversation, index) in state"
               :key="conversation.id"
               clickable
               v-ripple
@@ -129,18 +129,17 @@
 
               <q-item-section>
                 <q-item-label lines="1">
-                  {{ conversation.person }}
+                  {{ conversation.members.length ? conversation.members[0].username: ''}}
                 </q-item-label>
                 <q-item-label class="conversation__summary" caption>
-                  <q-icon name="check" v-if="conversation.sent" />
-                  <q-icon name="not_interested" v-if="conversation.deleted" />
-                  {{ conversation.caption }}
+                  <!-- <q-icon name="check" v-if="conversation.sent" /> -->
+                  <!-- <q-icon name="not_interested" v-if="conversation.deleted" /> -->
                 </q-item-label>
               </q-item-section>
 
               <q-item-section side>
                 <q-item-label caption>
-                  {{ conversation.time }}
+                  {{ conversation.lastMessage?.createdAt.toLocaleString() }}
                 </q-item-label>
                 <q-icon name="keyboard_arrow_down" />
               </q-item-section>
@@ -259,9 +258,11 @@ export default defineComponent({
     const message = ref('')
     const currentConversationIndex = ref(0)
     const chatStore = useChatStore()
+    const { isReady, state } = chatStore.fetchRooms()
 
     const currentConversation = computed(() => {
-      return conversations[currentConversationIndex.value]
+      return state.value[currentConversationIndex.value]
+      // return conversations[currentConversationIndex.value]
     })
 
     const style = computed(() => ({
@@ -291,6 +292,8 @@ export default defineComponent({
     })()
 
     return {
+      isReady,
+      state,
       leftDrawerOpen,
       search,
       message,

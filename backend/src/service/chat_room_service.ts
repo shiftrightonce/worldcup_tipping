@@ -3,7 +3,6 @@ import { AppDataSource } from "../data-source";
 import { ChatRoom, ChatRoomType } from "../entity/ChatRoom";
 import { UserChatRoom } from "../entity/UserChatRoom";
 import { getRoomsLastMessage } from "./chat_message_service";
-import { cleanUserData, getUserRepo } from "./user_service";
 
 
 export const getChatRoomRepo = () => {
@@ -52,7 +51,7 @@ export const getUserRooms = async (userId: number) => {
 
   const ids = rooms.map((room) => room.id);
   const messages = (ids.length) ? await getRoomsLastMessage(ids) : {}
-  const roomMemberAvatar: { [id: number]: string } = {};
+  const roomMemberAvatar: { [id: number]: { avatar: string, username: string } } = {};
 
   // room other users
   (await getUserChatRoomRepo()
@@ -62,14 +61,13 @@ export const getUserRooms = async (userId: number) => {
     .whereInIds(ids)
     .where("userroom.userId != :userId", { userId })
     .getMany()).forEach((room) => {
-    if (!roomMemberAvatar[room.room.id]) {
-      roomMemberAvatar[room.room.id] = room.user.avatar;
-    }
-  })
-
-  console.log('roomMemberAvatar',  roomMemberAvatar)
-  console.log('room ids', ids)
-  console.log('user id', userId)
+      if (!roomMemberAvatar[room.room.id]) {
+        roomMemberAvatar[room.room.id] = {
+          avatar: room.user.avatar,
+          username: room.user.username
+        }
+      }
+    })
 
   return rooms.map((room) => {
     const built = { id: 0, name: '', type: ChatRoomType.PUBLIC, members: [], avatar: '', lastMessage: null }
@@ -79,9 +77,10 @@ export const getUserRooms = async (userId: number) => {
     built.avatar = room.avatar;
 
     if (room.type === ChatRoomType.ONE_TO_ONE && roomMemberAvatar[room.id]) {
-      built.avatar = roomMemberAvatar[room.id];
+      built.avatar = roomMemberAvatar[room.id].avatar;
+      built.name = roomMemberAvatar[room.id].username
     }
-  
+
     built.lastMessage = messages[room.id] || null;
 
     return built;
