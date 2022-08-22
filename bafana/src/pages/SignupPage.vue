@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { useLayoutStore } from 'src/stores/layout-store'
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useSignupStore } from 'src/stores/signup-store'
 import { useRouter } from 'vue-router'
 
