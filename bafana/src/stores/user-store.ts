@@ -8,11 +8,17 @@ const tokenKey = '_t'
 const userKey = '_user'
 export const userEndpoint = '/api/v1/user'
 
+export enum UserRole {
+    USER = 'user',
+    ADMIN = 'admin'
+}
+
 export type User = {
   id: number,
   token: string,
   username: string,
-  avatar: string
+  avatar: string,
+  role: UserRole
 }
 
 export type UserTipState = {
@@ -31,6 +37,7 @@ export const useUserStore = defineStore('userStore', {
     isLogin: (state) => !!state.activeToken,
     token: (state) => state.activeToken,
     user: (state) => state.activeUser,
+    isAdmin: (state) => state.activeUser?.role === UserRole.ADMIN,
     api: (state) => {
       if (state.activeToken && !state._api) {
         state._api = axios.create({
@@ -93,6 +100,8 @@ export const useUserStore = defineStore('userStore', {
       try {
         const response = await axios.get('/api/user/logout')
         LocalStorage.clear()
+        this.activeToken = ''
+        this.activeUser = null
         return response.status === 200
       } catch (e) {
         return false
