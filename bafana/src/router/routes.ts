@@ -27,6 +27,14 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: () => import('pages/GroupChatPage.vue'), name: 'group-chat' }
     ]
   },
+  {
+    path: '/secure/admin',
+    component: () => import('layouts/AdminLayout.vue'),
+    children: [
+      { path: 'matches', component: () => import('pages/admin/MatchesPage.vue'), name: 'admin-matches' },
+      { path: 'users', component: () => import('pages/admin/UsersPage.vue'), name: 'admin-users' }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
