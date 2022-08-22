@@ -1,4 +1,8 @@
 <template>
+  <q-form
+    @submit="onSignin"
+      autofocus
+  >
   <div class="row">
     <div class="col-xs-12 col-md-12 q-pl-lg q-pr-lg q-mb-md">
       <q-input v-model="username" label="Username" outlined @update:model-value="onInput"></q-input>
@@ -18,7 +22,7 @@
         <q-btn label="Sign up" color="secondary" align="left" :to="{ name: 'signup'}" ></q-btn>
      </div>
      <div class="col-xs-6 q-pl-lg q-pr-lg q-mb-md">
-        <q-btn label="Sign in" color="primary" class="float-right" @click="onSignin" ></q-btn>
+        <q-btn label="Sign in" color="primary" class="float-right" type="submit"></q-btn>
       </div>
      <div class="col-xs-12 q-pl-lg q-pr-lg q-mt-lg">
         <div class="text-caption">
@@ -26,6 +30,7 @@
         </div>
       </div>
   </div>
+  </q-form>
 </template>
 
 <script lang="ts">
