@@ -48,7 +48,20 @@ export const useMenuStore = defineStore('menu', {
         color: 'primary'
       }
     ] as MenuItem[],
-    admin: [] as MenuItem[]
+    admin: [
+      {
+        label: 'Matches',
+        to: { name: 'admin-matches' },
+        icon: 'sports_soccer',
+        color: 'primary'
+      },
+      {
+        label: 'Users',
+        to: { name: 'admin-users' },
+        icon: 'people',
+        color: 'primary'
+      }
+    ] as MenuItem[]
   }),
   getters: {
     mainMenuItems: (state) => state.main
