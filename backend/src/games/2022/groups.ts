@@ -57,7 +57,7 @@ const groupC = [
     id: "C1",
     name: "Argentina",
     short: "ARG",
-    image: "AG_argentina.png"
+    image: "ARG_argentina.png"
   },
   {
     id: "C2",
@@ -129,7 +129,7 @@ const groupE = [
     id: "E4",
     name: "Costa Rica",
     short: "CRC",
-    image: "crc_costa_rica.png"
+    image: "CRC_costa_rica.png"
   }
 ];
 

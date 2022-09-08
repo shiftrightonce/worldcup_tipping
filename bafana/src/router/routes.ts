@@ -32,6 +32,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: 'matches', component: () => import('pages/admin/MatchesPage.vue'), name: 'admin-matches' },
+      { path: 'group-round-points', component: () => import('pages/admin/GroupRoundPointsPage.vue'), name: 'group-round-points' },
       { path: 'users', component: () => import('pages/admin/UsersPage.vue'), name: 'admin-users' }
     ]
   },

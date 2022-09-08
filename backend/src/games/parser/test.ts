@@ -109,6 +109,6 @@ const generateRandomFinalWins = (finalParsedMatches: Array<Match & { countries: 
   const finalMatches = getParsedFinalMatches(round4Winners, yearData);
   const finalWinner = generateRandomFinalWins(finalMatches);
 
-  console.log(groupMatches);
+  console.log("winner", finalWinner);
 
 })()

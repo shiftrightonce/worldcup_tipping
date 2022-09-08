@@ -45,17 +45,17 @@ export const useChatStore = defineStore('chatStore', {
             if (response.data.success) {
               this.rooms = response.data.rooms as ChatRoom[]
               this.rooms.forEach((room) => {
-                if (room.type === ChatRoomType.PUBLIC) {
-                  room.avatar = '/ph/group.png'
-                } else if (room.members.length > 0) {
-                  room.avatar = `/static/user/${room.members[0].username}.png`
-                  room.name = room.members[0].username
-                  room.members.forEach((member) => {
-                    member.avatar = `/static/user/${room.members[0].username}.png`
-                  })
-                } else {
-                  room.avatar = '/ph/noimage.png'
-                }
+                // if (room.type === ChatRoomType.PUBLIC) {
+                //   room.avatar = '/ph/group.png'
+                // } else if (room.members.length > 0) {
+                //   room.avatar = `/static/user/${room.members[0].username}.png`
+                //   room.name = room.members[0].username
+                //   room.members.forEach((member) => {
+                //     member.avatar = `/static/user/${room.members[0].username}.png`
+                //   })
+                // } else {
+                //   room.avatar = '/ph/noimage.png'
+                // }
 
                 if (room.lastMessage) {
                   room.lastMessage.createdAt = new Date(room.lastMessage.createdAt)

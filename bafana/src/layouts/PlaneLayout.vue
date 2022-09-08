@@ -3,7 +3,8 @@
 
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="layoutStore.toggleLeftDrawer" v-if="layoutStore.isLeftDrawerEnabled" />
+        <q-btn dense flat round icon="menu" @click="layoutStore.toggleLeftDrawer"
+          v-if="layoutStore.isLeftDrawerEnabled" />
 
         <q-toolbar-title>
           <q-avatar>
@@ -12,7 +13,8 @@
           {{ layoutStore.title }}
         </q-toolbar-title>
 
-        <q-btn dense flat round icon="menu" @click="layoutStore.toggleRighDrawer" v-if="layoutStore.isRightDrawerEnabled" />
+        <q-btn dense flat round icon="menu" @click="layoutStore.toggleRighDrawer"
+          v-if="layoutStore.isRightDrawerEnabled" />
       </q-toolbar>
     </q-header>
 
@@ -25,14 +27,7 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page padding>
-          <router-view />
-          <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
-            <div class="col cursor-pointer q-pa-sm bg-accent text-white text-center">
-              Scroll back up...
-            </div>
-          </q-page-scroller>
-        </q-page>
+      <router-view />
     </q-page-container>
 
   </q-layout>

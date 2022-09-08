@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, AfterLoad } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, AfterLoad, DeleteDateColumn } from "typeorm"
 import { Match } from "./Match";
 import { Tip } from "./Tip";
 
@@ -27,6 +27,9 @@ export class Country {
 
   @Column()
   image: string;
+
+  @DeleteDateColumn()
+  deletedAt: Date
 
   @OneToMany(() => Tip, (tip) => tip.toWin)
   tipWins: Tip[]

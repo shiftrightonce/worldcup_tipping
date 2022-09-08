@@ -5,6 +5,7 @@
    "type": "commonjs",
    "devDependencies": {
       "@types/bcrypt": "^5.0.0",
+      "@types/bull": "^3.15.9",
       "@types/cookie-parser": "^1.4.3",
       "@types/cors": "^2.8.12",
       "@types/node": "^18.7.5",
@@ -16,6 +17,7 @@
       "@types/jdenticon": "^2.2.0",
       "bcrypt": "^5.0.1",
       "body-parser": "^1.19.1",
+      "bull": "^4.8.5",
       "cookie-parser": "^1.4.6",
       "cors": "^2.8.5",
       "dotenv": "^16.0.1",
@@ -32,6 +34,8 @@
       "start": "ts-node src/index.ts",
       "start:dev": "npx nodemon -w './src/**' -e 'js,mjs,json,ts' -x npx ts-node ./src/index.ts",
       "p:test": "ts-node src/games/parser/test.ts",
+      "j:test": "ts-node src/jobs/queue.ts",
+      "bot:group": "ts-node src/bot/group_round_bot.ts",
       "db:setup": "ts-node src/tools/setup.ts",
       "db:seed": "ts-node src/seeds/index.ts",
       "typeorm": "typeorm-ts-node-commonjs"

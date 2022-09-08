@@ -1,4 +1,4 @@
-import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ChatMessage } from "./ChatMessage";
 import { UserChatRoom } from "./UserChatRoom";
 
@@ -27,6 +27,12 @@ export class ChatRoom {
     default: ChatRoomType.PUBLIC
   })
   type: ChatRoomType;
+
+  @CreateDateColumn()
+  createdAt: Date
+
+  @DeleteDateColumn()
+  deletedAt: Date
 
   @OneToMany(() => UserChatRoom, (member) => member.room)
   members: UserChatRoom[];

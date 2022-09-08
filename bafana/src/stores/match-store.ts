@@ -1,10 +1,11 @@
 import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { useUserTipStore } from './user-tip-store'
-import { useUserStore } from './user-store'
+import { UserRole, useUserStore } from './user-store'
 
 export type Country = {
   id: number,
+  internalId: string,
   groupPoints: number,
   image: string,
   imageSource: string,
@@ -38,6 +39,7 @@ export type Match = {
   countryB: Country,
   penalty: boolean,
   date: string,
+  match: string,
   round: MatchRound,
   time: string
   winner?: Country
@@ -76,7 +78,31 @@ export const useMatchStore = defineStore('matchStore', {
   }),
   getters: {
     today: (state) => state.activeMatches,
-    completed: (state) => state.completedMatches
+    completed: (state) => state.completedMatches,
+    matchStatuses: () => {
+      return [
+        {
+          label: 'Pending',
+          value: MatchStatus.PENDING
+        },
+        {
+          label: 'Open',
+          value: MatchStatus.OPEN
+        },
+        {
+          label: 'Close',
+          value: MatchStatus.CLOSE
+        },
+        {
+          label: 'Score Entered',
+          value: MatchStatus.SCORE_ENTERED
+        },
+        {
+          label: 'Completed',
+          value: MatchStatus.COMPLETED
+        }
+      ]
+    }
   },
   actions: {
     async getTodayMatches () {
@@ -126,10 +152,33 @@ export const useMatchStore = defineStore('matchStore', {
           }).catch(reject)
       }), [])
     },
+    fetchAllMatches (status: MatchStatus | null) {
+      return useAsyncState(new Promise<Match[]>((resolve, reject) => {
+        const userStore = useUserStore()
+        if (userStore.user?.role !== UserRole.ADMIN) {
+          return reject('permission denied')
+        }
+        userStore.api.get(`${matchEndpoint}/all?status=${status}`)
+          .then((response) => {
+            (response.data.matches as Match[]).forEach((match) => {
+              const matchDate = new Date(`${match.date}T${match.time}Z`)
+              match.fullDate = matchDate
+            })
+            resolve(response.data.matches)
+          }).catch(reject)
+      }), [])
+    },
     async placeTip (match: number) {
       const userStore = useUserStore()
       const tip = useUserTipStore().matchTip(match)
       return await userStore.api.post(`${matchEndpoint}/place-tip`, { ...tip.tip })
+    },
+    async updateMatch (matchId: number, matchData: Record<string, unknown>) {
+      const userStore = useUserStore()
+      if (userStore.user?.role === UserRole.ADMIN) {
+        const response = await userStore.api.put(`${matchEndpoint}/${matchId}`, matchData)
+        return response.data
+      }
     }
   }
 })

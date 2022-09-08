@@ -1,5 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { LoadingBar } from 'quasar'
+
+// only hijack api requests
+LoadingBar.setDefaults({
+  hijackFilter (url: string) {
+    return url.indexOf('/api/') > -1
+  }
+})
 
 const APP_VERSION = '0.0.1'
 

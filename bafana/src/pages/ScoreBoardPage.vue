@@ -1,18 +1,15 @@
 <template>
-  <transition
-    appear
-    enter-active-class="animated slideInLeft"
-    leave-active-class="animated slideOutRight"
-  >
-    <div class="row">
-      <div class="col-md-4 col-xs-12">
-        <q-list dense bordered separator padding v-if="state.length">
-          <q-item v-for="score in state" :key="score.user.id">
-           <q-item-section avatar>
-              <q-avatar>
-                <q-badge floating :label="getPosition(score.totalPoints)" color="teal" />
-                <img :src="'/static/user/'+ score.user.username + '.png'">
-              </q-avatar>
+  <q-page padding>
+    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <q-list dense bordered separator padding v-if="state.length">
+            <q-item v-for="score in state" :key="score.user.id">
+              <q-item-section avatar>
+                <q-avatar>
+                  <q-badge floating :label="getPosition(score.totalPoints)" color="teal" />
+                  <img :src="'/static/user/'+ score.user.username + '.png'">
+                </q-avatar>
               </q-item-section>
               <q-item-section>
                 {{ score.user.username }}
@@ -20,24 +17,29 @@
               <q-item-section avatar>
                 {{ score.totalPoints }}
               </q-item-section>
-          </q-item>
-      </q-list>
+            </q-item>
+          </q-list>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+    <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
+      <ScrollUpMessage></ScrollUpMessage>
+    </q-page-scroller>
+  </q-page>
 </template>
 
 <script lang="ts">
 import { useLayoutStore } from 'src/stores/layout-store'
 import { useTipStore } from 'src/stores/tip-store'
 import { defineComponent } from 'vue'
+import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 
 export default defineComponent({
   setup () {
     const layoutStore = useLayoutStore()
     const { isLoading, isReady, state } = useTipStore().fetchScoreboard()
     let currentPosition = 1
-    const positions: {[key:string]: number } = {}
+    const positions: { [key: string]: number } = {}
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.setTitle('Scoreboard')
@@ -56,6 +58,9 @@ export default defineComponent({
       state,
       getPosition
     }
+  },
+  components: {
+    ScrollUpMessage
   }
 })
 </script>

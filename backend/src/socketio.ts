@@ -32,7 +32,6 @@ export default async (io: Server) => {
 
     io.on("connection", (socket) => {
         console.log("connection: " + socket.id)
-        console.log('click data: ', socket.data)
 
         // server time
         socket.emit('server:time', Date.now())

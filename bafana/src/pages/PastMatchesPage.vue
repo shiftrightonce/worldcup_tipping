@@ -1,15 +1,16 @@
 <template>
-  <transition
-    appear
-    enter-active-class="animated slideInLeft"
-    leave-active-class="animated slideOutRight"
-  >
-    <div class="row">
-      <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id">
-        <activeTipCard :match="match"></activeTipCard>
+  <q-page padding>
+    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
+      <div class="row">
+        <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id">
+          <activeTipCard :match="match"></activeTipCard>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+    <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
+      <ScrollUpMessage></ScrollUpMessage>
+    </q-page-scroller>
+  </q-page>
 </template>
 
 <script lang="ts">
@@ -17,6 +18,7 @@ import { useLayoutStore } from 'src/stores/layout-store'
 import { useMatchStore } from 'src/stores/match-store'
 import { defineComponent } from 'vue'
 import ActiveTipCard from '../components/match/ActiveTipCard.vue'
+import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 
 export default defineComponent({
   name: 'PastMatchesPage',
@@ -33,6 +35,6 @@ export default defineComponent({
       state
     }
   },
-  components: { ActiveTipCard }
+  components: { ActiveTipCard, ScrollUpMessage }
 })
 </script>

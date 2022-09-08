@@ -56,6 +56,12 @@ export const useMenuStore = defineStore('menu', {
         color: 'primary'
       },
       {
+        label: 'Group Round Points',
+        to: { name: 'group-round-points' },
+        icon: 'timeline',
+        color: 'primary'
+      },
+      {
         label: 'Users',
         to: { name: 'admin-users' },
         icon: 'people',

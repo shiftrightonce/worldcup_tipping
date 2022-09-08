@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne, DeleteDateColumn } from "typeorm"
 import { Country } from "./Country";
 import { Match } from "./Match";
 import { User } from "./User";
@@ -44,4 +44,7 @@ export class Tip {
 
   @Column({ default: 0 })
   points: number
+
+  @DeleteDateColumn()
+  deletedAt: Date
 }

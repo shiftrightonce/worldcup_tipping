@@ -1,6 +1,7 @@
 import { MatchStatus } from '../entity/Match';
-import { getMatchById } from '../service/match_service';
-import { getTipsByMatchId, getTipsStreamByMatchId } from '../service/tip_service';
+import { Tip } from '../entity/Tip';
+import { getMatchById, updateMatch } from '../service/match_service';
+import { calculateScore, getGetTipById, getTipsByMatchId, getTipsStreamByMatchId, updateTip } from '../service/tip_service';
 import { ProcessorList, queueJob, createRegisterer } from './general'
 
 const handlerName = 'calculate_player_match_points';
@@ -9,18 +10,17 @@ const processQueuedJob = async (job: { matchId: number }) => {
   const match = await getMatchById(job.matchId)
 
   if (match && match.status === MatchStatus.SCORE_ENTERED) {
-    const tips = await getTipsByMatchId(match.id)
-    tips.forEach((aTip) => {
-      console.log("calculating....", aTip.id)
+    const stream = await getTipsStreamByMatchId(match.id)
+    stream.on('data', async (data) => {
+      const d = JSON.parse(JSON.stringify(data))
+      const tip = await getGetTipById(d['tip_id'])
+      tip.points = calculateScore(tip);
+      await updateTip(tip)
     })
 
-    const stream = await getTipsStreamByMatchId(match.id)
-    stream.on('data', (data) => {
-      console.log(data)
-    })
     stream.on('close', () => {
-      // @todo Set the match to completed
-      console.log('processing completed')
+      // mark match as completed
+      updateMatch(match.id, { status: MatchStatus.COMPLETED })
     })
 
   }

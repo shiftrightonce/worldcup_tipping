@@ -2,6 +2,7 @@ import { getRedisConnection } from '../redis_client'
 import { QUEUE_NAME, ProcessorList, Job } from './general'
 import calculatePlayerMatchPoints from './calculate_players_match_points'
 import processMatch from './process_match'
+import notifyUsers from './notify_users'
 import { AppDataSource } from '../data-source'
 
 
@@ -10,6 +11,7 @@ const processors: ProcessorList = {}
 // register processors
 calculatePlayerMatchPoints(processors)
 processMatch(processors)
+notifyUsers(processors)
 
 AppDataSource.initialize().then(async () => {
   getRedisConnection(true)

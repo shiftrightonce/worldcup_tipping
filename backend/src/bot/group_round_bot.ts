@@ -1,4 +1,4 @@
-import { Country, Match, YearData, GroupWinnerAndRunnerUp } from '../games/parser/types';
+import { Country, YearData } from '../games/parser/types';
 
 export const generateRandomGroupPoints = (yearData: YearData) => {
   const groups: { [key: string]: Country[] } = JSON.parse(JSON.stringify(yearData.groups));
@@ -17,5 +17,9 @@ export const generateRandomGroupPoints = (yearData: YearData) => {
     })
   }
 
+
+  console.log(groups);
+
   return groups;
 }
+
