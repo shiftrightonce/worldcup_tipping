@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import { useCountryStore } from 'src/stores/country-store'
 import { Country } from 'src/stores/match-store'
 import { defineComponent, PropType, ref } from 'vue'
 
@@ -29,11 +30,20 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['modelValue'],
   setup (props) {
     const points = ref(props.modelValue.groupPoints || '')
     const isSaving = ref(false)
+    const countryStore = useCountryStore()
 
     const saveData = () => {
+      countryStore.updateCountry(props.modelValue.id, { groupPoints: points.value })
+        .then((response) => {
+          console.log('res', response)
+        })
+        .catch((e) => {
+          console.log('error', e)
+        })
       console.log('saving...')
     }
 

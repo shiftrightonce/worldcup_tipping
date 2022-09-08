@@ -35,7 +35,7 @@ export const getUserMatchTip = async (matchId: number, userId: number, year = co
   return tip;
 }
 
-export const getGetTipById = async (tipId: number) => {
+export const getTipById = async (tipId: number) => {
   return await getTipRepo().findOne({
     where: {
       id: tipId
@@ -44,14 +44,15 @@ export const getGetTipById = async (tipId: number) => {
 }
 
 export const updateTip = async (tip: Tip) => {
-  return getTipRepo().update(
+  await getTipRepo().update(
     tip.id,
     tip
   )
+  return getTipById(tip.id)
 }
 
 export const placeUserTip = async (tip: Tip, userId: number) => {
-  const oldTip = await getGetTipById(tip.id)
+  const oldTip = await getTipById(tip.id)
   if (!oldTip) {
     return {
       success: false,
@@ -78,21 +79,23 @@ export const placeUserTip = async (tip: Tip, userId: number) => {
     tip.countryAPenaltyToScore = tip.countryAPenaltyToScore || 0;
     tip.countryBPenaltyToScore = tip.countryBPenaltyToScore || 0;
 
-    return {
-      success: true,
-      tip: await getTipRepo().update({
+    await getTipRepo().update({
         id: oldTip.id,
         user: {
           id: userId
         }
       }, tip)
+    return {
+      success: true,
+      tip: await getTipById(oldTip.id)
     }
   }
 
   return {
     success: false,
     code: 'tipping_time_expired',
-    message: 'The match may have started'
+    message: 'The match may have started',
+    tip: null
   }
 }
 

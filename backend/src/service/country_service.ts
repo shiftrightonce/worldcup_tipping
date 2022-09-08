@@ -7,9 +7,9 @@ export const getCountryRepo = () => {
 }
 export const getAllCountries = async (year = configYear) => {
   return await getCountryRepo().createQueryBuilder('country')
-  .where('country.year = :year', { year })
-  .orderBy('country.internalId', 'ASC')
-  .getMany()
+    .where('country.year = :year', { year })
+    .orderBy('country.internalId', 'ASC')
+    .getMany()
 }
 
 export const findCountryById = async (countryId: number) => {
@@ -19,13 +19,13 @@ export const findCountryById = async (countryId: number) => {
 export const updateCountry = async (countryId: number, data: Record<string, unknown>) => {
   const country = await findCountryById(countryId)
   if (country) {
-    const savedCountry = await getCountryRepo().update({
+    await getCountryRepo().update({
       id: country.id
     }, data)
 
     return {
       success: true,
-      country: savedCountry
+      country: await findCountryById(country.id)
     }
   }
 

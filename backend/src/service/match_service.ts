@@ -114,7 +114,7 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
       }
     }
 
-    const savedMatch = await getMatchRepo().update({
+    await getMatchRepo().update({
       id: match.id
     }, data);
 
@@ -122,7 +122,7 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
 
     return {
       success: true,
-      match: savedMatch 
+      match: await getMatchById(match.id) 
     }
   }
 

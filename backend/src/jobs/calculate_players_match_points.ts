@@ -1,7 +1,7 @@
 import { MatchStatus } from '../entity/Match';
 import { Tip } from '../entity/Tip';
 import { getMatchById, updateMatch } from '../service/match_service';
-import { calculateScore, getGetTipById, getTipsByMatchId, getTipsStreamByMatchId, updateTip } from '../service/tip_service';
+import { calculateScore, getTipById, getTipsByMatchId, getTipsStreamByMatchId, updateTip } from '../service/tip_service';
 import { ProcessorList, queueJob, createRegisterer } from './general'
 
 const handlerName = 'calculate_player_match_points';
@@ -13,7 +13,7 @@ const processQueuedJob = async (job: { matchId: number }) => {
     const stream = await getTipsStreamByMatchId(match.id)
     stream.on('data', async (data) => {
       const d = JSON.parse(JSON.stringify(data))
-      const tip = await getGetTipById(d['tip_id'])
+      const tip = await getTipById(d['tip_id'])
       tip.points = calculateScore(tip);
       await updateTip(tip)
     })
