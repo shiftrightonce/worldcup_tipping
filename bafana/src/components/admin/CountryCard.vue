@@ -31,20 +31,22 @@ export default defineComponent({
     }
   },
   emits: ['modelValue'],
-  setup (props) {
+  setup (props, ctx) {
     const points = ref(props.modelValue.groupPoints || '')
     const isSaving = ref(false)
     const countryStore = useCountryStore()
 
     const saveData = () => {
+      isSaving.value = true
       countryStore.updateCountry(props.modelValue.id, { groupPoints: points.value })
         .then((response) => {
-          console.log('res', response)
+          ctx.emit('modelValue', response)
+          isSaving.value = false
         })
         .catch((e) => {
           console.log('error', e)
+          isSaving.value = false
         })
-      console.log('saving...')
     }
 
     return {
