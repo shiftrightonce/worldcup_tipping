@@ -3,6 +3,7 @@ import { QUEUE_NAME, ProcessorList, Job } from './general'
 import calculatePlayerMatchPoints from './calculate_players_match_points'
 import processMatch from './process_match'
 import notifyUsers from './notify_users'
+import updateRound16MatchCountries from './update_round_16_match_countries'
 import { AppDataSource } from '../data-source'
 
 
@@ -12,6 +13,7 @@ const processors: ProcessorList = {}
 calculatePlayerMatchPoints(processors)
 processMatch(processors)
 notifyUsers(processors)
+updateRound16MatchCountries(processors)
 
 AppDataSource.initialize().then(async () => {
   getRedisConnection(true)
@@ -40,5 +42,4 @@ AppDataSource.initialize().then(async () => {
 
 }).catch(error => console.log(error))
 
-
-console.log("Okay this is good \r\n")
+console.log("Queue is up and running \r\n")

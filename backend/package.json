@@ -34,6 +34,7 @@
       "start": "ts-node src/index.ts",
       "start:dev": "npx nodemon -w './src/**' -e 'js,mjs,json,ts' -x npx ts-node ./src/index.ts",
       "p:test": "ts-node src/games/parser/test.ts",
+      "future": "ts-node src/jobs/update_round_8_match_countries.ts",
       "j:test": "ts-node src/jobs/queue.ts",
       "bot:group": "ts-node src/bot/group_round_bot.ts",
       "db:setup": "ts-node src/tools/setup.ts",

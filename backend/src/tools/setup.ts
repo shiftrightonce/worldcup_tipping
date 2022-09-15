@@ -81,6 +81,8 @@ export const insertMatches = async (matches: Array<ParsedMatchType & { countries
       const configDate = new Date(match.date.toUTCString());
       configDate.setDate(configDate.getDate() - 2);  // configuration is two days before the match
       match.toConfigureOn = configDate;
+    } else {
+      match.status = MatchStatus.OPEN;
     }
 
     await matchRepo.save(match)

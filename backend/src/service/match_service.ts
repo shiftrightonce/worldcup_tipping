@@ -1,6 +1,6 @@
-import { MoreThanOrEqual } from 'typeorm'
+import { MoreThanOrEqual, IsNull } from 'typeorm'
 import { AppDataSource } from "../data-source"
-import { Match, MatchStatus } from "../entity/Match";
+import { Match, MatchStatus, MatchRound } from "../entity/Match";
 import { queueProcessMatch } from '../jobs'
 import { year as configYear } from '../games/parser/parse_config'
 
@@ -122,7 +122,7 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
 
     return {
       success: true,
-      match: await getMatchById(match.id) 
+      match: await getMatchById(match.id)
     }
   }
 
@@ -132,4 +132,53 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
     message: `match with ID ${matchId} not found`,
     match: null
   }
+}
+
+export const getGroupedMatches = async (year = configYear) => {
+  const grouped = {};
+  const result = await getMatchRepo().find({
+    where: {
+      round: MatchRound.GROUP,
+      year
+    },
+    order: {
+      number: 'ASC'
+    }
+  })
+
+  result.forEach((match) => {
+    const letter = match.countryA.internalId[0]
+    if (grouped[letter] === undefined) {
+      grouped[letter] = []
+    }
+    grouped[letter].push(match)
+  })
+
+  return grouped
+}
+
+export const getMatchesByRound = async (round: MatchRound, year = configYear) => {
+  return await getMatchRepo().find({
+    where: {
+      round,
+      year
+    },
+    order: {
+      number: 'ASC'
+    }
+  })
+}
+
+
+export const getRoundMatchWithEmptyCountries = async (round: MatchRound, year = configYear) => {
+  return await getMatchRepo().find({
+    where: [
+      { countryA: IsNull(), round, year },
+      { countryB: IsNull(), round, year }
+    ],
+    order: {
+      number: 'ASC'
+    }
+  })
+
 }
