@@ -1,3 +1,6 @@
 export { addToQueue as queueCalculatePlayerMatchPoints } from './calculate_players_match_points'
 export { addToQueue as queueProcessMatch } from './process_match'
 export { addToQueue as updateRound16MatchCountries } from './update_round_16_match_countries'
+export { addToQueue as updateRound8MatchCountries } from './update_round_8_match_countries'
+export { addToQueue as updateRound4MatchCountries } from './update_round_4_match_countries'
+export { addToQueue as updateThirdAndFinalMatchCountries } from './update_third_and_final_place_matches_countries'

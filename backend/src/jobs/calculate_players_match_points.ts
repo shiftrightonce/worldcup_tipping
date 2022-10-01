@@ -24,7 +24,11 @@ const processQueuedJob = async (job: { matchId: number }) => {
     })
 
   }
-  console.log('calculating players match points', job)
+  console.log('calculating players match points', {
+    matchNumber: match.number,
+    matchId: match.id
+  });
+
   return job.matchId > 0
 }
 

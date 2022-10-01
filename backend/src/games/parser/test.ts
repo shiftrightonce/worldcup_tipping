@@ -98,7 +98,7 @@ const generateRandomFinalWins = (finalParsedMatches: Array<Match & { countries: 
 (async () => {
   const yearData = await getData();
   const groupMatches = getParsedGroupMatches(yearData)
-  console.log(groupMatches)
+
   const round16Matches = getParsedRound16Matches(generateRandomGroupWins(yearData), yearData)
   const round16Winners = generateRandomRound16Wins(round16Matches);
   const round8Matches = getParsedRound8Matches(round16Winners, yearData);
@@ -110,6 +110,6 @@ const generateRandomFinalWins = (finalParsedMatches: Array<Match & { countries: 
   const finalMatches = getParsedFinalMatches(round4Winners, yearData);
   const finalWinner = generateRandomFinalWins(finalMatches);
 
-  console.log("winner", finalWinner);
+  console.log("game winner", finalWinner);
 
 })()

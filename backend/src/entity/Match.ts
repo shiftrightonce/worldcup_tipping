@@ -89,4 +89,13 @@ export class Match {
 
   @OneToMany(() => Tip, (tip) => tip.match)
   tips: Tip[]
+
+
+  public getLooser () {
+    if (this.winner) {
+      return (this.winner.internalId === this.countryA.internalId) ? this.countryB : this.countryA;
+    }
+
+    return null
+  }
 }

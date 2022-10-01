@@ -4,16 +4,23 @@ import calculatePlayerMatchPoints from './calculate_players_match_points'
 import processMatch from './process_match'
 import notifyUsers from './notify_users'
 import updateRound16MatchCountries from './update_round_16_match_countries'
+import updateRound8MatchCountries from './update_round_8_match_countries'
+import updateRound4MatchCountries from './update_round_4_match_countries'
+import updateThirdAndFinalMatchCountries from  './update_third_and_final_place_matches_countries'
 import { AppDataSource } from '../data-source'
 
 
 const processors: ProcessorList = {}
 
 // register processors
-calculatePlayerMatchPoints(processors)
-processMatch(processors)
-notifyUsers(processors)
-updateRound16MatchCountries(processors)
+calculatePlayerMatchPoints(processors);
+processMatch(processors);
+notifyUsers(processors);
+updateRound16MatchCountries(processors);
+updateRound8MatchCountries(processors);
+updateRound4MatchCountries(processors);
+updateThirdAndFinalMatchCountries(processors);
+
 
 AppDataSource.initialize().then(async () => {
   getRedisConnection(true)

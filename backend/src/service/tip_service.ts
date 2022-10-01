@@ -28,7 +28,7 @@ export const getUserMatchTip = async (matchId: number, userId: number, year = co
       tip.match = match;
       tip.user = user;
       tip.year = year;
-      tip = await getTipRepo().save(tip); // @todo don't save the tip yet !@!@#!
+      // tip = await getTipRepo().save(tip); // @todo don't save the tip yet !@!@#!
     }
   }
 
@@ -51,16 +51,32 @@ export const updateTip = async (tip: Tip) => {
   return getTipById(tip.id)
 }
 
-export const placeUserTip = async (tip: Tip, userId: number) => {
-  const oldTip = await getTipById(tip.id)
-  if (!oldTip) {
-    return {
-      success: false,
-      code: 'match_is_not_open',
-      message: 'Match is not open for tipping'
-    };
-  }
-  if (oldTip.match.status !== MatchStatus.OPEN) {
+
+export const placeUserTip = async (tip: Tip, userId: number, year = configYear) => {
+  // const oldTip = await getTipById(tip.id)
+  // if (!oldTip) {
+  //   return {
+  //     success: false,
+  //     code: 'match_is_not_open',
+  //     message: 'Match is not open for tipping'
+  //   };
+  // }
+
+  const oldTip = await getTipRepo().findOne({
+    where: {
+      year: tip.year || year,
+      match: {
+        id: tip.match.id
+      },
+      user: {
+        id: userId
+      }
+    }
+  })
+
+  const match = await getMatchById(tip.match.id);
+
+  if (match.status !== MatchStatus.OPEN) {
     return {
       success: false,
       code: 'match_is_not_open',
@@ -68,7 +84,7 @@ export const placeUserTip = async (tip: Tip, userId: number) => {
     };
   }
 
-  if (matchHasNotExpire(oldTip.match)) {
+  if (matchHasNotExpire(match)) {
     delete tip.user
     if (tip.toWin && tip.toWin.id === 0) {
       tip.toWin = null
@@ -79,15 +95,26 @@ export const placeUserTip = async (tip: Tip, userId: number) => {
     tip.countryAPenaltyToScore = tip.countryAPenaltyToScore || 0;
     tip.countryBPenaltyToScore = tip.countryBPenaltyToScore || 0;
 
-    await getTipRepo().update({
+    if (oldTip) {
+      await getTipRepo().update({
         id: oldTip.id,
         user: {
           id: userId
         }
       }, tip)
+    } else {
+      const user = await getUserById(userId);
+      if (match && user) {
+        tip.match = match;
+        tip.user = user;
+        tip.year = tip.year || year;
+        tip = await getTipRepo().save(tip); // @todo don't save the tip yet !@!@#!
+      }
+    }
+
     return {
       success: true,
-      tip: await getTipById(oldTip.id)
+      tip: await getTipById(tip.id)
     }
   }
 
@@ -164,7 +191,7 @@ export const calculateScore = (tip: Tip) => {
     }
 
     return (tip.toPenalty === match.penalty) ? 10 : 0;
-  
+
   }
   const countryScore = () => {
     let points = 0;
@@ -176,7 +203,7 @@ export const calculateScore = (tip: Tip) => {
 
     if (tip.countryBToScore === match.countryBGoals) {
       points += (tip.countryBToScore || 1) * weigth
-    } 
+    }
 
     return points;
   }
@@ -198,7 +225,7 @@ export const calculateScore = (tip: Tip) => {
     return points;
   }
   const isLevel = () => {
-    return (tip.isLevel && match.winner === null) ? 1: 0
+    return (tip.isLevel && match.winner === null) ? 1 : 0
   }
   const toWin = () => {
     return (match.winner && tip.toWin && match.winner.id === tip.toWin.id) ? 1 : 0;
