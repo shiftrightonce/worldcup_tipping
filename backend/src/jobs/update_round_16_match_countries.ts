@@ -13,7 +13,7 @@ const round16 = async (yearData: YearData) => {
     return
   }
 
-  const groupWinderAndRunnerUps = {};
+  const groupWinnerAndRunnerUps = {};
   const countryRecords = {}
   const groupedMatches = await getGroupedMatches()
   for (const group in groupedMatches) {
@@ -21,7 +21,7 @@ const round16 = async (yearData: YearData) => {
     const allReady = groupedMatches[group].every((match) => {
       countryIds[match.countryA.id] = match.countryA.id;
       countryIds[match.countryB.id] = match.countryB.id;
-      return match.status === MatchStatus.SCORE_ENTERED || match.status === MatchStatus.COMPLETED
+      return ((match.status === MatchStatus.SCORE_ENTERED || match.status === MatchStatus.COMPLETED) && match.countryA.groupPoints > -1 && match.countryB.groupPoints > -1)
     });
 
     if (allReady) {
@@ -30,7 +30,7 @@ const round16 = async (yearData: YearData) => {
         countryRecords[countries[0].internalId] = countries[0];
         countryRecords[countries[1].internalId] = countries[1];
 
-        groupWinderAndRunnerUps[group] = {
+        groupWinnerAndRunnerUps[group] = {
           winner: countries[0].internalId,
           runnerUp: countries[1].internalId
         };
@@ -39,7 +39,7 @@ const round16 = async (yearData: YearData) => {
   }
 
   const round16Matches = {};
-  getParsedRound16Matches(groupWinderAndRunnerUps, yearData).forEach((match) => {
+  getParsedRound16Matches(groupWinnerAndRunnerUps, yearData).forEach((match) => {
     round16Matches[match.number] = match;
   })
 
@@ -48,11 +48,13 @@ const round16 = async (yearData: YearData) => {
       match.countryA = countryRecords[round16Matches[match.number].countries[0]]
       match.countryB = countryRecords[round16Matches[match.number].countries[1]]
 
-      await updateMatch(match.id, {
-        status: MatchStatus.OPEN,
-        countryA: match.countryA,
-        countryB: match.countryB
-      })
+      if (match.countryA && match.countryB) {
+        await updateMatch(match.id, {
+          status: MatchStatus.OPEN,
+          countryA: match.countryA,
+          countryB: match.countryB
+        })
+      }
     }
   })
 
