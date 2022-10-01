@@ -1,7 +1,7 @@
 import { In } from "typeorm";
 import { AppDataSource } from "../data-source"
 import { Country } from "../entity/Country"
-import { year as configYear } from '../games/parser/parse_config'
+import { year as configYear, year } from '../games/parser/parse_config'
 import { updateRound16MatchCountries } from "../jobs";
 
 export const getCountryRepo = () => {
@@ -16,6 +16,10 @@ export const getAllCountries = async (year = configYear) => {
 
 export const findCountryById = async (countryId: number) => {
   return await getCountryRepo().findOne({ where: { id: countryId } });
+}
+
+export const getCountryCount = async (year = configYear) => {
+  return await getCountryRepo().count();
 }
 
 export const updateCountry = async (countryId: number, data: Record<string, unknown>) => {
