@@ -33,6 +33,7 @@ export const getUserMatchTip = async (matchId: number, userId: number, year = co
       tip.countryAPenaltyToScore = 0;
       tip.countryBPenaltyToScore = 0;
       tip.isLevel = false;
+      tip.toPenalty = false;
       // tip = await getTipRepo().save(tip); // @todo don't save the tip yet !@!@#!
     }
   }
