@@ -33,11 +33,13 @@ const processQueuedJob = async () => {
       match.countryA = winners[round8Matches[match.number].countries[0]];
       match.countryB = winners[round8Matches[match.number].countries[1]];
 
-      await updateMatch(match.id, {
-        status: MatchStatus.OPEN,
-        countryA: match.countryA,
-        countryB: match.countryB
-      })
+      if (match.countryA && match.countryB) {
+        await updateMatch(match.id, {
+          status: MatchStatus.OPEN,
+          countryA: match.countryA,
+          countryB: match.countryB
+        })
+      }
     }
   })
   return true
