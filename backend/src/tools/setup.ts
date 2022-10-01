@@ -48,6 +48,7 @@ const setupCountries = async (yearData: YearData) => {
       country.short = entry.short;
       country.year = year;
       country.image = entry.image;
+      country.groupPoints = -1;
 
       await countryRepo.save(country);
     }
