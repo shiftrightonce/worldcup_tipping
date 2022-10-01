@@ -71,7 +71,7 @@ export const insertMatches = async (matches: Array<ParsedMatchType & { countries
 
     match.match = entry.match;
     match.status = MatchStatus.PENDING;
-    match.penalty = entry.penalty;
+    // match.penalty = entry.penalty; // we don't need to set this here
     match.year = year;
     match.number = entry.number;
     match.round = round;
