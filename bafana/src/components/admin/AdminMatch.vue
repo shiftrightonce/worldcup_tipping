@@ -41,7 +41,7 @@
             <q-input type="number" label="Goals" v-model="countryB.goals" dense outlined />
           </div>
         </div>
-        <div class="row q-ma-md">
+        <div class="row q-ma-md" v-if="!isGroupRound">
           <div class="col-4 text-center">
             <q-input type="number" label="Penalty Goals" v-model="countryA.penaltyGoals" dense outlined />
           </div>
@@ -49,6 +49,9 @@
           <div class="col-4 text-center">
             <q-input type="number" label="Penalty Goals" v-model="countryB.penaltyGoals" dense outlined />
           </div>
+        </div>
+        <div class="row q-ma-md" v-if="isGroupRound">
+          Note: You need to set the countires's final points before round 16 will be processed.
         </div>
         <div class="row q-ma-md">
           <div class="col-12 text-center">
@@ -67,7 +70,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, ref, reactive } from 'vue'
-import { Match, useMatchStore } from 'src/stores/match-store'
+import { Match, useMatchStore, MatchRound } from 'src/stores/match-store'
 import VersesImage from '../match/VersesImage.vue'
 
 export default defineComponent({
@@ -84,6 +87,7 @@ export default defineComponent({
     const isSaving = ref(false)
     const status = ref(props.match.status)
     const matchStore = useMatchStore()
+    const isGroupRound = ref(props.match.round === MatchRound.GROUP)
     const countryA = reactive({
       goals: props.match.countryAGoals || '',
       penaltyGoals: props.match.countryAPenaltyGoals || ''
@@ -128,6 +132,7 @@ export default defineComponent({
     return {
       expanded,
       isDataChanged,
+      isGroupRound,
       isSaving,
       countryA,
       countryB,
