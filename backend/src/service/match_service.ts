@@ -134,7 +134,7 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
   }
 }
 
-export const getGroupedMatches = async (year = configYear) => {
+export const getGroupedMatches = async (year = configYear): Promise<Record<string,Match[]>> => {
   const grouped = {};
   const result = await getMatchRepo().find({
     where: {
