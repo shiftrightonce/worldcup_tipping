@@ -36,27 +36,29 @@ export const simulateUserTip = async (match: Match, user: User, round: MatchRoun
   tip.countryAToScore = countryAScore;
   tip.countryBToScore = countryBScore;
 
-  if (countryAScore !== countryBScore) {
-    tip.toWin = (countryAScore > countryBScore) ? match.countryA : match.countryB;
-  } else if (round === MatchRound.GROUP) {
-    tip.isLevel = true;
-  } else {
-    tip.toPenalty = true;
+  if (match.countryA && match.countryB) {
+    if (countryAScore !== countryBScore) {
+      tip.toWin = (countryAScore > countryBScore) ? match.countryA : match.countryB;
+    } else if (round === MatchRound.GROUP) {
+      tip.isLevel = true;
+    } else {
+      tip.toPenalty = true;
 
-    let countryAPernaltyScore = Math.random() * 12 + 1;
-    let countryBPernaltyScore = Math.random() * 12 + 1;
+      let countryAPernaltyScore = Math.random() * 12 + 1;
+      let countryBPernaltyScore = Math.random() * 12 + 1;
 
-    while (countryAPernaltyScore === countryBPernaltyScore) {
-      countryAPernaltyScore = Math.random() * 12 + 1;
-      countryBPernaltyScore = Math.random() * 12 + 1;
+      while (countryAPernaltyScore === countryBPernaltyScore) {
+        countryAPernaltyScore = Math.random() * 12 + 1;
+        countryBPernaltyScore = Math.random() * 12 + 1;
+      }
+
+      tip.countryAPenaltyToScore = countryAPernaltyScore;
+      tip.countryBPenaltyToScore = countryBPernaltyScore;
+      tip.toWin = (countryAPernaltyScore > countryBPernaltyScore) ? match.countryA : match.countryB;
     }
 
-    tip.countryAPenaltyToScore = countryAPernaltyScore;
-    tip.countryBPenaltyToScore = countryBPernaltyScore;
-    tip.toWin = (countryAPernaltyScore > countryBPernaltyScore) ? match.countryA : match.countryB;
+    return await placeUserTip(tip, user.id);
   }
-
-  return await placeUserTip(tip, user.id);
 }
 
 export const simulateMatchPlay = async (match: Match, round: MatchRound) => {
@@ -68,25 +70,28 @@ export const simulateMatchPlay = async (match: Match, round: MatchRound) => {
   data.countryAGoals = countryAScore;
   data.countryBGoals = countryBScore;
 
-  if (countryAScore !== countryBScore) {
-    data.winner = (countryAScore > countryBScore) ? match.countryA : match.countryB;
-  } else if (round !== MatchRound.GROUP) {
-    data.penalty = true;
-    data.countryAPenaltyGoals = Math.floor(Math.random() * 12 + 1);
-    data.countryBPenaltyGoals = Math.floor(Math.random() * 12 + 1);
-
-    while (data.countryAPenaltyGoals === data.countryBPenaltyGoals) {
+  if (match.countryA && match.countryB) {
+    if (countryAScore !== countryBScore) {
+      data.winner = (countryAScore > countryBScore) ? match.countryA : match.countryB;
+    } else if (round !== MatchRound.GROUP) {
+      data.penalty = true;
       data.countryAPenaltyGoals = Math.floor(Math.random() * 12 + 1);
       data.countryBPenaltyGoals = Math.floor(Math.random() * 12 + 1);
+
+      while (data.countryAPenaltyGoals === data.countryBPenaltyGoals) {
+        data.countryAPenaltyGoals = Math.floor(Math.random() * 12 + 1);
+        data.countryBPenaltyGoals = Math.floor(Math.random() * 12 + 1);
+      }
+
+      data.winner = (data.countryAPenaltyGoals > data.countryBPenaltyGoals) ? match.countryA : match.countryB;
+
     }
 
-    data.winner = (data.countryAPenaltyGoals > data.countryBPenaltyGoals) ? match.countryA : match.countryB;
+    data.status = MatchStatus.SCORE_ENTERED;
 
+    return await updateMatch(match.id, data);
   }
 
-  data.status = MatchStatus.SCORE_ENTERED;
-
-  return await updateMatch(match.id, data);
 }
 
 export const runTippingSimulation = async (matches: Match[], users: User[], round: MatchRound) => {
