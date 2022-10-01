@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <q-page padding v-if="state.length && isReady">
     <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
       <div class="row">
         <div class="col-md-4 col-xs-12">
@@ -25,6 +25,11 @@
     <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
       <ScrollUpMessage></ScrollUpMessage>
     </q-page-scroller>
+  </q-page>
+  <q-page  v-else class="row items-evenly items-center flex-center">
+      <div class="col-12" style="text-align:center">
+        <span class="text-h6">Top position is still up for grabs!</span>
+      </div>
   </q-page>
 </template>
 
