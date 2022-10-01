@@ -71,7 +71,7 @@ export const simulateMatchPlay = async (match: Match, round: MatchRound) => {
   if (countryAScore !== countryBScore) {
     data.winner = (countryAScore > countryBScore) ? match.countryA : match.countryB;
   } else if (round !== MatchRound.GROUP) {
-    data.pernalty = true;
+    data.penalty = true;
     data.countryAPenaltyGoals = Math.floor(Math.random() * 12 + 1);
     data.countryBPenaltyGoals = Math.floor(Math.random() * 12 + 1);
 
