@@ -11,7 +11,7 @@
       <ScrollUpMessage></ScrollUpMessage>
     </q-page-scroller>
   </q-page>
-  <q-page  v-else class="row items-evenly items-center flex-center">
+  <q-page  v-if="state.length === 0 && isReady" class="row items-evenly items-center flex-center">
       <div class="col-12" style="text-align:center">
         <span class="text-h6">No game has been played.</span>
       </div>
