@@ -129,7 +129,8 @@ module.exports = configure(function (/* ctx */) {
       // Quasar plugins
       plugins: [
         'LocalStorage',
-        'LoadingBar'
+        'LoadingBar',
+        'Loading'
       ]
     },
 
