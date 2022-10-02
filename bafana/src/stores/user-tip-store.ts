@@ -76,6 +76,13 @@ export const useUserTipStore = defineStore('userTipStore', {
           })
       }), null)
     },
+    setTip (match: number, tip: Tip) {
+      if (!tip.toWin) {
+        tip.toWin = { id: 0 }
+      }
+      useUserTipStore().tips[match].tip = tip
+      return useUserTipStore().tips[match].tip
+    },
     getCountryAComputedGoalTip (match: number) {
       return computed({
         get: () => {
