@@ -8,17 +8,19 @@ import { pluckUserFromRequest } from "../service/user_service";
 
 export class MatchController {
 
-  public async todayMatchesAction () {
+  public async todayMatchesAction (req: Request) {
+    const user = pluckUserFromRequest(req);
     return {
       success: true,
-      todayMatches: await getTodayOpenMatches()
+      todayMatches: await getTodayOpenMatches(user)
     }
   }
 
-  public async completedMatchesAction () {
+  public async completedMatchesAction (req: Request) {
+    const user = pluckUserFromRequest(req);
     return {
       success: true,
-      completedMatches: await getMatchesByStatus(MatchStatus.COMPLETED)
+      completedMatches: await getMatchesByStatus(MatchStatus.COMPLETED, user)
     }
   }
 
