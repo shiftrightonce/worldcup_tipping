@@ -146,11 +146,13 @@ export const useUserTipStore = defineStore('userTipStore', {
     setCountryAGoalTip (match: number, goals: string | number) {
       if (this.tips[match]) {
         this.tips[match].tip.countryAToScore = goals as number
+        this.figureOutWinner(match)
       }
     },
     setCountryBGoalTip (match: number, goals: string | number) {
       if (this.tips[match]) {
         this.tips[match].tip.countryBToScore = goals as number
+        this.figureOutWinner(match)
       }
     },
     setCountryAPenaltyGoalTip (match: number, goals: string | number) {
@@ -189,8 +191,23 @@ export const useUserTipStore = defineStore('userTipStore', {
     toggleToPenalty (match: number) {
       if (this.tips[match].tip.countryAPenaltyToScore || this.tips[match].tip.countryBPenaltyToScore) {
         this.tips[match].tip.toPenalty = true
+        this.tips[match].tip.isLevel = false
+
+        this.tips[match].tip.toWin = (this.tips[match].tip.countryAPenaltyToScore > this.tips[match].tip.countryBPenaltyToScore) ? this.tips[match].tip.match.countryA : this.tips[match].tip.match.countryB
       } else if (!this.tips[match].tip.countryAPenaltyToScore && !this.tips[match].tip.countryBPenaltyToScore) {
         this.tips[match].tip.toPenalty = false
+        this.figureOutWinner(match)
+      }
+    },
+    figureOutWinner (match: number) {
+      if (this.tips[match]) {
+        if (this.tips[match].tip.countryAToScore !== this.tips[match].tip.countryBToScore) {
+          this.tips[match].tip.toWin = (this.tips[match].tip.countryAToScore > this.tips[match].tip.countryBToScore) ? this.tips[match].tip.match.countryA : this.tips[match].tip.match.countryB
+          this.tips[match].tip.isLevel = false
+        } else {
+          this.tips[match].tip.toWin = { id: 0 }
+          this.tips[match].tip.isLevel = true
+        }
       }
     }
   }
