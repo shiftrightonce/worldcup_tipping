@@ -3,6 +3,9 @@ import { AppDataSource } from "../data-source"
 import { Match, MatchStatus, MatchRound } from "../entity/Match";
 import { queueProcessMatch } from '../jobs'
 import { year as configYear } from '../games/parser/parse_config'
+import { createTip } from './tip_service';
+import { User } from '../entity/User';
+import { Tip } from '../entity/Tip';
 
 export const getMatchRepo = () => {
   return AppDataSource.getRepository(Match)
@@ -42,9 +45,28 @@ export const getAllMatches = async (status: MatchStatus | null, year = configYea
   }
 }
 
-export const getTodayOpenMatches = async (year = configYear) => {
+export const getTodayOpenMatches = async (userOrId: number | User, year = configYear) => {
   const date = new Date();
-  const time = `${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
+
+  const result = await getMatchRepo().createQueryBuilder('match')
+    .where('match.date >= :date', { date })
+    .where('match.status = :status', { status: MatchStatus.OPEN })
+    .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+    .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
+    .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
+    .orderBy('match.number', 'ASC')
+    .getMany()
+
+  for (const index in result) {
+    if (result[index].tips.length <= 0) {
+      (result[index] as Match & { tip: Tip }).tip = await createTip(year)
+    } else {
+      (result[index] as Match & { tip: Tip }).tip = result[index].tips.pop();
+    }
+  }
+
+  return result;
+
   return await getMatchRepo().find({
     where: {
       date: MoreThanOrEqual(date),
@@ -59,7 +81,26 @@ export const getTodayOpenMatches = async (year = configYear) => {
 
 }
 
-export const getMatchesByStatus = async (status: MatchStatus, year = configYear) => {
+export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | null, year = configYear) => {
+  if (userOrId) {
+    const result = await getMatchRepo().createQueryBuilder('match')
+      .where('match.status = :status', { status })
+      .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+      .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
+      .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
+      .orderBy('match.number', 'ASC')
+      .getMany();
+
+    for (const index in result) {
+      if (result[index].tips.length <= 0) {
+        (result[index] as Match & { tip: Tip }).tip = await createTip(year)
+      } else {
+        (result[index] as Match & { tip: Tip }).tip = result[index].tips.pop();
+      }
+    }
+    return result;
+  }
+
   return await getMatchRepo().find({
     where: {
       status,
@@ -134,7 +175,7 @@ export const updateMatch = async (matchId: number, data: { [key: string]: unknow
   }
 }
 
-export const getGroupedMatches = async (year = configYear): Promise<Record<string,Match[]>> => {
+export const getGroupedMatches = async (year = configYear): Promise<Record<string, Match[]>> => {
   const grouped = {};
   const result = await getMatchRepo().find({
     where: {
