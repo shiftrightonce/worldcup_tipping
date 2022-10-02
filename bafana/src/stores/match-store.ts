@@ -73,7 +73,7 @@ let intervalId: ReturnType<typeof setInterval> | null = null
 
 export const useMatchStore = defineStore('matchStore', {
   state: () => ({
-    activeMatches: [] as Match[],
+    activeMatches: {} as Record<number, Match>,
     completedMatches: [] as Match[]
   }),
   getters: {
@@ -107,20 +107,24 @@ export const useMatchStore = defineStore('matchStore', {
   actions: {
     async getTodayMatches () {
       const userStore = useUserStore()
-      const response = await userStore.api.get(`${matchEndpoint}/todays`)
-      this.activeMatches = response.data.todayMatches as Match[]
-      this.activeMatches.forEach((match) => {
+      const response = await userStore.api.get(`${matchEndpoint}/todays`);
+      // this.activeMatches = response.data.todayMatches as Match[]
+
+      // this.activeMatches.forEach((match) => {
+      (response.data.todayMatches as Match[]).forEach((match) => {
         const matchDate = new Date(`${match.date}T${match.time}Z`)
         const today = new Date()
         match.timestamp = matchDate.getTime() - today.getTime()
         match.fullDate = matchDate
         match.countdown = ''
         match.isMatchOpen = match.status === MatchStatus.OPEN
+        this.activeMatches[match.id] = match
       })
 
       if (!intervalId) {
         intervalId = setInterval(() => {
-          this.activeMatches.forEach((match) => {
+          // this.activeMatches.forEach((match) => {
+          Object.values(this.activeMatches).forEach((match) => {
             if (!match.timestamp) {
               return
             }
@@ -141,6 +145,9 @@ export const useMatchStore = defineStore('matchStore', {
       }
 
       return this.today
+    },
+    todayMatch (matchId: number) {
+      return this.today[matchId]
     },
     fetchCompletedMatches () {
       return useAsyncState(new Promise<Match[]>((resolve, reject) => {
@@ -171,7 +178,8 @@ export const useMatchStore = defineStore('matchStore', {
     async placeTip (match: number) {
       const userStore = useUserStore()
       const tip = useUserTipStore().matchTip(match)
-      return await userStore.api.post(`${matchEndpoint}/place-tip`, { ...tip.tip })
+      const response = await userStore.api.post(`${matchEndpoint}/place-tip`, { ...tip.tip })
+      return useUserTipStore().setTip(match, (response.data as { tip: Tip }).tip)
     },
     async updateMatch (matchId: number, matchData: Record<string, unknown>) {
       const userStore = useUserStore()
