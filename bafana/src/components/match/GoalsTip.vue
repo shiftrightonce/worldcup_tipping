@@ -36,7 +36,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
 import { Match, Tip, MatchStatus } from 'src/stores/match-store'
-import { UserTipState, useUserTipStore } from 'src/stores/user-tip-store'
+import { useUserTipStore } from 'src/stores/user-tip-store'
 
 export default defineComponent({
   name: 'GoalsTip',
