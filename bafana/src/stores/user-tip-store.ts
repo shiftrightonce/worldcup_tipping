@@ -187,6 +187,7 @@ export const useUserTipStore = defineStore('userTipStore', {
           this.tips[match].tip.countryBPenaltyToScore = Math.floor(Math.random() * 8)
         }
       }
+      this.figureOutWinner(match)
     },
     toggleToPenalty (match: number) {
       if (this.tips[match].tip.countryAPenaltyToScore || this.tips[match].tip.countryBPenaltyToScore) {
