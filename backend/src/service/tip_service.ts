@@ -1,12 +1,28 @@
 import { AppDataSource } from "../data-source"
 import { Tip } from "../entity/Tip"
 import { year as configYear } from "../games/parser"
-import { MatchStatus, MatchRound } from "../entity/Match";
+import { MatchStatus, MatchRound, Match } from "../entity/Match";
 import { getMatchById, matchHasNotExpire } from "./match_service"
-import { getUserById } from "./user_service"
+import { cleanUserData, getUserById } from "./user_service"
+import { User } from "../entity/User";
 
 export const getTipRepo = () => {
   return AppDataSource.getRepository(Tip);
+}
+
+export const createTip = async (year = configYear) => {
+  let tip = new Tip();
+  tip.year = year;
+  tip.countryAToScore = 0;
+  tip.countryBToScore = 0;
+  tip.countryAPenaltyToScore = 0;
+  tip.countryBPenaltyToScore = 0;
+  tip.isLevel = false;
+  tip.toPenalty = false;
+  tip.points = 0;
+  tip.entryByBot = false;
+
+  return tip
 }
 
 export const getUserMatchTip = async (matchId: number, userId: number, year = configYear) => {
