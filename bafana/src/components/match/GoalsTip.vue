@@ -44,14 +44,7 @@ export default defineComponent({
     match: {
       type: Object as PropType<Match>,
       required: true
-    },
-    userTipAndState: {
-      type: Object as PropType<{ tip: Tip, state: UserTipState }>,
-      required: true
     }
-  },
-  emits: {
-    'update:userTipAndState': null
   },
   setup (props) {
     const isMatchOpen = props.match.status === MatchStatus.OPEN
