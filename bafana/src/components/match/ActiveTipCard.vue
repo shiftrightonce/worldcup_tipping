@@ -42,7 +42,7 @@
           Some tips are not available in group round
         </div>
         <q-card-section class="text-subitle2">
-          <GoalsTip :match="match" :user-tip-and-state="state">
+          <GoalsTip :match="match">
           </GoalsTip>
           <PenaltyTip :match="match" :user-tip-and-state="state"></PenaltyTip>
           <PenaltyGoalsTip :match="match" :user-tip-and-state="state"></PenaltyGoalsTip>
@@ -95,25 +95,25 @@ export default defineComponent({
         }
 
         // goals
-        if (state.value.tip.countryAToScore > state.value.tip.countryBToScore) {
-          state.value.tip.toWin = props.match.countryA
-        } else if (state.value.tip.countryAToScore < state.value.tip.countryBToScore) {
-          state.value.tip.toWin = props.match.countryB
-        } else if (state.value.tip.countryAToScore === state.value.tip.countryBToScore) {
-          state.value.tip.toWin = { id: 0 }
-          state.value.tip.isLevel = true
-        }
+        // if (state.value.tip.countryAToScore > state.value.tip.countryBToScore) {
+        //   state.value.tip.toWin = props.match.countryA
+        // } else if (state.value.tip.countryAToScore < state.value.tip.countryBToScore) {
+        //   state.value.tip.toWin = props.match.countryB
+        // } else if (state.value.tip.countryAToScore === state.value.tip.countryBToScore) {
+        //   state.value.tip.toWin = { id: 0 }
+        //   state.value.tip.isLevel = true
+        // }
 
-        if (state.value.tip.toPenalty) {
-          state.value.tip.isLevel = false
-        }
+        // if (state.value.tip.toPenalty) {
+        //   state.value.tip.isLevel = false
+        // }
 
         // penalty
-        if (state.value.tip.countryAPenaltyToScore > state.value.tip.countryBPenaltyToScore) {
-          state.value.tip.toWin = props.match.countryA
-        } else if (state.value.tip.countryAPenaltyToScore < state.value.tip.countryBPenaltyToScore) {
-          state.value.tip.toWin = props.match.countryB
-        }
+        // if (state.value.tip.countryAPenaltyToScore > state.value.tip.countryBPenaltyToScore) {
+        //   state.value.tip.toWin = props.match.countryA
+        // } else if (state.value.tip.countryAPenaltyToScore < state.value.tip.countryBPenaltyToScore) {
+        //   state.value.tip.toWin = props.match.countryB
+        // }
 
         isDataChanged.value = true
       }, { deep: true })
