@@ -108,9 +108,7 @@ export const useMatchStore = defineStore('matchStore', {
     async getTodayMatches () {
       const userStore = useUserStore()
       const response = await userStore.api.get(`${matchEndpoint}/todays`);
-      // this.activeMatches = response.data.todayMatches as Match[]
 
-      // this.activeMatches.forEach((match) => {
       (response.data.todayMatches as Match[]).forEach((match) => {
         const matchDate = new Date(`${match.date}T${match.time}Z`)
         const today = new Date()
@@ -123,7 +121,6 @@ export const useMatchStore = defineStore('matchStore', {
 
       if (!intervalId) {
         intervalId = setInterval(() => {
-          // this.activeMatches.forEach((match) => {
           Object.values(this.activeMatches).forEach((match) => {
             if (!match.timestamp) {
               return
