@@ -19,15 +19,21 @@ import { defineComponent } from 'vue'
 import ActiveTipCard from '../components/match/ActiveTipCard.vue'
 import { useLayoutStore } from '../stores/layout-store'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup () {
     const matchStore = useMatchStore()
-    const layoutStore = useLayoutStore();
+    const layoutStore = useLayoutStore()
+    const q = useQuasar()
 
-    (async () => {
-      await matchStore.getTodayMatches()
-    })()
+    q.loading.show()
+    setTimeout(() => {
+      (async () => {
+        await matchStore.getTodayMatches()
+        q.loading.hide()
+      })()
+    }, 0)
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.setTitle('Active Matches')
