@@ -1,7 +1,7 @@
 import { AppDataSource } from "../data-source"
 import { Tip } from "../entity/Tip"
 import { year as configYear } from "../games/parser"
-import { MatchStatus, MatchRound, Match } from "../entity/Match";
+import { MatchStatus, MatchRound } from "../entity/Match";
 import { getMatchById, matchHasNotExpire } from "./match_service"
 import { getUserById } from "./user_service"
 
