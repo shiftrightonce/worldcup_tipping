@@ -74,7 +74,7 @@ let intervalId: ReturnType<typeof setInterval> | null = null
 export const useMatchStore = defineStore('matchStore', {
   state: () => ({
     activeMatches: {} as Record<number, Match>,
-    completedMatches: [] as Match[]
+    completedMatches: {} as Record<number, Match>
   }),
   getters: {
     today: (state) => state.activeMatches,
@@ -107,7 +107,8 @@ export const useMatchStore = defineStore('matchStore', {
   actions: {
     async getTodayMatches () {
       const userStore = useUserStore()
-      const response = await userStore.api.get(`${matchEndpoint}/todays`);
+      const response = await userStore.api.get(`${matchEndpoint}/todays`)
+      const userTipStore = useUserTipStore();
 
       (response.data.todayMatches as Match[]).forEach((match) => {
         const matchDate = new Date(`${match.date}T${match.time}Z`)
@@ -117,44 +118,52 @@ export const useMatchStore = defineStore('matchStore', {
         match.countdown = ''
         match.isMatchOpen = match.status === MatchStatus.OPEN
         this.activeMatches[match.id] = match
+        userTipStore.setTip(match.id, (match as Match & { tip: Tip }).tip)
       })
 
       if (!intervalId) {
-        intervalId = setInterval(() => {
-          Object.values(this.activeMatches).forEach((match) => {
-            if (!match.timestamp) {
-              return
-            }
-            match.timestamp -= 1000
+        setTimeout(() => {
+          intervalId = setInterval(() => {
+            Object.values(this.activeMatches).forEach((match) => {
+              if (!match.timestamp) {
+                return
+              }
+              match.timestamp -= 1000
 
-            if (match.timestamp <= 0) {
-              match.isMatchOpen = false
-              match.countdown = 'close'
-            }
+              if (match.timestamp <= 0) {
+                match.isMatchOpen = false
+                match.countdown = 'close'
+              }
 
-            const days = Math.floor(match.timestamp / (1000 * 60 * 60 * 24))
-            const hours = Math.floor(match.timestamp % (1000 * 60 * 60 * 24) / (1000 * 60 * 60))
-            const mins = Math.floor((match.timestamp % (1000 * 60 * 60)) / (1000 * 60))
-            const secs = Math.floor((match.timestamp % (1000 * 60)) / 1000)
-            match.countdown = `${days}d.${hours}h.${mins}m.${secs}s`
-          })
+              const days = Math.floor(match.timestamp / (1000 * 60 * 60 * 24))
+              const hours = Math.floor(match.timestamp % (1000 * 60 * 60 * 24) / (1000 * 60 * 60))
+              const mins = Math.floor((match.timestamp % (1000 * 60 * 60)) / (1000 * 60))
+              const secs = Math.floor((match.timestamp % (1000 * 60)) / 1000)
+              match.countdown = `${days}d.${hours}h.${mins}m.${secs}s`
+            })
+          }, 1000)
         }, 1000)
       }
 
       return this.today
     },
     todayMatch (matchId: number) {
-      return this.today[matchId]
+      return this.today[matchId] || this.completedMatches[matchId]
     },
     fetchCompletedMatches () {
-      return useAsyncState(new Promise<Match[]>((resolve, reject) => {
+      const userTipStore = useUserTipStore()
+      return useAsyncState(new Promise<Record<number, Match>>((resolve, reject) => {
         const userStore = useUserStore()
         userStore.api.get(`${matchEndpoint}/completed`)
           .then((response) => {
-            this.completedMatches = response.data.completedMatches as Match[]
+            (response.data.completedMatches as Match[]).forEach((match) => {
+              this.completedMatches[match.id] = match
+              userTipStore.setTip(match.id, (match as Match & { tip: Tip }).tip)
+            })
+
             resolve(this.completed)
           }).catch(reject)
-      }), [])
+      }), {})
     },
     fetchAllMatches (status: MatchStatus | null) {
       return useAsyncState(new Promise<Match[]>((resolve, reject) => {
