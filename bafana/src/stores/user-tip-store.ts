@@ -1,6 +1,6 @@
 import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
-import { MatchRound, MatchStatus, Tip } from './match-store'
+import { MatchRound, MatchStatus, Tip, useMatchStore } from './match-store'
 import { useUserStore, userEndpoint } from './user-store'
 import { computed } from 'vue'
 
@@ -22,7 +22,8 @@ export const useUserTipStore = defineStore('userTipStore', {
       return (matchId: number) => {
         if (state.tips[matchId]) {
           const matchTip = state.tips[matchId]
-          if (matchTip.tip.toWin.id || matchTip.tip.match.status !== MatchStatus.OPEN) {
+          const match = useMatchStore().todayMatch(matchId)
+          if (matchTip.tip.toWin.id || match.status !== MatchStatus.OPEN) {
             return false
           } else if (matchTip.tip.toWin.id || matchTip.tip.isLevel) {
             return false
@@ -57,157 +58,168 @@ export const useUserTipStore = defineStore('userTipStore', {
     }
   },
   actions: {
-    fetchMatchTip (match: number) {
+    fetchMatchTip (matchId: number) {
       return useAsyncState(new Promise<{ tip: Tip, state: UserTipState }>((resolve, reject) => {
-        if (this.tips[match]) {
-          resolve(this.tips[match])
+        if (this.tips[matchId]) {
+          resolve(this.tips[matchId])
           return
         }
-        this.api.get(`${userEndpoint}/tip/${match}`)
+        this.api.get(`${userEndpoint}/tip/${matchId}`)
           .then((response) => {
             if (response.status !== 200) {
               return reject(response.data)
             }
             const state: UserTipState = setupUserTipState()
-            this.tips[match] = { tip: response.data.tip as Tip, state }
-            this.tips[match].tip.toWin = response.data.tip.toWin || { id: 0 }
+            this.tips[matchId] = { tip: response.data.tip as Tip, state }
+            this.tips[matchId].tip.toWin = response.data.tip.toWin || { id: 0 }
 
-            resolve(this.tips[match])
+            resolve(this.tips[matchId])
           })
       }), null)
     },
-    setTip (match: number, tip: Tip) {
+    setTip (matchId: number, tip: Tip) {
       if (!tip.toWin) {
         tip.toWin = { id: 0 }
       }
-      useUserTipStore().tips[match].tip = tip
-      return useUserTipStore().tips[match].tip
+      if (!this.tips[matchId]) {
+        const state: UserTipState = setupUserTipState()
+        this.tips[matchId] = { tip, state }
+      } else {
+        this.tips[matchId].tip = tip
+      }
+
+      return this.tips[matchId].tip
     },
-    getCountryAComputedGoalTip (match: number) {
+    getCountryAComputedGoalTip (matchId: number) {
       return computed({
         get: () => {
-          return this.countryAGoalTip(match)
+          return this.countryAGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryAGoalTip(match, goals)
+          this.setCountryAGoalTip(matchId, goals)
         }
       })
     },
-    getCountryBComputedGoalTip (match: number) {
+    getCountryBComputedGoalTip (matchId: number) {
       return computed({
         get: () => {
-          return this.countryBGoalTip(match)
+          return this.countryBGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryBGoalTip(match, goals)
+          this.setCountryBGoalTip(matchId, goals)
         }
       })
     },
-    getCountryAComputedPenaltyGoalTip (match: number) {
+    getCountryAComputedPenaltyGoalTip (matchId: number) {
       return computed({
         get: () => {
-          return this.countryAPenaltyGoalTip(match)
+          return this.countryAPenaltyGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryAPenaltyGoalTip(match, goals)
+          this.setCountryAPenaltyGoalTip(matchId, goals)
         }
       })
     },
-    getCountryBComputedPenaltyGoalTip (match: number) {
+    getCountryBComputedPenaltyGoalTip (matchId: number) {
       return computed({
         get: () => {
-          return this.countryBPenaltyGoalTip(match)
+          return this.countryBPenaltyGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryBPenaltyGoalTip(match, goals)
+          this.setCountryBPenaltyGoalTip(matchId, goals)
         }
       })
     },
-    getCountryAComputedToWinTip (match: number) {
+    getCountryAComputedToWinTip (matchId: number) {
+      const match = useMatchStore().todayMatch(matchId)
       return computed({
         get: () => {
-          return this.tips[match].tip.toWin.id === this.tips[match].tip.match.countryA.id || this.tips[match].tip.isLevel
+          return this.tips[matchId].tip.toWin.id === match.countryA.id || this.tips[matchId].tip.isLevel
         },
         set: (val: boolean) => {
-          this.tips[match].tip.toWin = (val) ? this.tips[match].tip.match.countryA : { id: 0 }
+          this.tips[matchId].tip.toWin = (val) ? match.countryA : { id: 0 }
         }
       })
     },
-    getCountryBComputedToWinTip (match: number) {
+    getCountryBComputedToWinTip (matchId: number) {
+      const match = useMatchStore().todayMatch(matchId)
       return computed({
         get: () => {
-          return this.tips[match].tip.toWin.id === this.tips[match].tip.match.countryB.id || this.tips[match].tip.isLevel
+          return this.tips[matchId].tip.toWin.id === match.countryB.id || this.tips[matchId].tip.isLevel
         },
         set: (val: boolean) => {
-          this.tips[match].tip.toWin = (val) ? this.tips[match].tip.match.countryB : { id: 0 }
+          this.tips[matchId].tip.toWin = (val) ? match.countryB : { id: 0 }
         }
       })
     },
-    setCountryAGoalTip (match: number, goals: string | number) {
-      if (this.tips[match]) {
-        this.tips[match].tip.countryAToScore = goals as number
-        this.figureOutWinner(match)
+    setCountryAGoalTip (matchId: number, goals: string | number) {
+      if (this.tips[matchId]) {
+        this.tips[matchId].tip.countryAToScore = goals as number
+        this.figureOutWinner(matchId)
       }
     },
-    setCountryBGoalTip (match: number, goals: string | number) {
-      if (this.tips[match]) {
-        this.tips[match].tip.countryBToScore = goals as number
-        this.figureOutWinner(match)
+    setCountryBGoalTip (matchId: number, goals: string | number) {
+      if (this.tips[matchId]) {
+        this.tips[matchId].tip.countryBToScore = goals as number
+        this.figureOutWinner(matchId)
       }
     },
-    setCountryAPenaltyGoalTip (match: number, goals: string | number) {
-      if (this.tips[match]) {
-        this.tips[match].tip.countryAPenaltyToScore = goals as number
-        this.toggleToPenalty(match)
+    setCountryAPenaltyGoalTip (matchId: number, goals: string | number) {
+      if (this.tips[matchId]) {
+        this.tips[matchId].tip.countryAPenaltyToScore = goals as number
+        this.toggleToPenalty(matchId)
       }
     },
-    setCountryBPenaltyGoalTip (match: number, goals: string | number) {
-      if (this.tips[match]) {
-        this.tips[match].tip.countryBPenaltyToScore = goals as number
-        this.toggleToPenalty(match)
+    setCountryBPenaltyGoalTip (matchId: number, goals: string | number) {
+      if (this.tips[matchId]) {
+        this.tips[matchId].tip.countryBPenaltyToScore = goals as number
+        this.toggleToPenalty(matchId)
       }
     },
-    generateBotEntries (match: number) {
+    generateBotEntries (matchId: number) {
       const maxGoals = 12
-      this.tips[match].tip.countryAToScore = Math.floor(Math.random() * maxGoals)
-      this.tips[match].tip.countryBToScore = Math.floor(Math.random() * maxGoals)
+      const match = useMatchStore().todayMatch(matchId)
+      this.tips[matchId].tip.countryAToScore = Math.floor(Math.random() * maxGoals)
+      this.tips[matchId].tip.countryBToScore = Math.floor(Math.random() * maxGoals)
 
-      this.tips[match].tip.entryByBot = true
+      this.tips[matchId].tip.entryByBot = true
 
-      if (this.tips[match].tip.match.round !== MatchRound.GROUP) {
+      if (match.round !== MatchRound.GROUP) {
         const equalScore = Math.floor(Math.random() * maxGoals)
         if (equalScore % 2 === 0) {
-          this.tips[match].tip.countryAToScore = equalScore
-          this.tips[match].tip.countryBToScore = equalScore
+          this.tips[matchId].tip.countryAToScore = equalScore
+          this.tips[matchId].tip.countryBToScore = equalScore
         }
-        this.tips[match].tip.toPenalty = this.tips[match].tip.countryAToScore === this.tips[match].tip.countryBToScore
+        this.tips[matchId].tip.toPenalty = this.tips[matchId].tip.countryAToScore === this.tips[matchId].tip.countryBToScore
 
-        if (this.tips[match].tip.toPenalty) {
-          this.tips[match].tip.countryAPenaltyToScore = Math.floor(Math.random() * 8)
-          this.tips[match].tip.countryBPenaltyToScore = Math.floor(Math.random() * 8)
+        if (this.tips[matchId].tip.toPenalty) {
+          this.tips[matchId].tip.countryAPenaltyToScore = Math.floor(Math.random() * 8)
+          this.tips[matchId].tip.countryBPenaltyToScore = Math.floor(Math.random() * 8)
         }
       }
-      this.figureOutWinner(match)
+      this.figureOutWinner(matchId)
     },
-    toggleToPenalty (match: number) {
-      if (this.tips[match].tip.countryAPenaltyToScore || this.tips[match].tip.countryBPenaltyToScore) {
-        this.tips[match].tip.toPenalty = true
-        this.tips[match].tip.isLevel = false
+    toggleToPenalty (matchId: number) {
+      const match = useMatchStore().todayMatch(matchId)
+      if (this.tips[matchId].tip.countryAPenaltyToScore || this.tips[matchId].tip.countryBPenaltyToScore) {
+        this.tips[matchId].tip.toPenalty = true
+        this.tips[matchId].tip.isLevel = false
 
-        this.tips[match].tip.toWin = (this.tips[match].tip.countryAPenaltyToScore > this.tips[match].tip.countryBPenaltyToScore) ? this.tips[match].tip.match.countryA : this.tips[match].tip.match.countryB
-      } else if (!this.tips[match].tip.countryAPenaltyToScore && !this.tips[match].tip.countryBPenaltyToScore) {
-        this.tips[match].tip.toPenalty = false
-        this.figureOutWinner(match)
+        this.tips[matchId].tip.toWin = (this.tips[matchId].tip.countryAPenaltyToScore > this.tips[matchId].tip.countryBPenaltyToScore) ? match.countryA : match.countryB
+      } else if (!this.tips[matchId].tip.countryAPenaltyToScore && !this.tips[matchId].tip.countryBPenaltyToScore) {
+        this.tips[matchId].tip.toPenalty = false
+        this.figureOutWinner(matchId)
       }
     },
-    figureOutWinner (match: number) {
-      if (this.tips[match]) {
-        if (this.tips[match].tip.countryAToScore !== this.tips[match].tip.countryBToScore) {
-          this.tips[match].tip.toWin = (this.tips[match].tip.countryAToScore > this.tips[match].tip.countryBToScore) ? this.tips[match].tip.match.countryA : this.tips[match].tip.match.countryB
-          this.tips[match].tip.isLevel = false
+    figureOutWinner (matchId: number) {
+      const match = useMatchStore().todayMatch(matchId)
+      if (this.tips[matchId]) {
+        if (this.tips[matchId].tip.countryAToScore !== this.tips[matchId].tip.countryBToScore) {
+          this.tips[matchId].tip.toWin = (this.tips[matchId].tip.countryAToScore > this.tips[matchId].tip.countryBToScore) ? match.countryA : match.countryB
+          this.tips[matchId].tip.isLevel = false
         } else {
-          this.tips[match].tip.toWin = { id: 0 }
-          this.tips[match].tip.isLevel = true
+          this.tips[matchId].tip.toWin = { id: 0 }
+          this.tips[matchId].tip.isLevel = true
         }
       }
     }
