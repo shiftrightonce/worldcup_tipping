@@ -25,7 +25,7 @@
     <q-card-actions>
       <div v-if="match.countdown" class="text-red-4 q-pl-sm text-bold">{{ match.countdown }}</div>
       <q-space v-if="match.isMatchOpen" />
-      <BotTipBtn :match="match" :user-tip-and-state="state" @update:user-tip-and-state="onBotGenerate" class="q-mr-md">
+      <BotTipBtn :match="match" :user-tip-and-state="state" class="q-mr-md">
       </BotTipBtn>
 
       <TipBtn :match="match" :user-tip-and-state="state"></TipBtn>
@@ -122,14 +122,10 @@ export default defineComponent({
     const saveData = () => {
       isSaving.value = true;
       (async () => {
-        const response = await matchStore.placeTip(props.match.id)
+        await matchStore.placeTip(props.match.id)
         isSaving.value = false
         isDataChanged.value = false
       })()
-    }
-
-    const onBotGenerate = () => {
-      // saveData()
     }
 
     return {
@@ -138,8 +134,7 @@ export default defineComponent({
       isGroupRound,
       isDataChanged,
       isSaving,
-      saveData,
-      onBotGenerate
+      saveData
     }
   },
   components: { VersesImage, WinnerTip, GoalsTip, PenaltyTip, PenaltyGoalsTip, GameTipPercentage, BotTipBtn, TipBtn }
