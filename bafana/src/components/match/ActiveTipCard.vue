@@ -7,7 +7,8 @@
       </q-item-section>
 
       <q-item-section>
-        <q-item-label>Game #{{ match.number }} <span v-if="match.isMatchOpen" style="font-size: 9px;"> - {{ match.fullDate?.toLocaleString() }}</span> </q-item-label>
+        <q-item-label>Game #{{ match.number }} <span v-if="match.isMatchOpen" style="font-size: 9px;"> - {{
+        match.fullDate?.toLocaleString() }}</span> </q-item-label>
         <q-item-label caption>
           {{ match.countryA.name }} vs {{ match.countryB.name }}
         </q-item-label>
@@ -32,7 +33,8 @@
 
       <q-space v-if="!match.isMatchOpen" />
 
-      <q-btn flat rounded v-if="!match.isMatchOpen" :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+      <q-btn flat rounded v-if="!match.isMatchOpen"
+        :icon="state.state.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
         @click="(state) ? state.state.expanded = !state.state.expanded : ''" />
     </q-card-actions>
     <q-slide-transition>
@@ -47,20 +49,20 @@
           <PenaltyTip :match="match" :user-tip-and-state="state"></PenaltyTip>
           <PenaltyGoalsTip :match="match" :user-tip-and-state="state"></PenaltyGoalsTip>
           <WinnerTip :match="match" :user-tip-and-state="state"></WinnerTip>
+          <q-separator v-show="match.isMatchOpen"></q-separator>
+          <div class="q-mt-sm" v-show="match.isMatchOpen" style="text-align: right;">
+            <q-btn icon="check" round color="primary" @click="saveData" :loading="isSaving">
+            </q-btn>
+          </div>
         </q-card-section>
       </div>
     </q-slide-transition>
-    <q-separator v-if="isDataChanged"></q-separator>
-    <q-card-actions v-if="isDataChanged">
-      <q-space></q-space>
-      <q-btn icon="check" round color="primary" @click="saveData" :loading="isSaving"></q-btn>
-    </q-card-actions>
   </q-card>
   <!--// card-->
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import VersesImage from './VersesImage.vue'
 import WinnerTip from './WinnerTip.vue'
 import GoalsTip from './GoalsTip.vue'
@@ -88,15 +90,6 @@ export default defineComponent({
     const isSaving = ref(false)
     const { isReady, state } = userTipStore.fetchMatchTip(props.match.id)
 
-    watch(() => isReady.value, () => {
-      watch(() => state.value?.tip, () => {
-        if (!state.value) {
-          return
-        }
-        isDataChanged.value = true
-      }, { deep: true })
-    })
-
     const saveData = () => {
       isSaving.value = true;
       (async () => {
@@ -110,7 +103,6 @@ export default defineComponent({
       isReady,
       state,
       isGroupRound,
-      isDataChanged,
       isSaving,
       saveData
     }
