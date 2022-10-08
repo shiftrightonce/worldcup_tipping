@@ -193,34 +193,35 @@ export const useUserTipStore = defineStore('userTipStore', {
         this.tips[matchId].tip.toPenalty = this.tips[matchId].tip.countryAToScore === this.tips[matchId].tip.countryBToScore
 
         if (this.tips[matchId].tip.toPenalty) {
-          this.tips[matchId].tip.countryAPenaltyToScore = Math.floor(Math.random() * 8)
-          this.tips[matchId].tip.countryBPenaltyToScore = Math.floor(Math.random() * 8)
+          do {
+            this.tips[matchId].tip.countryAPenaltyToScore = Math.floor(Math.random() * 8)
+            this.tips[matchId].tip.countryBPenaltyToScore = Math.floor(Math.random() * 8)
+          } while (this.tips[matchId].tip.countryAPenaltyToScore === this.tips[matchId].tip.countryBPenaltyToScore)
         }
       }
       this.figureOutWinner(matchId)
     },
     toggleToPenalty (matchId: number) {
-      const match = useMatchStore().todayMatch(matchId)
-      if (this.tips[matchId].tip.countryAPenaltyToScore || this.tips[matchId].tip.countryBPenaltyToScore) {
-        this.tips[matchId].tip.toPenalty = true
-        this.tips[matchId].tip.isLevel = false
-
-        this.tips[matchId].tip.toWin = (this.tips[matchId].tip.countryAPenaltyToScore > this.tips[matchId].tip.countryBPenaltyToScore) ? match.countryA : match.countryB
-      } else if (!this.tips[matchId].tip.countryAPenaltyToScore && !this.tips[matchId].tip.countryBPenaltyToScore) {
-        this.tips[matchId].tip.toPenalty = false
-        this.figureOutWinner(matchId)
-      }
+      this.tips[matchId].tip.toPenalty = this.tips[matchId].tip.countryAPenaltyToScore > 0 || this.tips[matchId].tip.countryBPenaltyToScore > 0
+      this.figureOutWinner(matchId)
     },
     figureOutWinner (matchId: number) {
       const match = useMatchStore().todayMatch(matchId)
       if (this.tips[matchId]) {
-        if (this.tips[matchId].tip.countryAToScore !== this.tips[matchId].tip.countryBToScore) {
+        if (!this.tips[matchId].tip.toPenalty && this.tips[matchId].tip.countryAToScore !== this.tips[matchId].tip.countryBToScore) {
           this.tips[matchId].tip.toWin = (this.tips[matchId].tip.countryAToScore > this.tips[matchId].tip.countryBToScore) ? match.countryA : match.countryB
           this.tips[matchId].tip.isLevel = false
-        } else {
-          this.tips[matchId].tip.toWin = { id: 0 }
-          this.tips[matchId].tip.isLevel = true
+          return
         }
+
+        if (this.tips[matchId].tip.toPenalty && this.tips[matchId].tip.countryAPenaltyToScore !== this.tips[matchId].tip.countryBPenaltyToScore) {
+          this.tips[matchId].tip.toWin = (this.tips[matchId].tip.countryAPenaltyToScore > this.tips[matchId].tip.countryBPenaltyToScore) ? match.countryA : match.countryB
+          this.tips[matchId].tip.isLevel = false
+          return
+        }
+
+        this.tips[matchId].tip.toWin = { id: 0 }
+        this.tips[matchId].tip.isLevel = true
       }
     }
   }
