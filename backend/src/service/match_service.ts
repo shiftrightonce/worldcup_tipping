@@ -88,6 +88,7 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
       .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
       .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
       .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
+      .leftJoinAndSelect('match.winner', 'winner', 'winner.id = match.winnerId')
       .orderBy('match.number', 'ASC')
       .getMany();
 
