@@ -5,11 +5,11 @@
         <div class="col">
           <q-btn dense flat>
             <q-badge rounded color="green" transparent v-if="isMatchCompleted">
-                {{ match.countryAPenaltyGoals }}
-              </q-badge>
+              {{ match.countryAPenaltyGoals }}
+            </q-badge>
           </q-btn>
         </div>
-        <div class="col">
+        <div class="col" v-if="matchTip.tip.toPenalty || match.penalty">
           <b>PENALTY KICK-OFF GOALS</b>
         </div>
         <div class="col">
@@ -22,16 +22,23 @@
       </div>
     </div>
   </div>
-  <div class="fit row wrap justify-center items-center content-start q-mb-md" v-if="isNotGroupRound">
-  <div class="col text-center">
-    <q-input type="number" debounce="500" dense outlined v-model="aScore" label="A" :disable="!isMatchOpen" />
-  </div>
+  <div class="fit row wrap justify-center items-center content-start q-mb-md" v-if="isNotGroupRound && matchTip.tip.toPenalty">
+    <div class="col text-center">
+      <q-input type="number" debounce="500" dense outlined v-model="aScore" label="A" :disable="!isMatchOpen" />
+    </div>
     <div class="col text-center">V.</div>
     <div class="col text-center">
-      <q-input type="number" debounce="500" dense  outlined v-model="bScore" label="B" :disable="!isMatchOpen" />
+      <q-input type="number" debounce="500" dense outlined v-model="bScore" label="B" :disable="!isMatchOpen" />
     </div>
-</div>
-<span v-if="!isNotGroupRound"><!-- show nothing --></span>
+  </div>
+
+  <div class="row justify-center items-center q-mb-md">
+    <div class="col-12 text-center text-red-4" v-if="aScore === bScore && matchTip.tip.toPenalty">
+      <span>
+        A match ending in pernalty must have a winner
+      </span>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -48,7 +55,7 @@ export default defineComponent({
       required: true
     },
     userTipAndState: {
-      type: Object as PropType<{ tip: Tip, state: UserTipState}>,
+      type: Object as PropType<{ tip: Tip, state: UserTipState }>,
       required: true
     }
   },
@@ -57,12 +64,14 @@ export default defineComponent({
     const isNotGroupRound = props.match.round !== MatchRound.GROUP
     const isMatchCompleted = ref(props.match.status === MatchStatus.COMPLETED)
     const userTipStore = useUserTipStore()
+    const matchTip = useUserTipStore().matchTip(props.match.id)
 
     const aScore = userTipStore.getCountryAComputedPenaltyGoalTip(props.match.id)
     const bScore = userTipStore.getCountryBComputedPenaltyGoalTip(props.match.id)
 
     return {
       isMatchOpen,
+      matchTip,
       isNotGroupRound,
       aScore,
       bScore,
