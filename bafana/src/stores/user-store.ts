@@ -9,8 +9,8 @@ const userKey = '_user'
 export const userEndpoint = '/api/v1/user'
 
 export enum UserRole {
-    USER = 'user',
-    ADMIN = 'admin'
+  USER = 'user',
+  ADMIN = 'admin'
 }
 
 export type User = {
@@ -63,19 +63,19 @@ export const useUserStore = defineStore('userStore', {
       LocalStorage.set(userKey, user)
       this.setToken(user.token)
     },
+    setVapid (key: string) {
+      LocalStorage.set('vapid', key)
+    },
     async login (username: string, password: string) {
-      try {
-        const response = await axios.post('/api/user/login', {
-          username,
-          password
-        })
-        if (response.status === 200) {
-          this.setUser(response.data.user as User)
-          return true
-        }
-        return false
-      } catch (e) {
-        return false
+      const response = await axios.post('/api/user/login', {
+        username,
+        password
+      })
+
+      if (response.status === 200) {
+        this.setUser(response.data.user as User)
+        this.setVapid(response.data.pushVapid)
+        return true
       }
     },
     setupSocket () {
