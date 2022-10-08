@@ -54,6 +54,7 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
     .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
     .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
     .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
+    .leftJoinAndSelect('match.winner', 'winner', 'winner.id = match.winnerId')
     .orderBy('match.number', 'ASC')
     .getMany()
 
@@ -66,19 +67,6 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
   }
 
   return result;
-
-  return await getMatchRepo().find({
-    where: {
-      date: MoreThanOrEqual(date),
-      status: MatchStatus.OPEN,
-      year,
-      // time: MoreThan(time),
-    },
-    order: {
-      number: 'ASC'
-    }
-  })
-
 }
 
 export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | null, year = configYear) => {
