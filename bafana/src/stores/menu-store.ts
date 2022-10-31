@@ -56,6 +56,12 @@ export const useMenuStore = defineStore('menu', {
         color: 'primary'
       },
       {
+        label: 'Push Nofication',
+        to: { name: 'push-notification' },
+        icon: 'notifications',
+        color: 'primary'
+      },
+      {
         label: 'Group Round Points',
         to: { name: 'group-round-points' },
         icon: 'timeline',
