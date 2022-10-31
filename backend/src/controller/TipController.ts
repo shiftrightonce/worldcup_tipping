@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import { env } from "../data-source";
 import { getScoreboard, getUserTotalScore } from "../service/tip_service"
 
 export class TipController {
@@ -6,7 +7,7 @@ export class TipController {
   public async scoreboardAction () {
     return {
       success: true,
-      scoreboard: await getScoreboard()
+      scoreboard: await getScoreboard(env('SCORE_BOARD_LIMIT_TO_SHOW', 200))
     }
   }
 
