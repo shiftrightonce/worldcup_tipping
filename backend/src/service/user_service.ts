@@ -1,8 +1,8 @@
 import { AppDataSource } from "../data-source"
 import * as bcrypt from 'bcrypt'
 import { randomBytes, createCipheriv, createDecipheriv, createHash } from 'crypto'
-import { User } from "../entity/User";
-import { Request } from "express";
+import { User, UserRole, UserType } from "../entity/User";
+import { Request, Response } from "express";
 import { toPng } from 'jdenticon'
 import * as fs from 'fs/promises'
 import * as path from 'path'
@@ -30,7 +30,7 @@ export const checkPassword = async (user: User, rawPassword: string) => {
 export const generateAuthCookie = (user: User) => {
 
   const key = getEncryptionKey()
-  const iv = createHash('sha256').update(randomBytes(16).toString('hex')).digest().slice(0, 16)
+  const iv = createHash('sha256').update(randomBytes(16).toString('hex')).digest().subarray(0, 16)
   const encrypt = createCipheriv('aes256', key, iv)
 
   const encrypting = `${user.token}|${user.role}`
@@ -114,10 +114,31 @@ export const generateAvatar = async (value: string) => {
 }
 
 export const cleanUserData = (user: User) => {
-  delete user.email
-  delete user.token
-  delete user.password
-  delete user.role
+  delete user.email;
+  delete user.token;
+  delete user.password;
+  delete user.role;
+  delete user.data;
 
   return user;
+}
+
+export const whenUserIsAdmin = async (req: Request, res: Response, callback: Function) => {
+  const user = pluckUserFromRequest(req)
+  if (user.role !== UserRole.ADMIN) {
+    return {
+      success: false,
+      code: 'permission_denied',
+      message: 'You do not have the right permission'
+    }
+  } else {
+    return await callback()
+  }
+}
+
+export const getUsersStream = async () => {
+  return await getUserRepo().createQueryBuilder('user')
+    .where('deletedAt is null')
+    .where('type = :type', { type: UserType.HUMAN })
+    .stream()
 }
