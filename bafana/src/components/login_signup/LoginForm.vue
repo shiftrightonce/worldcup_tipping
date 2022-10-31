@@ -65,7 +65,7 @@ export default defineComponent({
       })
     }
 
-    const onSignin = () => {
+    const onSignIn = () => {
       if (username.value && password.value) {
         (async () => {
           try {
@@ -83,7 +83,7 @@ export default defineComponent({
 
     return {
       onInput,
-      onSignin,
+      onSignIn,
       username,
       password,
       isPassword
