@@ -139,14 +139,14 @@ export const placeUserTip = async (tip: Tip, userId: number, year = configYear) 
   }
 }
 
-export const getScoreboard = async (year = configYear) => {
+export const getScoreboard = async (limit = 200, year = configYear) => {
   const result = await getTipRepo().createQueryBuilder('tip')
     .where('tip.year = :year', { year })
     .leftJoinAndSelect("tip.user", "user")
     .addSelect('SUM(tip.points)', 'totalPoints')
     .groupBy('tip.userId')
     .orderBy('totalPoints', 'DESC')
-    .limit(200)
+    .limit(limit)
     .getRawMany()
 
   return result.map((entry) => {
