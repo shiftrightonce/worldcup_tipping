@@ -29,6 +29,7 @@ export const useUserStore = defineStore('userStore', {
   state: () => ({
     activeToken: LocalStorage.getItem(tokenKey),
     activeUser: LocalStorage.getItem(userKey) as User | null,
+    vapid: LocalStorage.getItem('vapid') || '',
     _api: null as AxiosInstance | null,
     tips: {} as { [key: number]: { tip: Tip, state: UserTipState } },
     socket: null as Socket | null
@@ -65,6 +66,7 @@ export const useUserStore = defineStore('userStore', {
     },
     setVapid (key: string) {
       LocalStorage.set('vapid', key)
+      this.vapid = key
     },
     async login (username: string, password: string) {
       const response = await axios.post('/api/user/login', {
@@ -102,6 +104,7 @@ export const useUserStore = defineStore('userStore', {
         LocalStorage.clear()
         this.activeToken = ''
         this.activeUser = null
+        this.vapid = ''
         return response.status === 200
       } catch (e) {
         return false
@@ -129,6 +132,39 @@ export const useUserStore = defineStore('userStore', {
 
     async setTip (match: number, entry: { tip: Tip, state: UserTipState }) {
       this.tips[match] = entry
+    },
+    async subscribeToNotifications (data: Record<string, unknown>) {
+      const response = await this.api.post(`${userEndpoint}/push-subscribe`, data)
+      return response.data
+    },
+    async setupNotificationSubscription () {
+      if (!('Notification' in window)) {
+        return
+      }
+
+      const channel = new BroadcastChannel('world-cup-tipping')
+      channel.onmessage = (event) => {
+        console.log('message came', event)
+        if (event.data.type) {
+          switch (event.data.type) {
+            case 'client:subscription_response':
+              console.log('client:subscription_response', Date.now())
+              this.subscribeToNotifications(event.data.data)
+              break
+          }
+        }
+      }
+
+      if (Notification.permission !== 'granted') {
+        Notification.requestPermission().then((response) => {
+          if (response === 'granted') {
+            channel.postMessage({ type: 'service:subscribe_to_notification', data: { vapid: this.vapid } })
+            // channel.close()
+          }
+        })
+      } else {
+        channel.close()
+      }
     }
   }
 })
