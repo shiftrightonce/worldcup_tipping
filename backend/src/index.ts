@@ -8,13 +8,17 @@ import setupPublicRoutes from './routes/public_routes'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
 import { createAdapter } from '@socket.io/redis-adapter'
-import { createClient } from 'redis'
 import setupSocketIO from './socketio'
 import { getRedisConnection } from "./redis_client"
+import { setupPushNotification } from "./push_notification"
 const path = require('path')
 
 
+
 AppDataSource.initialize().then(async () => {
+
+    // web push
+    setupPushNotification();
 
     // create express app
     const app = express();
