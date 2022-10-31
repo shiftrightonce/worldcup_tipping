@@ -160,6 +160,16 @@ export const getScoreboard = async (limit = 200, year = configYear) => {
   })
 }
 
+export const getScoreboardStream = async (year = configYear) => {
+  return await getTipRepo().createQueryBuilder('tip')
+    .where('tip.year = :year', { year })
+    .leftJoinAndSelect("tip.user", "user")
+    .addSelect('SUM(tip.points)', 'totalPoints')
+    .groupBy('tip.userId')
+    .orderBy('totalPoints', 'DESC')
+    .stream();
+}
+
 export const getUserTotalScore = async (userId: number, year = configYear) => {
   const result = await getTipRepo().createQueryBuilder('tip')
     .where('tip.year = :year', { year })
