@@ -75,15 +75,6 @@ export const updateTip = async (tip: Tip) => {
 
 
 export const placeUserTip = async (tip: Tip, userId: number, year = configYear) => {
-  // const oldTip = await getTipById(tip.id)
-  // if (!oldTip) {
-  //   return {
-  //     success: false,
-  //     code: 'match_is_not_open',
-  //     message: 'Match is not open for tipping'
-  //   };
-  // }
-
   const oldTip = await getTipRepo().findOne({
     where: {
       year: tip.year || year,
