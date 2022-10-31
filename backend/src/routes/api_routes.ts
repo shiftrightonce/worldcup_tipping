@@ -1,4 +1,5 @@
 import { Application, Router } from 'express'
+import { AdminController } from '../controller/AdminController';
 import { ChatController } from '../controller/ChatController';
 import { CountryController } from '../controller/CountryController';
 import { MatchController } from '../controller/MatchController';
@@ -18,6 +19,9 @@ apiTokenMiddleware(router);
 const routes = [
   // - user
   buildRoute(UserController, 'getMatchTipAction', 'get', '/user/tip/:match'),
+  buildRoute(UserController, 'pushNotificationSubscribeAction', 'post', '/user/push-subscribe'),
+  buildRoute(UserController, 'pushNotificationUnsubscribeAction', 'get', '/user/push-unsubscribe'),
+  buildRoute(UserController, 'vapidKeyAction', 'get', '/user/vapid-token'),
 
   // - match
   buildRoute(MatchController, 'todayMatchesAction', 'get', '/match/todays'),
@@ -35,8 +39,10 @@ const routes = [
   buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user'),
 
   // - chat
-  buildRoute(ChatController, 'getMyRoomsAction', 'get', '/chat/my-rooms')
+  buildRoute(ChatController, 'getMyRoomsAction', 'get', '/chat/my-rooms'),
 
+  // - admin
+  buildRoute(AdminController, 'sendPushNotificationAction', 'post', '/admin/push-message'),
 ];
 
 
