@@ -47,6 +47,11 @@ export class User {
     @Column({ length: 64 })
     token: string
 
+    @Column({ type: "simple-json", nullable: true })
+    data: {
+        push_subscription: Record<string,unknown>
+    }
+
     @CreateDateColumn()
     createdAt: Date
 
@@ -83,5 +88,29 @@ export class User {
 
     getAvatar () {
         return this.type === UserType.HUMAN ? `/static/user/${this.username}.png` : '/static/chat/bot.png';
+    }
+    setData (key: string, value: unknown) {
+        if (this.data === null) {
+            this.data = {
+                push_subscription: null
+            }
+        }
+        this.data[key] = value
+
+        return this
+    }
+
+    getData (key: string): unknown {
+        if (this.data && this.data[key] !== undefined) {
+            return this.data[key];
+        }
+        return this.data;
+    }
+
+    removeData (key: string) {
+        if (this.data && this.data[key]) {
+            delete this.data[key]
+        }
+        return this
     }
 }
