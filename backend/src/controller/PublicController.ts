@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response, CookieOptions } from "express"
+import { env } from "../data-source";
 import { User } from "../entity/User";
 import { checkPassword, createUser, generateAuthCookie, getUserRepo } from "../service/user_service";
 
@@ -57,22 +58,25 @@ export class PublicController {
       })
   }
 
-  private sendLoginResonse (res: Response, user: User) { 
-      const cookieOptions: CookieOptions = {
-        sameSite: 'none',
-        secure: true,
-        signed: true
-      }
-      const cookie = generateAuthCookie(user);
-      res.cookie('_t', cookie, cookieOptions).json({
-        success: true,
-        user: {
-          id: user.id,
-          token: user.token,
-          role: user.role,
-          username: user.username,
-          avatar: user.avatar
-        }
-      });
+  private sendLoginResonse (res: Response, user: User) {
+    const cookieOptions: CookieOptions = {
+      sameSite: 'none',
+      secure: true,
+      signed: true
+    }
+    const cookie = generateAuthCookie(user);
+    res.cookie('_t', cookie, cookieOptions)
+      .cookie('_vapid', env('VAPID_PUBLIC_KEY'), cookieOptions)
+      .json({
+      success: true,
+      user: {
+        id: user.id,
+        token: user.token,
+        role: user.role,
+        username: user.username,
+        avatar: user.avatar
+      },
+      pushVapid: env('VAPID_PUBLIC_KEY')
+    });
   }
 }
