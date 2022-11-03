@@ -1,4 +1,4 @@
-import { AfterLoad, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AfterLoad, Column, CreateDateColumn, DeleteDateColumn, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ChatMessage } from "./ChatMessage";
 import { UserChatRoom } from "./UserChatRoom";
 
@@ -14,6 +14,10 @@ export class ChatRoom {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated('uuid')
+  internalId: string;
 
   @Column({
     length: 255,

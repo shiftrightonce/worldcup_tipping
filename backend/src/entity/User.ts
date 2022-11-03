@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated } from "typeorm"
 import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
 import { ChatMessage } from "./ChatMessage";
 import { UserChatRoom } from "./UserChatRoom";
@@ -20,6 +20,10 @@ export class User {
 
     @PrimaryGeneratedColumn()
     id: number
+
+  @Column()
+  @Generated('uuid')
+  internalId: string;
 
     @Column({
         type: 'enum',
