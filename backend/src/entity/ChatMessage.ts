@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn, Generated } from "typeorm";
 import { ChatRoom } from "./ChatRoom";
 import { User } from "./User";
 
@@ -13,6 +13,10 @@ export class ChatMessage {
 
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  @Generated('uuid')
+  internalId: string;
 
   @ManyToOne(() => User, { nullable: false })
   from: User;
