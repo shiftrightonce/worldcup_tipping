@@ -39,6 +39,12 @@ export const findChatRoomById = async (id: number) => {
   })
 }
 
+export const findChatRoomByInternalId = async (internalId: string) => {
+  return await getChatRoomRepo().findOneBy({
+    internalId
+  })
+}
+
 export const getUserRooms = async (userId: number) => {
   const rooms = await getChatRoomRepo()
     .createQueryBuilder('room')
