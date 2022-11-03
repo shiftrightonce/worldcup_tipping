@@ -1,5 +1,6 @@
 import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import makeLiveServerChannel from 'src/channels/liveserver_channel'
 import { useUserStore } from './user-store'
 
 export const chatEndpoint = '/api/v1/chat'
@@ -11,21 +12,29 @@ export enum ChatRoomType {
 
 export type ChatUser = {
   id: number,
+  internalId: string,
   username: string,
   avatar: string
 }
 
 export type ChatMessage = {
   id: number,
-  createdAt: Date,
+  internalId: string,
   from: ChatUser,
   message: string,
-  room: { id: number, name: string, type: ChatRoomType },
-  updatedAt: Date
+  room: {
+    id: number,
+    internalId: string,
+    name: string,
+    type: ChatRoomType
+  },
+  createdAt: string,
+  updatedAt: string
 }
 
 export type ChatRoom = {
   id: number,
+  internalId: string,
   name: string,
   type: ChatRoomType,
   lastMessage: null | ChatMessage,
@@ -33,9 +42,28 @@ export type ChatRoom = {
   avatar: string
 }
 
+const liveChannel = makeLiveServerChannel()
+
+liveChannel.addEventListener('message', (e) => {
+  // const msg = (e.data as { data: ChatMessage }).data
+  switch (e.data.type) {
+    case 'server:chat_message':
+      console.log('chat room message', e.data.data.data)
+      if (!useChatStore().messages[e.data.roomId]) {
+        useChatStore().messages[e.data.roomId] = []
+      }
+      useChatStore().messages[e.data.roomId].push(e.data.data.data as ChatMessage)
+      break
+    default:
+      console.log('okay....:::', e.data)
+  }
+})
+
 export const useChatStore = defineStore('chatStore', {
   state: () => ({
-    rooms: [] as ChatRoom[]
+    rooms: [] as ChatRoom[],
+    messages: {} as { [key: string]: ChatMessage[] },
+    currentRoom: {} as ChatRoom
   }),
   actions: {
     fetchRooms () {
@@ -57,10 +85,10 @@ export const useChatStore = defineStore('chatStore', {
                 //   room.avatar = '/ph/noimage.png'
                 // }
 
-                if (room.lastMessage) {
-                  room.lastMessage.createdAt = new Date(room.lastMessage.createdAt)
-                  room.lastMessage.updatedAt = new Date(room.lastMessage.updatedAt)
-                }
+                // if (room.lastMessage) {
+                //   room.lastMessage.createdAt = new Date(room.lastMessage.createdAt)
+                //   room.lastMessage.updatedAt = new Date(room.lastMessage.updatedAt)
+                // }
               })
             }
             resolve(this.rooms)
@@ -70,6 +98,11 @@ export const useChatStore = defineStore('chatStore', {
             reject(e)
           })
       }), [])
+    },
+    async postMessage (roomId: string, message: string) {
+      return await useUserStore().api.post(`${chatEndpoint}/message/${roomId}`, {
+        message
+      })
     }
   }
 })
