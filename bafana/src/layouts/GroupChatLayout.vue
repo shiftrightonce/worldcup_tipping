@@ -3,13 +3,7 @@
     <q-layout view="lHr lpR lFr" container v-if="isReady">
       <q-header elevated>
         <q-toolbar>
-          <q-btn
-            round
-            flat
-            icon="menu"
-            class="WAL__drawer-open q-mr-sm"
-            @click="toggleLeftDrawer"
-          />
+          <q-btn round flat icon="menu" class="WAL__drawer-open q-mr-sm" @click="toggleLeftDrawer" />
 
           <q-btn round flat>
             <q-avatar>
@@ -21,8 +15,8 @@
             {{ currentConversation.name }}
           </span>
 
-          <q-space/>
-
+          <q-space />
+          <!--
           <q-btn round flat icon="search" />
           <q-btn round flat>
             <q-icon name="attachment" class="rotate-135" />
@@ -50,18 +44,12 @@
                 </q-item>
               </q-list>
             </q-menu>
-          </q-btn>
+          </q-btn> -->
           <q-btn flat round dense icon="menu" @click="toggleRightDrawer" />
         </q-toolbar>
       </q-header>
 
-      <q-drawer
-        v-model="leftDrawerOpen"
-        show-if-above
-        side="left"
-        bordered
-        :breakpoint="690"
-      >
+      <q-drawer v-model="leftDrawerOpen" show-if-above side="left" bordered :breakpoint="690">
         <q-toolbar>
           <q-avatar class="cursor-pointer">
             <ProfileImage></ProfileImage>
@@ -69,7 +57,7 @@
 
           <q-space />
 
-          <q-btn round flat icon="message" />
+          <!--<q-btn round flat icon="message" />
           <q-btn round flat icon="more_vert">
             <q-menu auto-close :offset="[110, 8]">
               <q-list style="min-width: 150px">
@@ -93,19 +81,14 @@
                 </q-item>
               </q-list>
             </q-menu>
-          </q-btn>
+          </q-btn> -->
 
-          <q-btn
-            round
-            flat
-            icon="close"
-            class="WAL__drawer-close"
-            @click="toggleLeftDrawer"
-          />
+          <q-btn round flat icon="close" class="WAL__drawer-close" @click="toggleLeftDrawer" />
         </q-toolbar>
 
         <q-toolbar cllass="bg-grey-2">
-          <q-input rounded outlined dense class="WAL__field full-width" v-model="search" placeholder="Search or start a new conversation">
+          <q-input rounded outlined dense class="WAL__field full-width" v-model="search"
+            placeholder="Search or start a new conversation">
             <template v-slot:prepend>
               <q-icon name="search" />
             </template>
@@ -114,13 +97,8 @@
 
         <q-scroll-area style="height: calc(100% - 100px)">
           <q-list>
-            <q-item
-              v-for="(conversation, index) in state"
-              :key="conversation.id"
-              clickable
-              v-ripple
-              @click="setCurrentConversation(index)"
-            >
+            <q-item v-for="(conversation, index) in state" :key="conversation.id" clickable v-ripple
+              @click="setCurrentConversation(index)">
               <q-item-section avatar>
                 <q-avatar>
                   <img :src="conversation.avatar">
@@ -140,8 +118,8 @@
 
               <q-item-section side>
                 <q-item-label caption>
-                 <!-- <span style="font-size: 9px">{{ conversation.lastMessage?.createdAt.toLocaleString() }}</span> -->
-                 <span>2W</span>
+                  <!-- <span style="font-size: 9px">{{ conversation.lastMessage?.createdAt.toLocaleString() }}</span> -->
+                  <span>2W</span>
                 </q-item-label>
                 <q-badge rounded color="green" />
               </q-item-section>
@@ -150,14 +128,9 @@
         </q-scroll-area>
       </q-drawer>
 
-    <q-drawer
-      show-if-above
-       v-model="rightDrawerOpen"
-      :breakpoint="690"
-      side="right" bordered
-    >
-      <MainMenu></MainMenu>
-    </q-drawer>
+      <q-drawer show-if-above v-model="rightDrawerOpen" :breakpoint="690" side="right" bordered>
+        <MainMenu></MainMenu>
+      </q-drawer>
 
       <q-page-container>
         <q-page class="q-pa-md">
@@ -168,17 +141,9 @@
       <q-footer>
         <q-toolbar class="bg-grey-6 text-black row">
           <q-btn round flat icon="insert_emoticon" class="q-mr-sm" />
-          <q-input
-            rounded
-            outlined
-            dense
-            class="WAL__field col-grow q-mr-sm text-black"
-            :dark="false"
-            bg-color="white"
-            v-model="message"
-            placeholder="Type a message"
-           />
-          <q-btn round flat icon="send" />
+          <q-input rounded outlined dense class="WAL__field col-grow q-mr-sm text-black" :dark="false" bg-color="white"
+            v-model="message" placeholder="Type a message" />
+          <q-btn round flat icon="send" @click="sendMessage" />
         </q-toolbar>
       </q-footer>
     </q-layout>
@@ -285,12 +250,23 @@ export default defineComponent({
     }
 
     function setCurrentConversation (index: number) {
+      chatStore.currentRoom = state.value[index]
       currentConversationIndex.value = index
     }
 
     (async () => {
       await chatStore.fetchRooms()
     })()
+
+    const sendMessage = () => {
+      if (message.value.trim()) {
+        (async () => {
+          const response = await chatStore.postMessage(currentConversation.value.internalId, message.value.trim())
+          message.value = ''
+          console.log('message posted', JSON.stringify(response.data))
+        })()
+      }
+    }
 
     return {
       isReady,
@@ -300,16 +276,15 @@ export default defineComponent({
       message,
       currentConversationIndex,
       conversations,
-
       menuStore,
       rightDrawerOpen,
-
-      currentConversation,
-      setCurrentConversation,
       style,
+      currentConversation,
 
+      setCurrentConversation,
       toggleLeftDrawer,
-      toggleRightDrawer
+      toggleRightDrawer,
+      sendMessage
     }
   }
 })
