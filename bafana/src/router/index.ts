@@ -23,7 +23,7 @@ export default route(function (/* { store, ssrContext } */) {
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
 
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior: () => ({ left: 0, top: 0 }), // @Todo look into this issue: https://github.com/quasarframework/quasar/issues/7899
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!
