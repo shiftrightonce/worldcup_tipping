@@ -93,3 +93,10 @@ export const getUserRooms = async (userId: number) => {
     return built;
   })
 }
+
+export const getPublicRooms = async () => {
+  return await getChatRoomRepo()
+    .createQueryBuilder('room')
+    .where("room.type = :type", { type: ChatRoomType.PUBLIC })
+    .getMany();
+}
