@@ -40,6 +40,7 @@ const routes = [
 
   // - chat
   buildRoute(ChatController, 'getMyRoomsAction', 'get', '/chat/my-rooms'),
+  buildRoute(ChatController, 'postRoomMessageAction', 'post', '/chat/message/:roomId'),
 
   // - admin
   buildRoute(AdminController, 'sendPushNotificationAction', 'post', '/admin/push-message'),
