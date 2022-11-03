@@ -3,6 +3,7 @@ import { LocalStorage } from 'quasar'
 import axios, { AxiosInstance } from 'axios'
 import { Tip } from './match-store'
 import { io, Socket } from 'socket.io-client'
+import makeLiveServerChannel from 'src/channels/liveserver_channel'
 
 const tokenKey = '_t'
 const userKey = '_user'
@@ -82,19 +83,26 @@ export const useUserStore = defineStore('userStore', {
     },
     setupSocket () {
       if (!this.socket) {
+        const liveChannel = makeLiveServerChannel()
         this.socket = io({
           auth: {
             token: this.token
           }
         })
         this.socket.io.on('open', () => {
+          liveChannel.postMessage({ type: 'open', data: { time: Date.now() } })
           console.log('we are connected')
         })
         this.socket.on('connection_error', (error) => {
+          liveChannel.postMessage({ type: 'connection_error', data: error })
           console.log('could not connect', error)
         })
         this.socket.on('server:time', (data) => {
+          liveChannel.postMessage({ type: 'server:time', data })
           console.log('server time', data)
+        })
+        this.socket.on('server:room_event', (data) => {
+          liveChannel.postMessage({ type: 'server:chat_message', data })
         })
       }
     },
