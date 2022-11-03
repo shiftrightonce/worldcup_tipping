@@ -1,5 +1,5 @@
 <template>
-  <q-form @submit="onSignin" autofocus>
+  <q-form @submit="onSignIn" autofocus>
     <div class="row">
       <div class="col-xs-12 col-md-12 q-pl-lg q-pr-lg q-mb-md">
         <q-input v-model="username" label="Username" outlined @update:model-value="onInput"></q-input>
