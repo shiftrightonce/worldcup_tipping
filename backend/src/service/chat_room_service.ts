@@ -76,8 +76,9 @@ export const getUserRooms = async (userId: number) => {
     })
 
   return rooms.map((room) => {
-    const built = { id: 0, name: '', type: ChatRoomType.PUBLIC, members: [], avatar: '', lastMessage: null }
+    const built = { id: 0, name: '', internalId: '', type: ChatRoomType.PUBLIC, members: [], avatar: '', lastMessage: null }
     built.id = room.id;
+    built.internalId = room.internalId;
     built.name = room.name;
     built.type = room.type;
     built.avatar = room.avatar;
