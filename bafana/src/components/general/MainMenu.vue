@@ -11,12 +11,14 @@
     </q-item>
     <q-separator v-if="userStore.isAdmin" />
     <q-item-label v-if="userStore.isAdmin" header>Adminstration</q-item-label>
+    <div v-if="userStore.isAdmin">
     <q-item clickable v-ripple v-for="item in menuStore.admin" :key="item.label" :to="item.to">
       <q-item-section avatar>
         <q-icon :name="item.icon"></q-icon>
       </q-item-section>
       <q-item-section>{{ item.label }}</q-item-section>
     </q-item>
+    </div>
     <q-separator v-if="userStore.isAdmin" />
     <q-item clickable v-ripple v-for="item in menuStore.user" :key="item.label" :to="item.to">
       <q-item-section avatar>
