@@ -13,4 +13,15 @@ export class ChatController {
       rooms: await getUserRooms(user.id)
     }
   }
+
+  public async postRoomMessageAction (req: Request) {
+    const user = pluckUserFromRequest(req)
+    const message = (req.body as { message: string }).message
+    const type = (req.body as { type?: ChatMessageType }).type || ChatMessageType.MESSAGE
+
+    return {
+      success: true,
+      message: await postMessage(req.params.roomId, user, message, type)
+    }
+  }
 }
