@@ -37,22 +37,27 @@ export type ChatRoom = {
   internalId: string,
   name: string,
   type: ChatRoomType,
-  lastMessage: null | ChatMessage,
+  lastMessages: null | ChatMessage[],
   members: ChatUser[],
   avatar: string
 }
 
 const liveChannel = makeLiveServerChannel()
 
+function pushNewRoomMessages (roomId: string, messages: ChatMessage[]) {
+  if (!useChatStore().messages[roomId]) {
+    useChatStore().messages[roomId] = {}
+  }
+  messages.forEach((msg) => {
+    useChatStore().messages[roomId][msg.internalId] = msg
+  })
+}
+
 liveChannel.addEventListener('message', (e) => {
   // const msg = (e.data as { data: ChatMessage }).data
   switch (e.data.type) {
     case 'server:chat_message':
-      console.log('chat room message', e.data.data.data)
-      if (!useChatStore().messages[e.data.roomId]) {
-        useChatStore().messages[e.data.roomId] = []
-      }
-      useChatStore().messages[e.data.roomId].push(e.data.data.data as ChatMessage)
+      pushNewRoomMessages(e.data.data.roomId, [e.data.data.data as ChatMessage])
       break
     default:
       console.log('okay....:::', e.data)
@@ -62,7 +67,7 @@ liveChannel.addEventListener('message', (e) => {
 export const useChatStore = defineStore('chatStore', {
   state: () => ({
     rooms: [] as ChatRoom[],
-    messages: {} as { [key: string]: ChatMessage[] },
+    messages: {} as { [key: string]: Record<string, ChatMessage> },
     currentRoom: {} as ChatRoom
   }),
   actions: {
@@ -73,22 +78,13 @@ export const useChatStore = defineStore('chatStore', {
             if (response.data.success) {
               this.rooms = response.data.rooms as ChatRoom[]
               this.rooms.forEach((room) => {
-                // if (room.type === ChatRoomType.PUBLIC) {
-                //   room.avatar = '/ph/group.png'
-                // } else if (room.members.length > 0) {
-                //   room.avatar = `/static/user/${room.members[0].username}.png`
-                //   room.name = room.members[0].username
-                //   room.members.forEach((member) => {
-                //     member.avatar = `/static/user/${room.members[0].username}.png`
-                //   })
-                // } else {
-                //   room.avatar = '/ph/noimage.png'
-                // }
+                if (!this.currentRoom.internalId) {
+                  this.currentRoom = room
+                }
 
-                // if (room.lastMessage) {
-                //   room.lastMessage.createdAt = new Date(room.lastMessage.createdAt)
-                //   room.lastMessage.updatedAt = new Date(room.lastMessage.updatedAt)
-                // }
+                if (room.lastMessages) {
+                  pushNewRoomMessages(room.internalId, room.lastMessages)
+                }
               })
             }
             resolve(this.rooms)
@@ -100,9 +96,16 @@ export const useChatStore = defineStore('chatStore', {
       }), [])
     },
     async postMessage (roomId: string, message: string) {
-      return await useUserStore().api.post(`${chatEndpoint}/message/${roomId}`, {
+      const response = await useUserStore().api.post(`${chatEndpoint}/message/${roomId}`, {
         message
       })
+
+      if (response.data.success) {
+        const message = response.data.message as ChatMessage
+        pushNewRoomMessages(message.room.internalId, [message])
+      }
+
+      return response
     }
   }
 })
