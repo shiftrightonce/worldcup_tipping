@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useUserStore } from './user-store'
 export type MenuItem = {
   label: string,
   to: { name: string },
