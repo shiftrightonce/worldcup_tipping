@@ -1,4 +1,3 @@
-import { In, Not } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { ChatRoom, ChatRoomType } from "../entity/ChatRoom";
 import { UserChatRoom } from "../entity/UserChatRoom";
