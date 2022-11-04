@@ -160,55 +160,6 @@ import ProfileImage from '../components/user/ProfileImage.vue'
 import MainMenu from '../components/general/MainMenu.vue'
 import { useChatStore } from 'src/stores/chat-store'
 
-const conversations = [
-  {
-    id: 11,
-    person: 'General',
-    avatar: 'https://cdn.quasar.dev/team/razvan_stoenescu.jpeg',
-    caption: 'I\'m working on Quasar!',
-    time: '15:00',
-    sent: true,
-    deleted: true,
-    type: 'group'
-  },
-  {
-    id: 1,
-    person: 'Razvan Stoenescu',
-    avatar: 'https://cdn.quasar.dev/team/razvan_stoenescu.jpeg',
-    caption: 'I\'m working on Quasar!',
-    time: '15:00',
-    sent: true,
-    deleted: true
-  },
-  {
-    id: 2,
-    person: 'Dan Popescu',
-    avatar: 'https://cdn.quasar.dev/team/dan_popescu.jpg',
-    caption: 'I\'m working on Quasar!',
-    time: '16:00',
-    sent: true,
-    deleted: false
-  },
-  {
-    id: 3,
-    person: 'Jeff Galbraith',
-    avatar: 'https://cdn.quasar.dev/team/jeff_galbraith.jpg',
-    caption: 'I\'m working on Quasar!',
-    time: '18:00',
-    sent: true,
-    deleted: false
-  },
-  {
-    id: 4,
-    person: 'Allan Gaunt',
-    avatar: 'https://cdn.quasar.dev/team/allan_gaunt.png',
-    caption: 'I\'m working on Quasar!',
-    time: '17:00',
-    sent: true,
-    deleted: false
-  }
-]
-
 export default defineComponent({
   name: 'GroupChatLayout',
   components: { ProfileImage, MainMenu },
@@ -292,7 +243,6 @@ export default defineComponent({
       search,
       message,
       currentConversationIndex,
-      conversations,
       menuStore,
       rightDrawerOpen,
       style,
