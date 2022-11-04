@@ -11,7 +11,7 @@ export const getChatMessageRepo = () => {
   return AppDataSource.getRepository(ChatMessage)
 }
 
-export const getRoomsLastMessage = async (roomIds: number[], messageType = ChatMessageType.MESSAGE): Promise<{ [roomId: number]: ChatMessage }> => {
+export const getRoomsLastMessage = async (roomIds: number[], messageType = ChatMessageType.MESSAGE, limit: number = 20): Promise<{ [roomId: number]: ChatMessage }> => {
   const result = {};
   (await getChatMessageRepo()
     .createQueryBuilder('message')
@@ -20,10 +20,14 @@ export const getRoomsLastMessage = async (roomIds: number[], messageType = ChatM
     .where({ room: In(roomIds) })
     .where("message.type = :type", { type: messageType })
     .distinctOn(['message.roomId'])
+    .limit(limit)
     .orderBy({ 'message.createdAt': 'DESC' })
-    .getMany()).forEach((message) => {
+    .getMany()).reverse().forEach((message) => {
       message.from = cleanUserData(message.from)
-      result[message.room.internalId] = message
+      if (!result[message.room.internalId]) {
+        result[message.room.internalId] = []
+      }
+      result[message.room.internalId].push(message)
     })
 
   return result
