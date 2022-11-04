@@ -142,7 +142,7 @@
         <q-toolbar class="bg-grey-6 text-black row">
           <q-btn round flat icon="insert_emoticon" class="q-mr-sm" />
           <q-input rounded outlined dense class="WAL__field col-grow q-mr-sm text-black" :dark="false" bg-color="white"
-            v-model="message" placeholder="Type a message" />
+            v-model="message" placeholder="Type a message" @keydown="onKeyDown" @keyup="onKeyUp" />
           <q-btn round flat icon="send" @click="sendMessage" />
         </q-toolbar>
       </q-footer>
@@ -261,11 +261,28 @@ export default defineComponent({
     const sendMessage = () => {
       if (message.value.trim()) {
         (async () => {
-          const response = await chatStore.postMessage(currentConversation.value.internalId, message.value.trim())
+          void await chatStore.postMessage(currentConversation.value.internalId, message.value.trim())
           message.value = ''
-          console.log('message posted', JSON.stringify(response.data))
         })()
       }
+    }
+
+    const keysHistory: Record<string, boolean> = {}
+    const onKeyDown = (e: KeyboardEvent) => {
+      keysHistory[e.key] = true
+      handleKeyEvent()
+    }
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      delete keysHistory[e.key]
+    }
+
+    const handleKeyEvent = () => {
+      if (!keysHistory.Shift && keysHistory.Enter) { // User press the enter key without holding down the shift key
+        sendMessage()
+      }
+
+      // @todo handle new line hint
     }
 
     return {
@@ -284,7 +301,9 @@ export default defineComponent({
       setCurrentConversation,
       toggleLeftDrawer,
       toggleRightDrawer,
-      sendMessage
+      sendMessage,
+      onKeyDown,
+      onKeyUp
     }
   }
 })
