@@ -110,18 +110,11 @@
                   {{ conversation.name }}
                 </q-item-label>
                 <q-item-label class="conversation__summary" caption>
-                  <q-icon name="check" vv-if="conversation.sent" />
-                  <!-- <q-icon name="not_interested" v-if="conversation.deleted" /> -->
-                  <span style="font-size: 9px">The quick brown fox jumps...</span>
                 </q-item-label>
               </q-item-section>
 
               <q-item-section side>
-                <q-item-label caption>
-                  <!-- <span style="font-size: 9px">{{ conversation.lastMessage?.createdAt.toLocaleString() }}</span> -->
-                  <span>2W</span>
-                </q-item-label>
-                <q-badge rounded color="green" />
+                <q-badge rounded color="green" v-if="conversation.internalId === currentConversation.internalId" />
               </q-item-section>
             </q-item>
           </q-list>
@@ -140,7 +133,7 @@
 
       <q-footer>
         <q-toolbar class="bg-grey-6 text-black row">
-          <q-btn round flat icon="insert_emoticon" class="q-mr-sm" />
+          <!-- <q-btn round flat icon="insert_emoticon" class="q-mr-sm" /> -->
           <q-input rounded outlined dense class="WAL__field col-grow q-mr-sm text-black" :dark="false" bg-color="white"
             v-model="message" placeholder="Type a message" @keydown="onKeyDown" @keyup="onKeyUp" />
           <q-btn round flat icon="send" @click="sendMessage" />
