@@ -30,6 +30,9 @@ export const AppDataSource = new DataSource({
     database: env('DATABASE_DATABASE', 'worldcup'),
     synchronize: env('DATABASE_SYNCHRONIZE', false),
     logging: env('DATABASE_LOGGING', false),
+    extra: {
+        "charset": "utf8mb4_unicode_ci"
+    },
     entities: ["src/entity/**/*.ts"],
     migrations: [
         "src/migration/**/*.ts"
