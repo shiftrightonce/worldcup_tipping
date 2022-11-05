@@ -49,6 +49,8 @@ function pushNewRoomMessages (roomId: string, messages: ChatMessage[]) {
     useChatStore().messages[roomId] = {}
   }
   messages.forEach((msg) => {
+    const date = new Date(msg.createdAt)
+    msg.createdAt = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
     useChatStore().messages[roomId][msg.internalId] = msg
   })
 }

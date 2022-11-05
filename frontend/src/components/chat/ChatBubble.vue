@@ -1,11 +1,8 @@
 <template>
-  <q-chat-message
-    :name="(data.from.id === userStore.user?.id)? 'me' : data.from.username"
-    :avatar="data.from.avatar"
-    :text="[data.message]"
-    :stamp="data.createdAt"
-    :sent="data.from.id === userStore.user?.id"
-   />
+  <transition appear enter-active-class="animated fadeInUpBig" leave-active-class="animated fadeInDownBig">
+    <q-chat-message :name="(data.from.id === userStore.user?.id) ? 'me' : data.from.username" :avatar="data.from.avatar"
+      :text="[data.message]" :stamp="data.createdAt" :sent="data.from.id === userStore.user?.id" />
+  </transition>
 </template>
 
 <script lang="ts">
