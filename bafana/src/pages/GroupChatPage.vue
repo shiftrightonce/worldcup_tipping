@@ -1,7 +1,7 @@
 <template>
   <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
     <div class="row" ref="board">
-      <div class="col-md-4 col-xs-12">
+      <div class="col-md-12 col-xs-12">
         <div v-if="chatStore.currentRoom && chatStore.messages[chatStore.currentRoom.internalId]">
           <ChatBubble v-for="message in chatStore.messages[chatStore.currentRoom.internalId]" :key="message.internalId"
             :data="message">
