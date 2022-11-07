@@ -1,9 +1,14 @@
 import { NextFunction, Request, Response, CookieOptions } from "express"
+import path = require("path");
 import { env } from "../data-source";
 import { User } from "../entity/User";
 import { checkPassword, createUser, generateAuthCookie, getUserRepo } from "../service/user_service";
 
 export class PublicController {
+
+  public async indexAction (req: Request, res: Response) {
+    return 'Index Page. Coming soon';
+  }
 
   public async loginAction (req: Request, res: Response) {
     const username = req.body.username || '';
