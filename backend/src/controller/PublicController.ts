@@ -73,15 +73,15 @@ export class PublicController {
     res.cookie('_t', cookie, cookieOptions)
       .cookie('_vapid', env('VAPID_PUBLIC_KEY'), cookieOptions)
       .json({
-      success: true,
-      user: {
-        id: user.id,
-        token: user.token,
-        role: user.role,
-        username: user.username,
-        avatar: user.avatar
-      },
-      pushVapid: env('VAPID_PUBLIC_KEY')
-    });
+        success: true,
+        user: {
+          id: user.id,
+          token: user.token,
+          role: user.role,
+          username: user.username,
+          avatar: user.avatar
+        },
+        pushVapid: env('VAPID_PUBLIC_KEY')
+      });
   }
 }
