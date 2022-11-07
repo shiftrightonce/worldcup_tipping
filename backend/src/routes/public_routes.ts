@@ -12,6 +12,11 @@ const routes = [
   buildRoute(PublicController, 'signupAction', 'post', '/user/signup'),
 ];
 
+const indexRouts = [
+  buildRoute(PublicController, 'indexAction', 'get', '/'),
+];
+
 export default function setup (app: Application) {
   app.use(baseEndpoint, registerHandlers(router, routes));
+  app.use('/', registerHandlers(router, indexRouts));
 }
