@@ -44,6 +44,7 @@ AppDataSource.initialize().then(async () => {
     app.use(express.urlencoded({ extended: false }));
     app.use(cookieParser(process.env.COOKIE_SECRET || `random${Date.now()}`));
     app.use('/static', express.static(path.join(__dirname, 'public')));
+    app.use('/app', express.static(path.join(__dirname, 'public/app')));
 
     // register api routes
     setupApiRoutes(app);
