@@ -52,7 +52,11 @@ export default defineComponent({
     layoutStore.setTitle('Scoreboard');
 
     (async () => {
-      myScore.value = await tipStore.fetchMyTotalScore()
+      try {
+        myScore.value = await tipStore.fetchMyTotalScore()
+      } catch (_) {
+        // do nothing
+      }
     })()
 
     setTimeout(() => {
