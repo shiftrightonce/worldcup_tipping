@@ -12,7 +12,7 @@
     <q-card-section horizontal>
       <q-card-section class="col-3">
         <q-avatar square size="100px" font-size="82px">
-          <img :src="score.user.avatar" />
+          <q-img :src="score.user.avatar" />
         </q-avatar>
       </q-card-section>
       <!-- <q-separator vertical /> -->
