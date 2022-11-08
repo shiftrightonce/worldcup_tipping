@@ -14,7 +14,7 @@
       <ScrollUpMessage></ScrollUpMessage>
     </q-page-scroller>
   </q-page>
-  <q-page v-else class="row items-evenly items-center flex-center">
+  <q-page v-if="!myScore && isReady && state.length === 0" class="row items-evenly items-center flex-center">
     <div class="col-12" style="text-align:center">
       <span class="text-h6">Top position is still up for grabs!</span>
     </div>
@@ -28,16 +28,25 @@ import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, ref } from 'vue'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 import ScoreboardCard from 'src/components/general/ScoreboardCard.vue'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   setup () {
     const layoutStore = useLayoutStore()
     const userStore = useUserStore()
     const tipStore = useTipStore()
-    const { isLoading, isReady, state } = tipStore.fetchScoreboard()
+    const { isLoading, isReady, state, execute } = tipStore.fetchScoreboard()
     const myScore = ref<Score | null>(null)
     let currentPosition = 1
     const positions: { [key: string]: number } = {}
+
+    const q = useQuasar()
+    q.loading.show()
+    execute().then(() => {
+      q.loading.hide()
+    }).catch(() => {
+      q.loading.hide()
+    })
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.setTitle('Scoreboard');
