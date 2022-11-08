@@ -15,7 +15,6 @@ export const useCountryStore = defineStore('countryStore', {
         const userStore = useUserStore()
         userStore.api.get(`${countryEndpoint}/all`)
           .then((response) => {
-            console.log(response)
             this.countries = response.data.countries as Country[]
             resolve(this.countries)
           })

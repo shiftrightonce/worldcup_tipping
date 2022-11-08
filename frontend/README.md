@@ -1,4 +1,4 @@
-# Bafana (bafana)
+# MansTip (MansTip)
 
 Friendly world cup betting app
 

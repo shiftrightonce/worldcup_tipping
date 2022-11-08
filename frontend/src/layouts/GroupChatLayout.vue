@@ -54,7 +54,7 @@
           <q-avatar class="cursor-pointer">
             <ProfileImage></ProfileImage>
           </q-avatar>
-
+          {{ userStore.user?.username }}
           <q-space />
 
           <!--<q-btn round flat icon="message" />
@@ -240,7 +240,7 @@ export default defineComponent({
       rightDrawerOpen,
       style,
       currentConversation,
-
+      userStore,
       setCurrentConversation,
       toggleLeftDrawer,
       toggleRightDrawer,

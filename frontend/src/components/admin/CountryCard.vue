@@ -2,7 +2,7 @@
   <q-card class="q-mb-md q-mr-md-md" flat bordered>
     <q-item>
       <q-item-section>
-        <q-item-label>{{ modelValue.internalId + ' : ' + modelValue.name + ' - ' + modelValue.short}}</q-item-label>
+        <q-item-label>{{ modelValue.internalId + ' : ' + modelValue.name + ' - ' + modelValue.short                                                                   }}</q-item-label>
       </q-item-section>
       <q-item-section avatar>
         <q-img :src="modelValue.imageSource" />
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar'
 import { useCountryStore } from 'src/stores/country-store'
 import { Country } from 'src/stores/match-store'
 import { defineComponent, PropType, ref } from 'vue'
@@ -35,6 +36,7 @@ export default defineComponent({
     const points = ref(props.modelValue.groupPoints || '')
     const isSaving = ref(false)
     const countryStore = useCountryStore()
+    const q = useQuasar()
 
     const saveData = () => {
       isSaving.value = true
@@ -44,7 +46,10 @@ export default defineComponent({
           isSaving.value = false
         })
         .catch((e) => {
-          console.log('error', e)
+          q.dialog({
+            title: 'Could not update country record',
+            message: e.message
+          })
           isSaving.value = false
         })
     }

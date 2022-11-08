@@ -92,15 +92,12 @@ export const useUserStore = defineStore('userStore', {
         })
         this.socket.io.on('open', () => {
           liveChannel.postMessage({ type: 'open', data: { time: Date.now() } })
-          console.log('we are connected')
         })
         this.socket.on('connection_error', (error) => {
           liveChannel.postMessage({ type: 'connection_error', data: error })
-          console.log('could not connect', error)
         })
         this.socket.on('server:time', (data) => {
           liveChannel.postMessage({ type: 'server:time', data })
-          console.log('server time', data)
         })
         this.socket.on('server:room_event', (data) => {
           liveChannel.postMessage({ type: 'server:chat_message', data })
@@ -153,11 +150,9 @@ export const useUserStore = defineStore('userStore', {
 
       const channel = new BroadcastChannel('world-cup-tipping')
       channel.onmessage = (event) => {
-        console.log('message came', event)
         if (event.data.type) {
           switch (event.data.type) {
             case 'client:subscription_response':
-              console.log('client:subscription_response', Date.now())
               this.subscribeToNotifications(event.data.data)
               break
           }

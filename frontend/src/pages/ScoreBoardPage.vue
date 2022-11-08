@@ -53,7 +53,6 @@ export default defineComponent({
 
     (async () => {
       myScore.value = await tipStore.fetchMyTotalScore()
-      console.log('my score', { ...myScore.value })
     })()
 
     setTimeout(() => {

@@ -62,7 +62,6 @@ liveChannel.addEventListener('message', (e) => {
       pushNewRoomMessages(e.data.data.roomId, [e.data.data.data as ChatMessage])
       break
     default:
-      console.log('okay....:::', e.data)
   }
 })
 
@@ -90,7 +89,6 @@ export const useChatStore = defineStore('chatStore', {
               })
             }
             resolve(this.rooms)
-            console.log('respose', response.data)
           }).catch((e) => {
             // @todo handle error
             reject(e)
