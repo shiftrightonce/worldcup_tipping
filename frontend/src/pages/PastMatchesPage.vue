@@ -1,6 +1,6 @@
 <template>
   <q-page padding v-if="Object.keys(state).length && isReady">
-    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
+    <transition appear enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
       <div class="row">
         <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id">
           <activeTipCard :match="match"></activeTipCard>
