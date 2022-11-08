@@ -16,6 +16,7 @@ export enum UserRole {
 
 export type User = {
   id: number,
+  internalId: string,
   token: string,
   username: string,
   avatar: string,
