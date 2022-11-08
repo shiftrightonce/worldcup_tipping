@@ -1,14 +1,18 @@
 <template>
   <q-page padding>
-    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
+    <transition appear enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
+      <div>
       <div class="row">
         <div class="col-xs-12">
           <div>Filter goes here</div>
         </div>
-        <div class="col-md-4 col-xs-12" v-show="isReady">
-          <AdminMatch v-for="match in state" :key="match.id" :match="match"></AdminMatch>
+        </div>
+      <div class="row">
+        <div class="col-md-4 col-xs-12" v-for="match in state" :key="match.id" v-show="isReady">
+          <AdminMatch  :match="match"></AdminMatch>
         </div>
       </div>
+    </div>
     </transition>
     <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
       <ScrollUpMessage></ScrollUpMessage>

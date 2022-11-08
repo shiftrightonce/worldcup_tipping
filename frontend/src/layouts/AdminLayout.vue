@@ -18,9 +18,9 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="layoutStore.leftDrawer" side="left" bordered>
+    <!-- <q-drawer show-if-above v-model="layoutStore.leftDrawer" side="left" bordered> -->
       <!-- drawer content -->
-    </q-drawer>
+    <!-- </q-drawer> -->
 
     <q-drawer show-if-above v-model="layoutStore.rightDrawer" side="right" bordered>
       <MainMenu></MainMenu>
