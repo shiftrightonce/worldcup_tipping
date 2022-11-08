@@ -113,12 +113,16 @@ export const generateAvatar = async (value: string) => {
   return fileName
 }
 
-export const cleanUserData = (user: User) => {
+export const cleanUserData = (user: User, additional: string[] = []) => {
   delete user.email;
   delete user.token;
   delete user.password;
   delete user.role;
   delete user.data;
+
+  additional.forEach((a) => {
+    delete user[a]
+  })
 
   return user;
 }
