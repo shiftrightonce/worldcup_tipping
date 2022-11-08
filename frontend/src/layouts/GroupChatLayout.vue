@@ -5,8 +5,8 @@
         <q-toolbar>
           <q-btn round flat icon="menu" class="WAL__drawer-open q-mr-sm" @click="toggleLeftDrawer" />
 
+          <AppLogo></AppLogo>
           <q-btn round flat>
-            <AppLogo></AppLogo>
             <q-avatar>
               <img :src="currentConversation.avatar">
             </q-avatar>
