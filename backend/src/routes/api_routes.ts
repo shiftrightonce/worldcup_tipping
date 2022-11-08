@@ -36,7 +36,8 @@ const routes = [
 
   // - tip
   buildRoute(TipController, 'scoreboardAction', 'get', '/tip/scoreboard'),
-  buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user'),
+  buildRoute(TipController, 'myTotalScoreAction', 'get', '/tip/my-score'),
+  buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user/:year?'),
 
   // - chat
   buildRoute(ChatController, 'getMyRoomsAction', 'get', '/chat/my-rooms'),

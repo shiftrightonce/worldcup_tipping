@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated, OneToOne } from "typeorm"
 import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
 import { ChatMessage } from "./ChatMessage";
+import { Scoreboard } from "./Scoreboard";
 import { UserChatRoom } from "./UserChatRoom";
 
 export enum UserRole {
@@ -70,6 +71,10 @@ export class User {
 
     @OneToMany(() => UserChatRoom, (room) => room.user)
     chatRooms: UserChatRoom[]
+
+    // @OneToOne(() => Scoreboard, (score) => score.userId)
+    @OneToOne(() => Scoreboard)
+    score: Scoreboard;
 
     @BeforeInsert()
     async handeBeforeInsert () {

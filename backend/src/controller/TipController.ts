@@ -1,6 +1,10 @@
 import { Request, Response } from "express"
 import { env } from "../data-source";
-import { getScoreboard, getUserTotalScore } from "../service/tip_service"
+import { getUserScore } from "../service/scoreboard_service";
+// import { getScoreboard, getUserTotalScore } from "../service/tip_service"
+import { getScoreboard } from '../service/scoreboard_service'
+import { pluckUserFromRequest } from "../service/user_service";
+import { year as configYear } from "../games/parser"
 
 export class TipController {
 
@@ -9,6 +13,12 @@ export class TipController {
       success: true,
       scoreboard: await getScoreboard(env('SCORE_BOARD_LIMIT_TO_SHOW', 200))
     }
+  }
+
+  public async myTotalScoreAction (req: Request, res: Response) {
+    const user = pluckUserFromRequest(req); 
+    req.params.user = user.id.toString()
+    return await this.userTotalScoreAction(req, res);
   }
 
   public async userTotalScoreAction (req: Request, res: Response) {
@@ -20,9 +30,19 @@ export class TipController {
       })
       return;
     }
-    return {
-      success: true,
-      score: await getUserTotalScore(parseInt(req.params.user, 10))
+    const year = (req.params.year) ? parseInt(req.params.year, 10) : configYear;
+    const score = await getUserScore(parseInt(req.params.user, 10), year)
+    if (score) {
+      return {
+        success: true,
+        score
+      }
     }
+
+    return res.status(404).json({
+      success: false,
+      code: 'score_not_found',
+      message: 'Could not find a score for the user'
+    })
   }
 }

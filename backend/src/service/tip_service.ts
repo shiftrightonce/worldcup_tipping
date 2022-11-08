@@ -139,6 +139,7 @@ export const placeUserTip = async (tip: Tip, userId: number, year = configYear) 
   }
 }
 
+// Deprecated: Use `getScoreboard` from `scordboard_service`
 export const getScoreboard = async (limit = 200, year = configYear) => {
   const result = await getTipRepo().createQueryBuilder('tip')
     .where('tip.year = :year', { year })

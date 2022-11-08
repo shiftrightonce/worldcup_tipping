@@ -3,8 +3,9 @@ import { defineStore } from 'pinia'
 import { useUserStore } from './user-store'
 
 export type Score = {
-  user: { id: number, username: string },
-  totalPoints: number
+  user: { internalId: string, username: string, avatar: string },
+  totalPoints: number,
+  position: number
 }
 
 const tipEndpoint = '/api/v1/tip'
@@ -24,16 +25,9 @@ export const useTipStore = defineStore('useTipStore', {
           })
       }), [])
     },
-    fetchUserTotalScore (userId = 0) {
-      const userStore = useUserStore()
-      userId = userId || userStore.activeUser?.id as number
-      useUserStore().api.get(`${tipEndpoint}/user-score/${userId}`)
-        .then((response) => {
-          console.log('total score response data', response.data)
-          console.log('total score response', response)
-        }).catch((e) => {
-          console.log('error total score fetching', e)
-        })
+    async fetchMyTotalScore () {
+      const response = await useUserStore().api.get(`${tipEndpoint}/my-score`)
+      return response.data.score as Score
     }
   }
 })

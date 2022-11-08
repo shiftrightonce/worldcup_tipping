@@ -1,24 +1,12 @@
 <template>
   <q-page padding v-if="state.length && isReady">
-    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
+    <transition appear enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
       <div class="row">
         <div class="col-md-4 col-xs-12">
-          <q-list dense bordered separator padding v-if="state.length">
-            <q-item v-for="score in state" :key="score.user.id">
-              <q-item-section avatar>
-                <q-avatar>
-                  <q-badge floating :label="getPosition(score.totalPoints)" color="teal" />
-                  <img :src="'/static/user/'+ score.user.username + '.png'">
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>
-                {{ score.user.username }}
-              </q-item-section>
-              <q-item-section avatar>
-                {{ score.totalPoints }}
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <ScoreboardCard v-if="myScore" current-user :score="myScore"></ScoreboardCard>
+        </div>
+        <div class="col-md-4 col-xs-12" v-for="score in state" :key="score.user.internalId">
+          <ScoreboardCard :score="score"></ScoreboardCard>
         </div>
       </div>
     </transition>
@@ -35,25 +23,33 @@
 
 <script lang="ts">
 import { useLayoutStore } from 'src/stores/layout-store'
-import { useTipStore } from 'src/stores/tip-store'
+import { useTipStore, Score } from 'src/stores/tip-store'
 import { useUserStore } from 'src/stores/user-store'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
+import ScoreboardCard from 'src/components/general/ScoreboardCard.vue'
 
 export default defineComponent({
   setup () {
     const layoutStore = useLayoutStore()
     const userStore = useUserStore()
-    const { isLoading, isReady, state } = useTipStore().fetchScoreboard()
+    const tipStore = useTipStore()
+    const { isLoading, isReady, state } = tipStore.fetchScoreboard()
+    const myScore = ref<Score | null>(null)
     let currentPosition = 1
     const positions: { [key: string]: number } = {}
 
     layoutStore.activeLeftDrawer(false)
-    layoutStore.setTitle('Scoreboard')
+    layoutStore.setTitle('Scoreboard');
+
+    (async () => {
+      myScore.value = await tipStore.fetchMyTotalScore()
+      console.log('my score', { ...myScore.value })
+    })()
 
     setTimeout(() => {
       userStore.setupNotificationSubscription()
-    }, 3000)
+    }, 2000)
 
     const getPosition = (points: string | number): number => {
       if (positions[points]) {
@@ -67,11 +63,13 @@ export default defineComponent({
       isLoading,
       isReady,
       state,
+      myScore,
       getPosition
     }
   },
   components: {
-    ScrollUpMessage
+    ScrollUpMessage,
+    ScoreboardCard
   }
 })
 </script>
