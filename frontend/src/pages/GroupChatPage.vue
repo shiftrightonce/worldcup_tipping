@@ -3,7 +3,6 @@
     <div class="row">
       <div class="col-md-12 col-xs-12">
         <q-scroll-area :style="{ height: height, maxHeight: height }" ref="board">
-          Hello
           <div v-if="chatStore.currentRoom && chatStore.messages[chatStore.currentRoom.internalId]">
             <ChatBubble v-for="message in chatStore.messages[chatStore.currentRoom.internalId]"
               :key="message.internalId" :data="message">
