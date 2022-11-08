@@ -7,9 +7,7 @@
           v-if="layoutStore.isLeftDrawerEnabled" />
 
         <q-toolbar-title>
-          <q-avatar>
-            <ProfileImage></ProfileImage>
-          </q-avatar>
+          <AppLogo></AppLogo>
           {{ layoutStore.title }}
         </q-toolbar-title>
 
@@ -39,12 +37,12 @@ import { useUserStore } from 'src/stores/user-store'
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLayoutStore } from '../stores/layout-store'
-import ProfileImage from '../components/user/ProfileImage.vue'
 import MainMenu from '../components/general/MainMenu.vue'
+import AppLogo from 'src/components/general/AppLogo.vue'
 
 export default defineComponent({
   name: 'PlaneLayout',
-  components: { ProfileImage, MainMenu },
+  components: { MainMenu, AppLogo },
   setup () {
     const router = useRouter()
     const userStore = useUserStore()

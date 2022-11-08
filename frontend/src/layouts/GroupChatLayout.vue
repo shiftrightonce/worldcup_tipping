@@ -6,6 +6,7 @@
           <q-btn round flat icon="menu" class="WAL__drawer-open q-mr-sm" @click="toggleLeftDrawer" />
 
           <q-btn round flat>
+            <AppLogo></AppLogo>
             <q-avatar>
               <img :src="currentConversation.avatar">
             </q-avatar>
@@ -152,10 +153,11 @@ import { useRouter } from 'vue-router'
 import ProfileImage from '../components/user/ProfileImage.vue'
 import MainMenu from '../components/general/MainMenu.vue'
 import { useChatStore } from 'src/stores/chat-store'
+import AppLogo from 'src/components/general/AppLogo.vue'
 
 export default defineComponent({
   name: 'GroupChatLayout',
-  components: { ProfileImage, MainMenu },
+  components: { ProfileImage, MainMenu, AppLogo },
   setup () {
     const $q = useQuasar()
 
