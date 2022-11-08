@@ -39,10 +39,11 @@ export class TipController {
       }
     }
 
-    return res.status(404).json({
+    res.status(404).json({
       success: false,
       code: 'score_not_found',
       message: 'Could not find a score for the user'
     })
+    return;
   }
 }
