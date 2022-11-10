@@ -2,7 +2,7 @@
   <q-page padding v-if="state.length && isReady">
     <transition appear enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
       <div class="row">
-        <div class="col-md-4 col-xs-12">
+        <div class="col-md-4 col-xs-12" v-if="myScore">
           <ScoreboardCard v-if="myScore" current-user :score="myScore"></ScoreboardCard>
         </div>
         <div class="col-md-4 col-xs-12" v-for="score in state" :key="score.user.internalId">
