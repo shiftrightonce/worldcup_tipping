@@ -14,7 +14,7 @@ const scoreboardMenuItem = {
   color: 'secondary'
 }
 const contactUsMenuItem = {
-  label: 'Contact Us',
+  label: 'Contact Me',
   to: { name: 'contact-us' },
   icon: 'alternate_email',
   color: 'primary'

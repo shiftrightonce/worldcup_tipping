@@ -2,20 +2,6 @@
   <div v-if="!userStore.isLogin" class="col-12 index-menu"
     style="background-image: url('img/bg_1.jpg'); background-size: cover;background-position: center center; min-height: 100vh;">
     <div class="row justify-evenly">
-      <!-- <div class="col-xs-12 col-md-8 items-center">
-              <q-toolbar class="text-white q-mt-md">
-                <AppLogo size="70px"></AppLogo>
-                <q-toolbar-title class="text-positive text-bold">
-                  MansarTip
-                </q-toolbar-title>
-                <div class="gt-sm">
-                  <q-btn flat v-for="item in menuStore.public" :to="item.to" :icon="item.icon" :key="item.label">
-                    &nbsp;{{ item.label }}</q-btn>
-                </div>
-                <q-btn flat round dense icon="menu" class="lt-md"
-                  @click="() => layoutStore.rightDrawer = !layoutStore.rightDrawer" />
-              </q-toolbar>
-            </div> -->
       <div class="col-12 q-mt-md">
         <div class="row">
           <div class="q-ml-auto col-md-6 col-sm-12 q-pa-md text-blue-grey-5">

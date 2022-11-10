@@ -5,7 +5,7 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page class="row"  style="background-color: #056480;">
+      <q-page class="row" style="background-color: #056480;">
         <div class="col-12 q-pb-md" style="background-color: #056480;max-height: 110px;">
           <div class="row justify-evenly">
             <div class="col-xs-12 col-md-8 items-center">
@@ -15,13 +15,14 @@
                 </q-toolbar-title>
                 <div class="gt-sm">
                   <div v-if="!userStore.isLogin">
-                  <q-btn flat v-for="item in menuStore.public" :to="item.to" :icon="item.icon" :key="item.label">
-                    &nbsp;{{ item.label }}</q-btn>
-                    <q-btn v-if="menuStore.shareIsSupported()" flat @click="shareApp" label="Share" icon="share"></q-btn>
+                    <q-btn flat v-for="item in menuStore.public" :to="item.to" :icon="item.icon" :key="item.label">
+                      &nbsp;{{ item.label }}</q-btn>
+                    <q-btn v-if="menuStore.shareIsSupported()" flat @click="shareApp" label="Share" icon="share">
+                    </q-btn>
                   </div>
                   <div v-else>
-                <q-btn flat round dense icon="menu" class="gt-sm"
-                  @click="() => layoutStore.rightDrawer = !layoutStore.rightDrawer" />
+                    <q-btn flat round dense icon="menu" class="gt-sm"
+                      @click="() => layoutStore.rightDrawer = !layoutStore.rightDrawer" />
                   </div>
                 </div>
                 <q-btn flat round dense icon="menu" class="lt-md"
@@ -30,7 +31,9 @@
             </div>
           </div>
         </div>
-        <router-view/>
+
+          <router-view />
+
         <div class="col-12" style="background-color: #056480;">
           <FooterComponent></FooterComponent>
         </div>
