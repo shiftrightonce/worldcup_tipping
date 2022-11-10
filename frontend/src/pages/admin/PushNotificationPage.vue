@@ -58,6 +58,7 @@ export default defineComponent({
         try {
           void await useAdminStore().sendPushMessage(message)
         } catch (e) {
+          // @todo Make error message more helpful
           q.notify((e as Error).message)
         }
       }
