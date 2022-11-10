@@ -184,7 +184,7 @@ export const useMatchStore = defineStore('matchStore', {
     async placeTip (match: number) {
       const userStore = useUserStore()
       const tip = useUserTipStore().matchTip(match)
-      const response = await userStore.api.post(`${matchEndpoint}/place-tip`, { ...tip.tip })
+      const response = await userStore.api.post(`${matchEndpoint}/place-tip`, { ...tip.tip, match })
       return useUserTipStore().setTip(match, (response.data as { tip: Tip }).tip)
     },
     async updateMatch (matchId: number, matchData: Record<string, unknown>) {
