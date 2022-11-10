@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { env } from "../data-source";
 import { getUserMatchTip } from "../service/tip_service"
-import {pluckUserFromRequest, getUserRepo } from "../service/user_service";
+import { pluckUserFromRequest, getUserRepo, updateUser, deleteUserAccount, sendLoginResonse } from "../service/user_service";
 
 export class UserController {
 
@@ -52,6 +52,31 @@ export class UserController {
     return {
       success: true,
       token: env('VAPID_PUBLIC_KEY')
+    }
+  }
+
+  public async getMyInformationAction (req: Request) {
+    const user = pluckUserFromRequest(req)
+    return {
+      success: true,
+      user
+    }
+  }
+
+  public async updateMyDataAction (req: Request, res: Response) {
+    const user = pluckUserFromRequest(req)
+    const result = await updateUser(user.id, req.body);
+    if (result.success) {
+      sendLoginResonse(res, result.user);
+      return;
+    }
+    return result
+  }
+
+  public async deleteMyAccountAction (req: Request, res: Response) {
+    const user = pluckUserFromRequest(req)
+    return {
+      success: await deleteUserAccount(user.id)
     }
   }
 
