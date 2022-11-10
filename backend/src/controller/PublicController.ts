@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response, CookieOptions } from "express"
 import path = require("path");
-import { env } from "../data-source";
-import { User } from "../entity/User";
-import { checkPassword, createUser, generateAuthCookie, getUserRepo } from "../service/user_service";
+import { checkPassword, createUser, generateAuthCookie, getUserRepo, sendLoginResonse } from "../service/user_service";
 
 export class PublicController {
 
@@ -15,12 +13,18 @@ export class PublicController {
     const password = req.body.password || '';
     const errorMessage = 'posted data is incorrect'
 
-    const user = await getUserRepo().findOneBy({
+    let user = await getUserRepo().findOneBy({
       username
     });
 
+    if (!user) {
+      user = await getUserRepo().findOneBy({
+        email: username
+      })
+    }
+
     if (user && await checkPassword(user, password)) {
-      this.sendLoginResonse(res, user)
+      sendLoginResonse(res, user)
       return null;
     }
 
@@ -40,7 +44,7 @@ export class PublicController {
 
     try {
       const user = await createUser(username, email, password)
-      this.sendLoginResonse(res, user)
+      sendLoginResonse(res, user);
     } catch (e) {
       res.status(401).json({
         succes: false,
@@ -61,27 +65,5 @@ export class PublicController {
       .json({
         success: 'true'
       })
-  }
-
-  private sendLoginResonse (res: Response, user: User) {
-    const cookieOptions: CookieOptions = {
-      sameSite: 'none',
-      secure: true,
-      signed: true
-    }
-    const cookie = generateAuthCookie(user);
-    res.cookie('_t', cookie, cookieOptions)
-      .cookie('_vapid', env('VAPID_PUBLIC_KEY'), cookieOptions)
-      .json({
-        success: true,
-        user: {
-          id: user.id,
-          token: user.token,
-          role: user.role,
-          username: user.username,
-          avatar: user.avatar
-        },
-        pushVapid: env('VAPID_PUBLIC_KEY')
-      });
   }
 }

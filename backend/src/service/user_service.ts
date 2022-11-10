@@ -1,8 +1,8 @@
-import { AppDataSource } from "../data-source"
+import { AppDataSource, env } from "../data-source"
 import * as bcrypt from 'bcrypt'
 import { randomBytes, createCipheriv, createDecipheriv, createHash } from 'crypto'
 import { User, UserRole, UserType } from "../entity/User";
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 import { toPng } from 'jdenticon'
 import * as fs from 'fs/promises'
 import * as path from 'path'
@@ -105,6 +105,59 @@ export const createUser = async (username: string, email: string, password: stri
   return await getUserRepo().save(user)
 }
 
+export const updateUser = async (userId: number, data: Record<string, unknown>) => {
+  const user = await getUserById(userId);
+
+  if (user) {
+    if (data.username) {
+      const username = data.username as string
+      const oldUser = await getUserRepo().findOneBy({ username })
+      if (oldUser && oldUser.id != user.id) {
+        return {
+          success: false,
+          code: 'user_name_taken',
+          message: 'User name already taken'
+        }
+      }
+      user.username = data.username as string;
+    }
+
+    if (data.email) {
+      const email = data.email as string
+      const oldUser = await getUserRepo().findOneBy({ email })
+      if (oldUser && oldUser.id != user.id) {
+        return {
+          success: false,
+          code: 'user_email_not_valid',
+          message: 'New email is not value.'
+        }
+      }
+      user.email = email;
+    }
+
+    if (data.password) {
+      const password = data.password as string;
+      user.password = await hashPassword(password);
+      user.token = generateToken();
+    }
+
+    return {
+      success: true,
+      user: await getUserRepo().save(user)
+    }
+  }
+
+  return {
+    success: false,
+    code: 'user_not_found',
+    message: 'Could not find this user'
+  }
+}
+
+export const deleteUserAccount = async (userId: number) => {
+  return await getUserRepo().delete(userId);
+}
+
 export const generateAvatar = async (value: string) => {
   const size = 200;
   const png = toPng(value, size)
@@ -145,4 +198,28 @@ export const getUsersStream = async () => {
     .where('deletedAt is null')
     .where('type = :type', { type: UserType.HUMAN })
     .stream()
+}
+
+export const sendLoginResonse = (res: Response, user: User) => {
+  const cookieOptions: CookieOptions = {
+    sameSite: 'none',
+    secure: true,
+    signed: true
+  }
+
+  const cookie = generateAuthCookie(user);
+  res.cookie('_t', cookie, cookieOptions)
+    .cookie('_vapid', env('VAPID_PUBLIC_KEY'), cookieOptions)
+    .json({
+      success: true,
+      user: {
+        id: user.id,
+        internalId: user.internalId,
+        token: user.token,
+        role: user.role,
+        username: user.username,
+        avatar: user.avatar
+      },
+      pushVapid: env('VAPID_PUBLIC_KEY')
+    });
 }
