@@ -27,8 +27,8 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.my-card {
+/* .my-card {
   width: 100%;
   max-width: 250px
-}
+} */
 </style>
