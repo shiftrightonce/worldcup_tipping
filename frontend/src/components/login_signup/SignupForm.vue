@@ -44,7 +44,6 @@ import { useLayoutStore } from 'src/stores/layout-store'
 import { defineComponent, ref } from 'vue'
 import { useSignupStore } from 'src/stores/signup-store'
 import { useRouter } from 'vue-router'
-import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'SignupPage',
