@@ -7,7 +7,11 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue'), name: 'home' },
       { path: 'forgot-login', component: () => import('pages/ForgotLoginPage.vue'), name: 'forgot-login' },
-      { path: 'signup', component: () => import('pages/SignupPage.vue'), name: 'signup' }
+      { path: 'signup', component: () => import('pages/SignupPage.vue'), name: 'signup' },
+      { path: 'login', component: () => import('pages/LoginPage.vue'), name: 'login' },
+      { path: 'prizes', component: () => import('pages/PrizePage.vue'), name: 'prizes' },
+      { path: 'learn', component: () => import('pages/LearnPage.vue'), name: 'learn' },
+      { path: 'contact-us', component: () => import('pages/ContactPage.vue'), name: 'contact-us' }
     ]
   },
   {
@@ -17,7 +21,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'scoreboard', component: () => import('pages/ScoreBoardPage.vue'), name: 'scoreboard' },
       { path: 'active-matches', component: () => import('pages/ActiveMatchesPage.vue'), name: 'active-matches' },
       { path: 'past-matches', component: () => import('pages/PastMatchesPage.vue'), name: 'past-matches' },
-      { path: 'logout', component: () => import('pages/LogoutPage.vue'), name: 'logout' }
+      { path: 'logout', component: () => import('pages/LogoutPage.vue'), name: 'logout' },
+      { path: 'account', component: () => import('pages/AccountPage.vue'), name: 'account' }
     ]
   },
   {
