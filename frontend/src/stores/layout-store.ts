@@ -18,7 +18,8 @@ export const useLayoutStore = defineStore('layoutStore', {
     leftDrawer: ref(true),
     rightDrawer: ref(false),
     enableLeftDrawer: ref(true),
-    enableRightDrawer: ref(true)
+    enableRightDrawer: ref(true),
+    backgroundImage: ''
   }),
   getters: {
     title: (state) => state.layoutTitle,

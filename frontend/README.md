@@ -1,4 +1,4 @@
-# MansTip (MansTip)
+# MansarTip (MansarTip)
 
 Friendly world cup betting app
 

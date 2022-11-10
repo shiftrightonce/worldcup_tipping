@@ -5,14 +5,13 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page class="row">
+      <q-page class="row"  style="background-color: #056480;">
         <div class="col-12 q-pb-md" style="background-color: #056480;max-height: 110px;">
           <div class="row justify-evenly">
             <div class="col-xs-12 col-md-8 items-center">
               <q-toolbar class="text-white q-mt-md">
                 <AppLogo size="70px"></AppLogo>
                 <q-toolbar-title class="text-positive text-bold">
-                  MansTip
                 </q-toolbar-title>
                 <div class="gt-sm">
                   <div v-if="!userStore.isLogin">
@@ -31,7 +30,7 @@
             </div>
           </div>
         </div>
-        <router-view />
+        <router-view/>
         <div class="col-12" style="background-color: #056480;">
           <FooterComponent></FooterComponent>
         </div>

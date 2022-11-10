@@ -1,8 +1,8 @@
 {
-  "name": "MansTip",
+  "name": "MansarTip",
   "version": "0.0.1",
   "description": "Friendly world cup betting app",
-  "productName": "MansTip",
+  "productName": "MansarTip",
   "author": "Jibao Mansaray <jibaomansaray@gmail.com>",
   "private": true,
   "scripts": {
