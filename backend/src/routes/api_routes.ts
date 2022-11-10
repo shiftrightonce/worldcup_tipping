@@ -21,6 +21,9 @@ const routes = [
   buildRoute(UserController, 'getMatchTipAction', 'get', '/user/tip/:match'),
   buildRoute(UserController, 'pushNotificationSubscribeAction', 'post', '/user/push-subscribe'),
   buildRoute(UserController, 'pushNotificationUnsubscribeAction', 'get', '/user/push-unsubscribe'),
+  buildRoute(UserController, 'getMyInformationAction', 'get', '/user/my-info'),
+  buildRoute(UserController, 'updateMyDataAction', 'put', '/user/my-data'),
+  buildRoute(UserController, 'deleteMyAccountAction', 'delete', '/user/my-account'),
   buildRoute(UserController, 'vapidKeyAction', 'get', '/user/vapid-token'),
 
   // - match
