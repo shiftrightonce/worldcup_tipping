@@ -1,10 +1,6 @@
 <template>
   <q-page>
-    <div class="row">
-      <div class="col-md-4 col-xs-12">
-        <h4>You have logout and will be redirected shortly</h4>
-      </div>
-    </div>
+    <div class="row"></div>
   </q-page>
 </template>
 
@@ -12,18 +8,28 @@
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'src/stores/user-store'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'LogoutPage',
   setup () {
     const router = useRouter()
     const userStore = useUserStore()
+    const q = useQuasar()
 
+    q.loading.show()
     userStore.logout()
       .then(() => {
         router.push({ name: 'home' })
-      }).catch((_e) => {
-        // @todo handle error
+        q.loading.hide()
+      }).catch((e) => {
+        q.loading.hide()
+
+        // @todo Make error message more helpful
+        q.dialog({
+          title: 'We were unable to log yout out',
+          message: e.message
+        })
       })
 
     return {
