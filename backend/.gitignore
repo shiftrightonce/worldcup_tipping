@@ -7,3 +7,10 @@ temp/
 .env
 src/public/app/
 yarn-error.log
+src/public/assets/
+src/public/icons/
+src/public/img/
+src/public/sound
+src/public/index.html
+src/public/manifest.json
+src/public/sw.js
