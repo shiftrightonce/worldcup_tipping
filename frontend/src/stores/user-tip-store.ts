@@ -134,7 +134,13 @@ export const useUserTipStore = defineStore('userTipStore', {
       const match = useMatchStore().todayMatch(matchId)
       return computed({
         get: () => {
-          return this.tips[matchId].tip.toWin.id === match.countryA.id || this.tips[matchId].tip.isLevel
+          if (match.status === MatchStatus.COMPLETED) {
+            return this.tips[matchId].tip.toWin.id === match.countryA.id || this.tips[matchId].tip.isLevel
+          }
+          if (this.tips[matchId].tip.toPenalty) {
+            return this.tips[matchId].tip.countryAPenaltyToScore > this.tips[matchId].tip.countryBPenaltyToScore || this.tips[matchId].tip.countryAPenaltyToScore === this.tips[matchId].tip.countryBPenaltyToScore
+          }
+          return this.tips[matchId].tip.countryAToScore > this.tips[matchId].tip.countryBToScore || this.tips[matchId].tip.countryAToScore === this.tips[matchId].tip.countryBToScore
         },
         set: (val: boolean) => {
           this.tips[matchId].tip.toWin = (val) ? match.countryA : { id: 0 }
@@ -145,7 +151,13 @@ export const useUserTipStore = defineStore('userTipStore', {
       const match = useMatchStore().todayMatch(matchId)
       return computed({
         get: () => {
-          return this.tips[matchId].tip.toWin.id === match.countryB.id || this.tips[matchId].tip.isLevel
+          if (match.status === MatchStatus.COMPLETED) {
+            return this.tips[matchId].tip.toWin.id === match.countryB.id || this.tips[matchId].tip.isLevel
+          }
+          if (this.tips[matchId].tip.toPenalty) {
+            return this.tips[matchId].tip.countryBPenaltyToScore > this.tips[matchId].tip.countryAPenaltyToScore || this.tips[matchId].tip.countryBPenaltyToScore === this.tips[matchId].tip.countryAPenaltyToScore
+          }
+          return this.tips[matchId].tip.countryBToScore > this.tips[matchId].tip.countryAToScore || this.tips[matchId].tip.countryBToScore === this.tips[matchId].tip.countryAToScore
         },
         set: (val: boolean) => {
           this.tips[matchId].tip.toWin = (val) ? match.countryB : { id: 0 }
