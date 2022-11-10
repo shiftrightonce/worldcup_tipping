@@ -14,3 +14,4 @@ src/public/sound
 src/public/index.html
 src/public/manifest.json
 src/public/sw.js
+src/public/favicon.ico
