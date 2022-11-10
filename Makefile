@@ -1,2 +1,2 @@
 build:
-	cd ./frontend && npx quasar build -m pwa && rm -rf ../backend/src/public/app && cp -r dist/pwa ../backend/src/public/app
+	cd ./frontend && npx quasar build -m pwa  && cp -rf dist/pwa/* ../backend/src/public/
