@@ -112,7 +112,11 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
       config: {
-        dark: true
+        dark: true,
+        notify: {
+          position: 'top-right',
+          color: 'positive'
+        }
       },
       cssAddon: true,
 
@@ -131,7 +135,8 @@ module.exports = configure(function (/* ctx */) {
         'LocalStorage',
         'LoadingBar',
         'Loading',
-        'Dialog'
+        'Dialog',
+        'Notify'
       ]
     },
 
