@@ -78,7 +78,7 @@ export class Match {
   winner: Country;
 
   @Column({ type: 'date', nullable: true })
-  toConfigureOn: Date
+  toConfigureOn: Date;
 
   setDateAndTime (date: string, time: string): this {
     const dt = new Date(new Date(`${date}T${time}`).toUTCString());
