@@ -50,6 +50,7 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
 
   const result = await getMatchRepo().createQueryBuilder('match')
     .where('match.date >= :date', { date })
+    .where('match.year = :year', { year })
     .where('match.status = :status', { status: MatchStatus.OPEN })
     .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
     .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
