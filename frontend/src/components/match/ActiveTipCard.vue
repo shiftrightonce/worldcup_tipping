@@ -8,7 +8,8 @@
 
       <q-item-section>
         <q-item-label>Game #{{ match.number }} <span v-if="match.isMatchOpen" style="font-size: 9px;"> - {{
-        match.fullDate?.toLocaleString() }}</span> </q-item-label>
+            match.fullDate?.toLocaleString()
+        }}</span> </q-item-label>
         <q-item-label caption>
           {{ match.countryA.name }} vs {{ match.countryB.name }}
         </q-item-label>
@@ -73,6 +74,7 @@ import GameTipPercentage from './GameTipPercentage.vue'
 import { useUserTipStore } from 'src/stores/user-tip-store'
 import BotTipBtn from './BotTipBtn.vue'
 import TipBtn from './TipBtn.vue'
+import { useConfetti } from 'src/composibles/effectComposible'
 
 export default defineComponent({
   name: 'ActiveTipCard',
@@ -89,6 +91,7 @@ export default defineComponent({
     const isDataChanged = ref(false)
     const isSaving = ref(false)
     const { isReady, state } = userTipStore.fetchMatchTip(props.match.id)
+    const confetti = useConfetti()
 
     const saveData = () => {
       isSaving.value = true;
@@ -96,6 +99,7 @@ export default defineComponent({
         await matchStore.placeTip(props.match.id)
         isSaving.value = false
         isDataChanged.value = false
+        confetti()
       })()
     }
 
