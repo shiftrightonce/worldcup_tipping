@@ -46,6 +46,7 @@ export default defineComponent({
           isSaving.value = false
         })
         .catch((e) => {
+          // @todo Make error message more helpful
           q.dialog({
             title: 'Could not update country record',
             message: e.message
