@@ -169,6 +169,28 @@ export const useUserStore = defineStore('userStore', {
       } else {
         channel.close()
       }
+    },
+    async getMyInformation () {
+      const response = await axios.get(`${userEndpoint}/my-info`)
+      return response.data.user as User & { email: string }
+    },
+    async updateMyData (data: Record<string, unknown>) {
+      const response = await axios.put(`${userEndpoint}/my-data`, data)
+      const user = response.data.user as User
+      LocalStorage.clear()
+      this.activeToken = ''
+      this.activeUser = null
+      this.setUser(user)
+
+      return user
+    },
+    async deleteMyAccount () {
+      try {
+        const response = await axios.delete(`${userEndpoint}/my-account`)
+        return response.status === 200
+      } catch (e) {
+        return false
+      }
     }
   }
 })
