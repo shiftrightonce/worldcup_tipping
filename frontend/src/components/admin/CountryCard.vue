@@ -2,7 +2,7 @@
   <q-card class="q-mb-md q-mr-md-md" flat bordered>
     <q-item>
       <q-item-section>
-        <q-item-label>{{ modelValue.internalId + ' : ' + modelValue.name + ' - ' + modelValue.short                                                                   }}</q-item-label>
+        <q-item-label>{{ modelValue.internalId + ' : ' + modelValue.name + ' - ' + modelValue.short }}</q-item-label>
       </q-item-section>
       <q-item-section avatar>
         <q-img :src="modelValue.imageSource" />
