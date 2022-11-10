@@ -1,60 +1,34 @@
 <template>
   <q-page class="row items-evenly items-center flex-center">
-    <q-form
-       @submit="onSubmit"
-       autofocus
-    >
+    <q-form @submit="onSubmit" autofocus>
       <div class="row">
         <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
           <div class="text-h4">Sign up</div>
         </div>
         <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
-          <q-input
-            label="Username *"
-            outlined
-            v-model="model.username"
-            :rules="[val => val !== null && val.trim() !== '' || 'Username is required']"
-            style="max-width:420px"
-          ></q-input>
-        </div>
-        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
-          <q-input
-            label="Password *"
-            outlined
-            v-model="model.password"
-            :rules="[val => val !== null && val.trim() !== '' || 'Password is required']"
-            type="password"
-            style="max-width:420px"
-          ></q-input>
-        </div>
-        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
-          <q-input
-            label="Confirm Password *"
-            outlined
-            v-model="model.confirmPassword"
-            :rules="[val => val && val === model.password || 'Confirmation does not match']"
-            type="password"
-            style="max-width:420px"
-        ></q-input>
-        </div>
-        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
-          <q-input
-           label="Email *"
-            outlined
-            v-model="model.email"
-            :rules="[val => val !== null && val.trim() !== '' || 'Email is required']"
-            type="email"
+          <q-input label="Username *" outlined v-model="model.username"
+            :rules="[val => val !== null && val.trim() !== '' || 'Username is required', val => val.toString().length <= 50 || 'Username cannot be more than 50 characters']"
             style="max-width:420px"></q-input>
         </div>
         <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
-          <q-input
-           :label="number + ' + ' + add + ' ='"
-            outlined
-            v-model="answer"
-            :rules="[val => Number(val) === (number + add) || 'Answer is incorrect']"
-            style="max-width:420px"
-            type="number"
-            hint="Answer this math question"></q-input>
+          <q-input label="Password *" outlined v-model="model.password"
+            :rules="[val => val !== null && val.trim() !== '' || 'Password is required']" type="password"
+            style="max-width:420px"></q-input>
+        </div>
+        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
+          <q-input label="Confirm Password *" outlined v-model="model.confirmPassword"
+            :rules="[val => val && val === model.password || 'Confirmation does not match']" type="password"
+            style="max-width:420px"></q-input>
+        </div>
+        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
+          <q-input label="Email *" outlined v-model="model.email"
+            :rules="[val => val !== null && val.trim() !== '' || 'Email is required']" type="email"
+            style="max-width:420px"></q-input>
+        </div>
+        <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
+          <q-input :label="number + ' + ' + add + ' ='" outlined v-model="answer"
+            :rules="[val => Number(val) === (number + add) || 'Answer is incorrect']" style="max-width:420px"
+            type="number" hint="Answer this math question"></q-input>
         </div>
         <div class="col-12 q-pl-lg q-pr-lg q-mb-md">
           <q-btn label="Sign up" color="primary" type="submit"></q-btn>
@@ -69,6 +43,7 @@ import { useLayoutStore } from 'src/stores/layout-store'
 import { defineComponent, ref } from 'vue'
 import { useSignupStore } from 'src/stores/signup-store'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'SignupPage',
@@ -79,6 +54,7 @@ export default defineComponent({
     const add = ref(0)
     const signupStore = useSignupStore()
     const router = useRouter()
+    const q = useQuasar()
 
     const generateQuestion = () => {
       number.value = Math.floor(Math.random() * 30000)
@@ -94,7 +70,11 @@ export default defineComponent({
             })
           }
         }).catch((e) => {
-          // @todo handle here?
+          // @todo Make error message more helpful
+          q.dialog({
+            title: 'We could not create your account at this moment',
+            message: (e as Error).message
+          })
         })
     }
 
