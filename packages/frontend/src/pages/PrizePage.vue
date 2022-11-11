@@ -9,15 +9,10 @@
           </div>
         </div>
         <div class="row justify-center">
-          <div class="col-md-2 col-xs-11 q-mb-md q-mr-md-md">
-            <PrizeCard></PrizeCard>
+          <div class="col-md-2 col-xs-11 q-mb-md q-mr-md-md" v-for="(prize, index) in data.prizes" :key="index">
+            <PrizeCard :prize="prize"></PrizeCard>
           </div>
-          <div class="col-md-2 col-xs-11 q-mr-md-md q-mb-md">
-            <PrizeCard></PrizeCard>
-          </div>
-          <div class="col-md-2 col-xs-11 q-mb-md">
-            <PrizeCard></PrizeCard>
-          </div>
+
           <div class="col-12 lt-md q-mb-xl"></div>
         </div>
       </div>
@@ -27,10 +22,23 @@
 
 <script lang="ts">
 import PrizeCard from 'src/components/general/PrizeCard.vue'
-import { defineComponent } from 'vue'
+import { useUserStore } from 'src/stores/user-store'
+import { defineComponent, reactive } from 'vue'
 
 export default defineComponent({
   name: 'PrizePage',
-  components: { PrizeCard }
+  components: { PrizeCard },
+  setup () {
+    const userStore = useUserStore()
+    const data = reactive<{ prizes: Array<{ image: string, title: string, position: number, description: string }> }>({ prices: [] });
+
+    (async () => {
+      data.prizes = await userStore.prizes()
+    })()
+
+    return {
+      data
+    }
+  }
 })
 </script>
