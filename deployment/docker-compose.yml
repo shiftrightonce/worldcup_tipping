@@ -1,0 +1,45 @@
+version: "3"
+services:
+  redisdb:
+     build:
+        context: ./docker/redis
+     volumes:
+        - ./docker/redis/data:/data
+     networks:
+      - webnetwork
+     hostname: redisdb
+     restart: always
+  db:
+    build:
+      context: ./docker/db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-dbpassword}
+      - MYSQL_USER=${MYSQL_USER:-dbuser}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-dbuser}
+    networks:
+      - webnetwork
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    hostname: mariadb
+  adminer:
+    image: adminer
+    networks:
+      - webnetwork
+    hostname: adminer
+  worldcup:
+    image: jibaomansaray/mansartip:latest
+    volumes:
+      - ./storage/user_images:/app/src/public/user
+      - ./storage/.env:/app/.env
+    hostname: worldcup 
+    restart: unless-stopped
+    ports:
+      - ${NODE_PORT}:3000
+    networks:
+      - webnetwork
+
+networks:
+  webnetwork:
+    name: ${NETWORK_NAME:-dev_network}
+    driver: bridge
