@@ -116,7 +116,10 @@ export const useUserStore = defineStore('userStore', {
         return false
       }
     },
-
+    async prizes () {
+      const response = await axios.get('/api/prizes')
+      return response.data.prizes as Array<{title: string, image: string, position: number, description: string}>
+    },
     async getTip (match: number) {
       if (this.tips[match]) {
         return this.tips[match]
