@@ -1,28 +1,32 @@
 <template>
   <q-card flat bordered class="my-card">
     <q-card-section>
-      <div class="text-h6">Our Changing Planet</div>
+      <div class="text-h6">{{ prize.title }}</div>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
+      <q-img :src="prize.image" />
     </q-card-section>
 
-    <q-separator inset />
+    <q-separator inset v-if="prize.description" />
 
-    <q-card-section>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua.
+    <q-card-section v-if="prize.description">
+      {{ prize.description }}
     </q-card-section>
   </q-card>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
 
 export default defineComponent({
-  name: 'PrizeCard'
+  name: 'PrizeCard',
+  props: {
+    prize: {
+      type: Object as PropType<{ image: string, title: string, position: number, description: string }>,
+      required: true
+    }
+  }
 })
 </script>
 
