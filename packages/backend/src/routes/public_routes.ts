@@ -10,6 +10,7 @@ const routes = [
   buildRoute(PublicController, 'loginAction', 'post', '/user/login'),
   buildRoute(PublicController, 'logoutAction', 'get', '/user/logout'),
   buildRoute(PublicController, 'signupAction', 'post', '/user/signup'),
+  buildRoute(PublicController, 'prizesAction', 'get', '/prizes'),
 ];
 
 const indexRouts = [

@@ -66,4 +66,30 @@ export class PublicController {
         success: 'true'
       })
   }
+
+  public prizesAction (_: Request, res: Response) {
+    return {
+      success: true,
+      prizes: [
+        {
+          image: '/static/prizes/1st_place.jpg',
+          title: 'First Place',
+          position: 1,
+          description: ''
+        },
+        {
+          image: '/static/prizes/2nd_place.jpg',
+          title: 'Second Place',
+          position: 2,
+          description: ''
+        },
+        {
+          image: '/static/prizes/3rd_place.jpg',
+          title: 'Third Place',
+          position: 3,
+          description: ''
+        }
+      ]
+    }
+  }
 }
