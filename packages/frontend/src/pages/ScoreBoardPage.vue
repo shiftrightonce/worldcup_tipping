@@ -16,6 +16,7 @@
   </q-page>
   <q-page v-if="!myScore && isReady && state.length === 0" class="row items-evenly items-center flex-center">
     <div class="col-12" style="text-align:center">
+      <img src="/img/first.svg" style="width:200px" /><br/>
       <span class="text-h6">Top position is still up for grabs!</span>
     </div>
   </q-page>
