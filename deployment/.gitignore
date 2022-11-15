@@ -17,3 +17,8 @@ docker/postgres/data
 docker/nginx/sites/*_name.conf
 vendor/
 projects/
+storage/user_images/
+storage/nginx/*
+!storage/nginx/.gitkeep
+storage/letsencrypt/*
+!storage/letsencrypt/.gitkeep
