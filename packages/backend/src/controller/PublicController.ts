@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, CookieOptions } from "express"
 import path = require("path");
-import { checkPassword, createUser, generateAuthCookie, getUserRepo, sendLoginResonse } from "../service/user_service";
+import { addToQueue as queuePasswordResetRequest } from "../jobs/password_request_email";
+import { authenticateToken, checkPassword, createUser, generateAuthCookie, getUserByEmail, getUserRepo, sendLoginResonse } from "../service/user_service";
 
 export class PublicController {
 
@@ -91,5 +92,54 @@ export class PublicController {
         }
       ]
     }
+  }
+
+  public async requestPasswordResetAction (req: Request) {
+    const email = req.body.email
+    if (!email) {
+      return {
+        success: false,
+        code: 'email_is_required',
+        message: 'You need to provde the user\'s email'
+      };
+    }
+
+    const user = await getUserByEmail(email)
+
+    if (!user) {
+      return {
+        success: false,
+        code: 'user_not_found',
+        message: 'User not found'
+      };
+    }
+
+    queuePasswordResetRequest(user.id);
+
+    return {
+      success: true,
+      message: 'You should receive an email shortly. Please make sure to check your spam inbox as well.'
+    }
+  }
+
+  public async loginWithTokenAction(req: Request, res: Response) {
+    const token = req.params.token || ''
+    const wrongTokenResponse = {
+        success: false,
+        code: 'wrong_token',
+        message: 'Wrong token provided'
+    }
+
+    if (!token) {
+      return wrongTokenResponse
+    }
+
+    const user = await authenticateToken(token as string)
+
+    if (!user) {
+      return wrongTokenResponse
+    }
+
+    sendLoginResonse(res, user)
   }
 }
