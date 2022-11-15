@@ -11,6 +11,8 @@ const routes = [
   buildRoute(PublicController, 'logoutAction', 'get', '/user/logout'),
   buildRoute(PublicController, 'signupAction', 'post', '/user/signup'),
   buildRoute(PublicController, 'prizesAction', 'get', '/prizes'),
+  buildRoute(PublicController, 'requestPasswordResetAction', 'post', '/reset-password-request'),
+  buildRoute(PublicController, 'loginWithTokenAction', 'get', '/token-login/:token'),
 ];
 
 const indexRouts = [
