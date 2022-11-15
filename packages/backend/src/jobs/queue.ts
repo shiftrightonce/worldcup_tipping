@@ -8,6 +8,7 @@ import updateRound8MatchCountries from './update_round_8_match_countries'
 import updateRound4MatchCountries from './update_round_4_match_countries'
 import updateThirdAndFinalMatchCountries from  './update_third_and_final_place_matches_countries'
 import processChatData from './process_chat_data'
+import processPasswordResetReqest from './password_request_email'
 import { AppDataSource } from '../data-source'
 
 
@@ -22,6 +23,7 @@ updateRound8MatchCountries(processors);
 updateRound4MatchCountries(processors);
 updateThirdAndFinalMatchCountries(processors);
 processChatData(processors);
+processPasswordResetReqest(processors);
 
 
 AppDataSource.initialize().then(async () => {
