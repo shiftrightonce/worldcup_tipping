@@ -22,6 +22,7 @@
 
 <script lang="ts">
 import PrizeCard from 'src/components/general/PrizeCard.vue'
+import { useLayoutStore } from 'src/stores/layout-store'
 import { useUserStore } from 'src/stores/user-store'
 import { defineComponent, reactive } from 'vue'
 
@@ -30,7 +31,11 @@ export default defineComponent({
   components: { PrizeCard },
   setup () {
     const userStore = useUserStore()
-    const data = reactive<{ prizes: Array<{ image: string, title: string, position: number, description: string }> }>({ prices: [] });
+    const data = reactive<{ prizes: Array<{ image: string, title: string, position: number, description: string }> }>({ prizes: [] })
+    const layoutStore = useLayoutStore()
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false);
 
     (async () => {
       data.prizes = await userStore.prizes()
