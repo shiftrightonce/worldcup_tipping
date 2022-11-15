@@ -22,9 +22,9 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number
 
-  @Column()
-  @Generated('uuid')
-  internalId: string;
+    @Column()
+    @Generated('uuid')
+    internalId: string;
 
     @Column({
         type: 'enum',
@@ -54,7 +54,7 @@ export class User {
 
     @Column({ type: "simple-json", nullable: true })
     data: {
-        push_subscription: Record<string,unknown>
+        push_subscription: Record<string, unknown>
     }
 
     @CreateDateColumn()
@@ -75,6 +75,7 @@ export class User {
     // @OneToOne(() => Scoreboard, (score) => score.userId)
     @OneToOne(() => Scoreboard)
     score: Scoreboard;
+
 
     @BeforeInsert()
     async handeBeforeInsert () {
