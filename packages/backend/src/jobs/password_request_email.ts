@@ -44,7 +44,7 @@ const processQueuedJob = async (job: JobPayload) => {
           ${url}
         </p>
         <p>
-          Regards,
+          Regards,<br/>
           J-man
         </p>
         `
