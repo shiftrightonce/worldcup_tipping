@@ -43,9 +43,18 @@
 </template>
 
 <script lang="ts">
+import { useLayoutStore } from 'src/stores/layout-store'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ContactPage'
+  name: 'ContactPage',
+  setup () {
+    const layoutStore = useLayoutStore()
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
+
+    return {}
+  }
 })
 </script>
