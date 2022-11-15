@@ -3,16 +3,17 @@
     <div class="row itemss-center" style="height:100%">
       <div class="col-8 col-xs-12 q-mt-xl">
         <div class="row justify-center">
+          <div class="col-auto q-mb-lg q-mr-md-md q-mt-xs-xl">
+            <div class="text-h2 text-bold text-positive">Contact Me</div>
+          </div>
+        </div>
+        <div class="row justify-center">
           <div class="col-md-2 col-xs-11 q-mb-md q-mr-md-md">
             <q-card flat bordered class="my-card">
-              <q-card-section>
-                <div class="text-h6">Contact Me</div>
-              </q-card-section>
-
-              <q-card-section class="q-pt-none">
+              <q-card-section class="q-pt-md">
                 <div class="q-mb-sm">
                   <span class="text-bold text-deep-orange-8">Email</span> <br />
-                  jibaomansaray at gmail dot com
+                  jibaomansaray at kpama dot com dot au
                 </div>
                 <div class="q-mb-sm">
                   <span class="text-bold text-deep-orange-8">Twitter</span> <br />
