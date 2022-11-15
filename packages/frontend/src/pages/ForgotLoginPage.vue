@@ -8,9 +8,15 @@
             <div class="row">
               <div class="q-ml-auto col-md-6 col-sm-12 q-pa-md bg-blue-grey-10" style="border-radius: 10px"
                 v-if="!token">
-                <div class="text-h2 text-bold text-positive">Password Reset</div>
-                <q-input type="email" v-model="email" required outlined label="Email" class="q-pa-md" />
-                <q-btn label="Request" class="float-right q-mr-md" color="primary" @click="onClick"></q-btn>
+                <div v-if="message">
+                <div class="text-h2 text-bold text-positive q-mb-lg">Email sent</div>
+                  {{ message }}
+                </div>
+                <div v-else>
+                  <div class="text-h2 text-bold text-positive q-mb-lg">Password Reset</div>
+                  <q-input type="email" v-model="email" required outlined label="Email" class="q-pa-md" />
+                  <q-btn label="Request" class="float-right q-mr-md" color="primary" @click="onClick"></q-btn>
+                </div>
               </div>
             </div>
           </div>
@@ -35,14 +41,12 @@ export default defineComponent({
     const router = useRouter()
     const token = ref(route.query._t || '')
     const q = useQuasar()
-
-    console.log(token)
+    const message = ref('')
 
     if (token.value) {
       (async () => {
         try {
-          const response = await userStore.loginWithToken(token.value as string)
-          console.log(response)
+          void await userStore.loginWithToken(token.value as string)
           router.push({
             name: 'account'
           })
@@ -59,15 +63,15 @@ export default defineComponent({
       if (email.value) {
         (async () => {
           const response = await userStore.requestPasswordReset(email.value)
-          console.log(response.data)
+          message.value = (response.data as { message: string }).message
         })()
       }
-      console.log('reset password')
     }
 
     return {
       token,
       email,
+      message,
       onClick
     }
   }
