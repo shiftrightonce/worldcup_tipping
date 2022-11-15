@@ -21,7 +21,8 @@ const processQueuedJob = async (job: JobPayload) => {
       await conn.rPush(CHAT_MESSAGE_REDIS_QUEUE, JSON.stringify(job));
     }
   } catch (e) {
-    throw e;
+    // @todo handle error
+    // throw e;
   }
 
   return true;
