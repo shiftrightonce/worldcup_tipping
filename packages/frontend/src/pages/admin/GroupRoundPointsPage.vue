@@ -1,14 +1,13 @@
 <template>
   <q-page padding>
-    <transition appear enter-active-class="animated slideInLeft" leave-active-class="animated slideOutRight">
-      <div>
-        <CountryCard v-for="country, index in state" :key="country.id" v-model="state[index]"></CountryCard>
-
-      <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
-        <ScrollUpMessage></ScrollUpMessage>
-      </q-page-scroller>
+    <div class="row">
+      <div class="col-md-2 col-xs-12" v-for="country, index in state" :key="country.id">
+        <CountryCard v-model="state[index]"></CountryCard>
       </div>
-    </transition>
+    </div>
+    <q-page-scroller expand position="top" :scroll-offset="150" :offset="[0, 0]">
+      <ScrollUpMessage></ScrollUpMessage>
+    </q-page-scroller>
   </q-page>
 </template>
 
