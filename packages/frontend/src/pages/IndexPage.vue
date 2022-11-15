@@ -10,7 +10,7 @@
             <p class="q-mt-lg text-bold text-orange-9">
               Simply register and start tipping in order to be in the run
               for awesome prizes 😍🎊🎉<br/>
-              Frindly and free soccer world cup tipping with friends.
+              Friendly and free soccer world cup tipping for families and friends.
             </p>
           </div>
         </div>
