@@ -49,12 +49,12 @@ export const useMenuStore = defineStore('menu', {
         icon: 'home',
         color: 'primary'
       },
-      {
-        label: 'Learn',
-        to: { name: 'learn' },
-        icon: 'info',
-        color: 'primary'
-      },
+      // {
+      //   label: 'Learn',
+      //   to: { name: 'learn' },
+      //   icon: 'info',
+      //   color: 'primary'
+      // },
       contactUsMenuItem,
       {
         label: 'Prizes',
