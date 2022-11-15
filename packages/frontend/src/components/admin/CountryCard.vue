@@ -10,7 +10,7 @@
     </q-item>
     <q-separator />
     <q-card-actions>
-      <q-input type="number" dense outlined label="Points" v-model="points" />
+      <q-input type="number" dense outlined label="Points" v-model="points" style="width:100px" />
       <q-space></q-space>
       <q-btn icon="check" round color="primary" @click="saveData" :loading="isSaving"></q-btn>
     </q-card-actions>
