@@ -35,6 +35,7 @@ import { defineComponent } from 'vue'
 // import LoginForm from 'src/components/login_signup/LoginForm.vue'
 import { useRouter } from 'vue-router'
 import SignupForm from 'src/components/login_signup/SignupForm.vue'
+import { useLayoutStore } from 'src/stores/layout-store'
 
 export default defineComponent({
   name: 'IndexPage',
@@ -42,6 +43,11 @@ export default defineComponent({
   setup () {
     const userStore = useUserStore()
     const router = useRouter()
+    const layoutStore = useLayoutStore()
+
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
+
     if (userStore.isLogin) {
       router.push({ name: 'scoreboard' })
     }
