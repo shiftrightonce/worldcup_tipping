@@ -30,9 +30,9 @@ const processQueuedJob = async (job: JobPayload) => {
     });
     if (result.success && fromEmail && sendgridToken) {
       const url = `${env('APP_URL')}#/forgot-login?_t=${result.user.token}`
-      await sendgrid.send({
-        to: 'jibaomansaray@gmail.com',
-        from: 'support@911tutor.com',
+      const _response = await sendgrid.send({
+        to: result.user.email,
+        from:  fromEmail,
         subject: 'MansarTip Password reset',
         html: `
         Hello ${result.user.username},
@@ -51,7 +51,7 @@ const processQueuedJob = async (job: JobPayload) => {
       })
     }
   } catch (e) {
-    console.log(e.message)
+    console.log('could not send email: ' + e.message)
   }
 
   return true;
