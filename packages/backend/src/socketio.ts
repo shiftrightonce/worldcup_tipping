@@ -4,10 +4,13 @@ import { getRedisConnection } from './redis_client'
 import { getPublicRooms } from "./service/chat_room_service";
 import { ChatRoomType } from "./entity/ChatRoom";
 import { JobPayload } from "./jobs/process_chat_data";
+import { env } from "./data-source";
 
 export const CHAT_MESSAGE_REDIS_QUEUE = 'chat:redis_queue';
 
 export const CHAT_ACTION_ROOM_MESSAGE = 'room_message';
+
+const inDevMode = env('ENV') === 'development';
 
 export default async (io: Server) => {
     const redisConnection = await getRedisConnection();
@@ -53,7 +56,9 @@ export default async (io: Server) => {
         }
 
         socket.on('disconnect', (reason) => {
-            console.log('disconnecting', reason)
+            if (inDevMode) {
+                console.log('disconnecting', reason)
+            }
         });
 
         // join public rooms
@@ -68,7 +73,9 @@ export default async (io: Server) => {
     })
 
     io.on("connection", (socket) => {
-        console.log("connection: " + socket.id)
+        if (inDevMode) {
+            console.log("connection: " + socket.id)
+        }
 
         // server time
         socket.emit('server:time', Date.now())
