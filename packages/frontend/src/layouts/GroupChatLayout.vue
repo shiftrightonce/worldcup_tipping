@@ -17,35 +17,6 @@
           </span>
 
           <q-space />
-          <!--
-          <q-btn round flat icon="search" />
-          <q-btn round flat>
-            <q-icon name="attachment" class="rotate-135" />
-          </q-btn>
-          <q-btn round flat icon="more_vert">
-            <q-menu auto-close :offset="[110, 0]">
-              <q-list style="min-width: 150px">
-                <q-item clickable>
-                  <q-item-section>Contact data</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Block</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Select messages</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Silence</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Clear messages</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Erase messages</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn> -->
           <q-btn flat round dense icon="menu" @click="toggleRightDrawer" />
         </q-toolbar>
       </q-header>
@@ -57,33 +28,6 @@
           </q-avatar>
           {{ userStore.user?.username }}
           <q-space />
-
-          <!--<q-btn round flat icon="message" />
-          <q-btn round flat icon="more_vert">
-            <q-menu auto-close :offset="[110, 8]">
-              <q-list style="min-width: 150px">
-                <q-item clickable>
-                  <q-item-section>New group</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Profile</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Archived</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Favorites</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Settings</q-item-section>
-                </q-item>
-                <q-item clickable>
-                  <q-item-section>Logout</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn> -->
-
           <q-btn round flat icon="close" class="WAL__drawer-close" @click="toggleLeftDrawer" />
         </q-toolbar>
 
@@ -96,7 +40,7 @@
           </q-input>
         </q-toolbar>
 
-        <q-scroll-area style="height: calc(100% - 100px)">
+        <!-- <q-scroll-area style="height: calc(100% - 100px)"> -->
           <q-list>
             <q-item v-for="(conversation, index) in state" :key="conversation.id" clickable v-ripple
               @click="setCurrentConversation(index)">
@@ -119,7 +63,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-        </q-scroll-area>
+        <!-- </q-scroll-area> -->
       </q-drawer>
 
       <q-drawer show-if-above v-model="rightDrawerOpen" :breakpoint="690" side="right" bordered>
