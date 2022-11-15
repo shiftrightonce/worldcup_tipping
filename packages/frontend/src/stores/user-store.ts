@@ -116,9 +116,23 @@ export const useUserStore = defineStore('userStore', {
         return false
       }
     },
+    async requestPasswordReset (email: string) {
+      return await axios.post('/api/reset-password-request', {
+        email
+      })
+    },
+    async loginWithToken (token: string) {
+      const response = await axios.get(`/api/token-login/${token}`)
+      if (response.status === 200) {
+        this.setUser(response.data.user as User)
+        this.setVapid(response.data.pushVapid)
+        return true
+      }
+      return false
+    },
     async prizes () {
       const response = await axios.get('/api/prizes')
-      return response.data.prizes as Array<{title: string, image: string, position: number, description: string}>
+      return response.data.prizes as Array<{ title: string, image: string, position: number, description: string }>
     },
     async getTip (match: number) {
       if (this.tips[match]) {
