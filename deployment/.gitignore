@@ -20,3 +20,5 @@ projects/
 storage/user_images/
 storage/nginx/*
 !storage/nginx/.gitkeep
+storage/letsencrypt/*
+!storage/letsencrypt/.gitkeep

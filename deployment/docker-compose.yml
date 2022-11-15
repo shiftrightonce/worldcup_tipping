@@ -1,18 +1,28 @@
 version: "3"
 services:
+  nginxproxy:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - ${PROXY_UI_ADDRESS:-81}:81
+      - '443:443'
+    volumes:
+      - ./storage/nginx:/data
+      - ./storage/letsencrypt:/etc/letsencrypt
   redisdb:
-     build:
-        context: ./docker/redis
-     volumes:
-        - ./docker/redis/data:/data
-     networks:
+    build:
+      context: ./docker/redis
+    volumes:
+      - ./docker/redis/data:/data
+    networks:
       - webnetwork
-     hostname: redisdb
-     restart: always
+    hostname: redisdb
+    restart: unless-stopped
   db:
     build:
       context: ./docker/db
-    restart: always
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-dbpassword}
       - MYSQL_USER=${MYSQL_USER:-dbuser}
@@ -32,7 +42,7 @@ services:
     volumes:
       - ./storage/user_images:/app/src/public/user
       - ./storage/.env:/app/.env
-    hostname: worldcup 
+    hostname: worldcup
     restart: unless-stopped
     ports:
       - ${NODE_PORT}:3000
