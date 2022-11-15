@@ -95,6 +95,10 @@ export const getUserById = async (userId: number) => {
   return await getUserRepo().findOneBy({ id: userId })
 }
 
+export const getUserByEmail = async (email: string) => {
+  return await getUserRepo().findOneBy({ email })
+}
+
 export const createUser = async (username: string, email: string, password: string) => {
   const user = new User()
 
