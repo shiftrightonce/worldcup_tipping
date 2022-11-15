@@ -10,6 +10,8 @@ services:
     volumes:
       - ./storage/nginx:/data
       - ./storage/letsencrypt:/etc/letsencrypt
+    networks:
+      - webnetwork
   redisdb:
     build:
       context: ./docker/redis
