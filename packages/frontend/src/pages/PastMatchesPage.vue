@@ -13,6 +13,7 @@
   </q-page>
   <q-page v-if="Object.keys(state).length === 0 && isReady" class="row items-evenly items-center flex-center">
     <div class="col-12" style="text-align:center">
+      <img src="/img/nothing.svg" style="width:200px" /><br/>
       <span class="text-h6">No game has been played.</span>
     </div>
   </q-page>
