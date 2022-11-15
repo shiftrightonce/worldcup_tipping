@@ -1,11 +1,24 @@
 <template>
   <q-page padding>
-    <q-input label="Title" v-model="message.title"></q-input>
-    <q-input label="Icon" v-model="message.icon"></q-input>
-    <q-input label="Body" v-model="message.body"></q-input>
-    <q-checkbox label="Test" v-model="test"></q-checkbox>
-    <q-separator />
-    <q-btn label="Push" @click="onSubmit" color="primary"></q-btn>
+    <div class="row">
+      <div class="col-md-4 col-xs-12 q-pa-sm">
+        <q-input label="Title" outlined v-model="message.title" class="q-mb-xs-md"></q-input>
+      </div>
+      <div class="col-md-4 col-xs-12 q-pa-sm">
+        <q-input label="Body" outlined v-model="message.body" class="q-mb-xs-md"></q-input>
+      </div>
+      <div class="col-md-4 col-xs-12 q-pa-sm">
+        <q-input label="Icon" outlined v-model="message.icon" class="q-mb-xs-md"></q-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-xs-12 q-pa-sm">
+        <q-checkbox label="Test" v-model="test"></q-checkbox>
+      </div>
+      <div class="col-md-6 col-xs-12 q-pa-sm">
+        <q-btn label="Push" @click="onSubmit" color="primary"></q-btn>
+      </div>
+    </div>
   </q-page>
 </template>
 
