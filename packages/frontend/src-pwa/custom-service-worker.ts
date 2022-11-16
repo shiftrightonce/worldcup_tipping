@@ -35,10 +35,10 @@ self.addEventListener('push', (event) => {
 // Non-SSR fallback to index.html
 // Production SSR fallback to offline.html (except for dev)
 if (process.env.MODE !== 'ssr' || process.env.PROD) {
-  // registerRoute(
-  //   new NavigationRoute(
-  //     createHandlerBoundToURL(process.env.PWA_FALLBACK_HTML),
-  //     { denylist: [/sw\.js$/, /workbox-(.)*\.js$/] }
-  //   )
-  // )
+  registerRoute(
+    new NavigationRoute(
+      createHandlerBoundToURL(process.env.PWA_FALLBACK_HTML),
+      { denylist: [/sw\.js$/, /workbox-(.)*\.js$/] }
+    )
+  )
 }
