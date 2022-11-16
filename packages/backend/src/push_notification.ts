@@ -38,14 +38,14 @@ export const sendNotification = async (payload: { title: string, body: string, i
         return false;
       }
 
-      if (['production', 'prod'].indexOf(env('ENV', 'development')) === -1) {
-        console.table({
-          ...payload,
-          userId: user.id
-        });
+      // if (['production', 'prod'].indexOf(env('ENV', 'development')) === -1) {
+      //   console.table({
+      //     ...payload,
+      //     userId: user.id
+      //   });
 
-        return false; // we are not in production mode
-      }
+      //   return false; // we are not in production mode
+      // }
 
       return await webPush.sendNotification(subscription as webPush.PushSubscription, JSON.stringify(payload))
     }
