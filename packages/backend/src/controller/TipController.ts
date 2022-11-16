@@ -39,8 +39,9 @@ export class TipController {
       }
     }
 
-    res.status(404).json({
+    res.status(200).json({
       success: false,
+      score: null,
       code: 'score_not_found',
       message: 'Could not find a score for the user'
     })
