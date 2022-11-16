@@ -50,8 +50,7 @@ export default defineComponent({
     })
 
     const onLoad = (index: number, done: (b: boolean) => void) => {
-      done(false)
-      console.log('scrolling', index)
+      done(true)
     }
 
     return {
