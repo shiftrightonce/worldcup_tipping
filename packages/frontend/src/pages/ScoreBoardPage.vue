@@ -38,8 +38,6 @@ export default defineComponent({
     const tipStore = useTipStore()
     const { isLoading, isReady, state, execute } = tipStore.fetchScoreboard()
     const myScore = ref<Score | null>(null)
-    let currentPosition = 1
-    const positions: { [key: string]: number } = {}
 
     const q = useQuasar()
     q.loading.show()
@@ -64,20 +62,11 @@ export default defineComponent({
       userStore.setupNotificationSubscription()
     }, 2000)
 
-    const getPosition = (points: string | number): number => {
-      if (positions[points]) {
-        return positions[points]
-      }
-      positions[points] = currentPosition++
-      return getPosition(points)
-    }
-
     return {
       isLoading,
       isReady,
       state,
-      myScore,
-      getPosition
+      myScore
     }
   },
   components: {
