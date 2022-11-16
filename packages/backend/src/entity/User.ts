@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated, OneToOne } from "typeorm"
-import { generateAvatar, generateToken, hashPassword } from "../service/user_service";
+import { cleanUsernameForAvatar, generateAvatar, generateToken, hashPassword } from "../service/user_service";
 import { ChatMessage } from "./ChatMessage";
 import { Scoreboard } from "./Scoreboard";
 import { UserChatRoom } from "./UserChatRoom";
@@ -97,7 +97,7 @@ export class User {
     }
 
     getAvatar () {
-        return this.type === UserType.HUMAN ? `/static/user/${this.username}.png` : '/static/chat/bot.png';
+        return this.type === UserType.HUMAN ? `/static/user/${cleanUsernameForAvatar(this.username)}.png` : '/static/chat/bot.png';
     }
     setData (key: string, value: unknown) {
         if (this.data === null) {
