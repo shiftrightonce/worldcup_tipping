@@ -25,7 +25,7 @@ export const useLayoutStore = defineStore('layoutStore', {
     title: (state) => state.layoutTitle,
     appVersion: (state) => state.version,
     isLeftDrawerEnabled: (state) => state.enableLeftDrawer,
-    isRightDrawerEnabled: (state) => state.enableRightDrawer
+    isRightDrawerEnabled: () => true
   },
   actions: {
     setTitle (title: string) {

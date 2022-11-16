@@ -18,7 +18,7 @@ export const generateRandomGroupPoints = (yearData: YearData) => {
   }
 
 
-  console.log(groups);
+  // console.log(groups);
 
   return groups;
 }
