@@ -27,6 +27,8 @@ export type UserTipState = {
   expanded: boolean
 }
 
+const LAST_PUSH_SUBSCRIPTION_TS = 'last_push_subscription_ts'
+
 export const useUserStore = defineStore('userStore', {
   state: () => ({
     activeToken: LocalStorage.getItem(tokenKey),
@@ -158,6 +160,7 @@ export const useUserStore = defineStore('userStore', {
     },
     async subscribeToNotifications (data: Record<string, unknown>) {
       const response = await this.api.post(`${userEndpoint}/push-subscribe`, data)
+      LocalStorage.set(LAST_PUSH_SUBSCRIPTION_TS, Date.now())
       return response.data
     },
     async setupNotificationSubscription () {
@@ -184,7 +187,15 @@ export const useUserStore = defineStore('userStore', {
           }
         })
       } else {
-        channel.close()
+        const lastTimestamp = LocalStorage.getItem(LAST_PUSH_SUBSCRIPTION_TS) || 0
+        const todayTs = Date.now()
+        const aDay = 1000 * 3600 * 24
+
+        if (!lastTimestamp || (Math.floor((todayTs - parseInt(lastTimestamp as string, 10))) / aDay) >= 80) {
+          channel.postMessage({ type: 'service:subscribe_to_notification', data: { vapid: this.vapid } })
+        } else {
+          channel.close()
+        }
       }
     },
     async getMyInformation () {
