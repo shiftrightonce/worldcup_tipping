@@ -30,6 +30,7 @@ import { defineComponent, ref } from 'vue'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 import ScoreboardCard from 'src/components/general/ScoreboardCard.vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
@@ -38,13 +39,21 @@ export default defineComponent({
     const tipStore = useTipStore()
     const { isLoading, isReady, state, execute } = tipStore.fetchScoreboard()
     const myScore = ref<Score | null>(null)
+    const router = useRouter()
 
     const q = useQuasar()
     q.loading.show()
     execute().then(() => {
       q.loading.hide()
-    }).catch(() => {
+    }).catch((e) => {
       q.loading.hide()
+      if ((e as Error).message.indexOf('401') >= 0) {
+        userStore.logout().then(() => {
+          router.push({
+            name: 'home'
+          })
+        })
+      }
     })
 
     layoutStore.activeLeftDrawer(false)

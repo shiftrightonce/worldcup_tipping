@@ -20,18 +20,32 @@ import ActiveTipCard from '../components/match/ActiveTipCard.vue'
 import { useLayoutStore } from '../stores/layout-store'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 import { useQuasar } from 'quasar'
+import { useUserStore } from 'src/stores/user-store'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   setup () {
     const matchStore = useMatchStore()
     const layoutStore = useLayoutStore()
+    const userStore = useUserStore()
     const q = useQuasar()
+    const router = useRouter()
 
     q.loading.show()
     setTimeout(() => {
       (async () => {
-        await matchStore.getTodayMatches()
-        q.loading.hide()
+        try {
+          await matchStore.getTodayMatches()
+          q.loading.hide()
+        } catch (e) {
+          q.loading.hide()
+          if ((e as Error).message.indexOf('401') >= 0) {
+            void await userStore.logout()
+            router.push({
+              name: 'home'
+            })
+          }
+        }
       })()
     }, 0)
 
