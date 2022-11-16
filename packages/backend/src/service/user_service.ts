@@ -162,10 +162,14 @@ export const deleteUserAccount = async (userId: number) => {
   return await getUserRepo().delete(userId);
 }
 
+export const cleanUsernameForAvatar = (name: string) => {
+  return name.split(' ').join('').toLocaleLowerCase()
+}
+
 export const generateAvatar = async (value: string) => {
   const size = 200;
   const png = toPng(value, size)
-  const fileName = value.split(' ').join('').toLocaleLowerCase() + '.png'
+  const fileName = cleanUsernameForAvatar(value) + '.png'
   await fs.writeFile(path.join(path.basename(path.dirname(__dirname)), 'public', 'user', fileName), png)
   return fileName
 }
