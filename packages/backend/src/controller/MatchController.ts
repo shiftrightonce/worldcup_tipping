@@ -45,8 +45,14 @@ export class MatchController {
 
   public async placeTipAction (req: Request, res: Response) {
     const user = pluckUserFromRequest(req);
-    const body = req.body as Tip
-    const result = await placeUserTip(body, user.id)
+    const data = req.body;
+
+    if (data.match && !data.match.id) {
+      data.match = {
+        id: data.match
+      }
+    }
+    const result = await placeUserTip(data as Tip, user.id)
 
     if (result.success) {
       return result
