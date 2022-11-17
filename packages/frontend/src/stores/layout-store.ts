@@ -10,6 +10,7 @@ LoadingBar.setDefaults({
 })
 
 const APP_VERSION = '0.0.1'
+let watchingForUpdate = false
 
 export const useLayoutStore = defineStore('layoutStore', {
   state: () => ({
@@ -51,6 +52,17 @@ export const useLayoutStore = defineStore('layoutStore', {
     },
     leftDrawerComputed () {
       return computed(() => this.leftDrawer)
+    },
+    onAppUpdate (callback: () => void) {
+      if (!watchingForUpdate) {
+        watchingForUpdate = true
+        const channel = new BroadcastChannel('world-cup-tipping')
+        channel.onmessage = (event) => {
+          if (event.data && event.data.type === 'client:app-update-found') {
+            callback()
+          }
+        }
+      }
     }
   }
 })
