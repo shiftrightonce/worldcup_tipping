@@ -73,7 +73,7 @@ let intervalId: ReturnType<typeof setInterval> | null = null
 
 export const useMatchStore = defineStore('matchStore', {
   state: () => ({
-    activeMatches: {} as Record<number, Match>,
+    activeMatches: [] as Array<Match>,
     completedMatches: {} as Record<number, Match>
   }),
   getters: {
@@ -117,14 +117,14 @@ export const useMatchStore = defineStore('matchStore', {
         match.fullDate = matchDate
         match.countdown = ''
         match.isMatchOpen = match.status === MatchStatus.OPEN
-        this.activeMatches[match.id] = match
+        this.activeMatches.push(match)
         userTipStore.setTip(match.id, (match as Match & { tip: Tip }).tip)
       })
 
       if (!intervalId) {
         setTimeout(() => {
           intervalId = setInterval(() => {
-            Object.values(this.activeMatches).forEach((match) => {
+            this.activeMatches.forEach((match) => {
               if (!match.timestamp) {
                 return
               }
@@ -148,7 +148,20 @@ export const useMatchStore = defineStore('matchStore', {
       return this.today
     },
     todayMatch (matchId: number) {
-      return this.today[matchId] || this.completedMatches[matchId]
+      let index = -1
+      this.today.every((m, i) => {
+        if (m.id === matchId) {
+          index = i
+          return false
+        }
+        return true
+      })
+
+      if (index >= 0) {
+        return this.today[index]
+      } else {
+        return this.completedMatches[matchId]
+      }
     },
     fetchCompletedMatches () {
       const userTipStore = useUserTipStore()
