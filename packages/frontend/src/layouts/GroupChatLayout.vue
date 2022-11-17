@@ -41,28 +41,28 @@
         </q-toolbar>
 
         <!-- <q-scroll-area style="height: calc(100% - 100px)"> -->
-          <q-list>
-            <q-item v-for="(conversation, index) in state" :key="conversation.id" clickable v-ripple
-              @click="setCurrentConversation(index)">
-              <q-item-section avatar>
-                <q-avatar>
-                  <img :src="conversation.avatar">
-                </q-avatar>
-              </q-item-section>
+        <q-list>
+          <q-item v-for="(conversation, index) in state" :key="conversation.id" clickable v-ripple
+            @click="setCurrentConversation(index)">
+            <q-item-section avatar>
+              <q-avatar>
+                <img :src="conversation.avatar">
+              </q-avatar>
+            </q-item-section>
 
-              <q-item-section>
-                <q-item-label lines="2">
-                  {{ conversation.name }}
-                </q-item-label>
-                <q-item-label class="conversation__summary" caption>
-                </q-item-label>
-              </q-item-section>
+            <q-item-section>
+              <q-item-label lines="2">
+                {{ conversation.name }}
+              </q-item-label>
+              <q-item-label class="conversation__summary" caption>
+              </q-item-label>
+            </q-item-section>
 
-              <q-item-section side>
-                <q-badge rounded color="green" v-if="conversation.internalId === currentConversation.internalId" />
-              </q-item-section>
-            </q-item>
-          </q-list>
+            <q-item-section side>
+              <q-badge rounded color="green" v-if="conversation.internalId === currentConversation.internalId" />
+            </q-item-section>
+          </q-item>
+        </q-list>
         <!-- </q-scroll-area> -->
       </q-drawer>
 
