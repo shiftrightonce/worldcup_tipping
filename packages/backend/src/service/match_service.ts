@@ -56,7 +56,8 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
     .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
     .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
     .leftJoinAndSelect('match.winner', 'winner', 'winner.id = match.winnerId')
-    .orderBy('match.number', 'ASC')
+    .orderBy('match.date', 'ASC')
+    .addOrderBy('match.time', 'ASC')
     .getMany()
 
   for (const index in result) {
