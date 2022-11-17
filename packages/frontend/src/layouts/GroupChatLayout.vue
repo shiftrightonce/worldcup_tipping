@@ -115,7 +115,18 @@ export default defineComponent({
     const message = ref('')
     const currentConversationIndex = ref(0)
     const chatStore = useChatStore()
-    const { isReady, state } = chatStore.fetchRooms()
+    const { isReady, state, execute } = chatStore.fetchRooms({
+      onError: (e) => {
+        if ((e as Error).message.indexOf('401') >= 0) {
+          console.log('very good')
+          userStore.logout().then(() => {
+            router.push({
+              name: 'home'
+            })
+          })
+        }
+      }
+    })
 
     const currentConversation = computed(() => {
       return state.value[currentConversationIndex.value]
@@ -143,10 +154,6 @@ export default defineComponent({
       chatStore.currentRoom = state.value[index]
       currentConversationIndex.value = index
     }
-
-    (async () => {
-      await chatStore.fetchRooms()
-    })()
 
     const sendMessage = () => {
       if (message.value.trim()) {
