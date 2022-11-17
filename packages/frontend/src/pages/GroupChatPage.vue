@@ -44,7 +44,6 @@ export default defineComponent({
       setTimeout(() => {
         if (board.value) {
           board.value.scrollTop = board.value.scrollHeight + 100
-          console.log('ajusted', Date.now())
         }
       }, 500)
     })
