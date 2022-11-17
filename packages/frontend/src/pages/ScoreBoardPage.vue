@@ -71,6 +71,16 @@ export default defineComponent({
       userStore.setupNotificationSubscription()
     }, 2000)
 
+    layoutStore.onAppUpdate(() => {
+      q.dialog({
+        title: 'New version available',
+        message: 'Do you want to update now?',
+        cancel: true
+      }).onOk(() => {
+        document.location.reload()
+      })
+    })
+
     return {
       isLoading,
       isReady,
