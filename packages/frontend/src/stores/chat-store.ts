@@ -1,4 +1,4 @@
-import { useAsyncState } from '@vueuse/core'
+import { useAsyncState, UseAsyncStateOptions } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import makeLiveServerChannel from 'src/channels/liveserver_channel'
 import { useUserStore } from './user-store'
@@ -72,7 +72,7 @@ export const useChatStore = defineStore('chatStore', {
     currentRoom: {} as ChatRoom
   }),
   actions: {
-    fetchRooms () {
+    fetchRooms (option: UseAsyncStateOptions<true> | undefined = undefined) {
       return useAsyncState(new Promise<ChatRoom[]>((resolve, reject) => {
         useUserStore().api.get(`${chatEndpoint}/my-rooms`)
           .then((response) => {
@@ -93,7 +93,7 @@ export const useChatStore = defineStore('chatStore', {
             // @todo handle error
             reject(e)
           })
-      }), [])
+      }), [], option)
     },
     async postMessage (roomId: string, message: string) {
       const response = await useUserStore().api.post(`${chatEndpoint}/message/${roomId}`, {
