@@ -214,7 +214,7 @@ export const calculateScore = (tip: Tip) => {
       return 0
     }
 
-    return (tip.toPenalty === match.penalty) ? 10 : 0;
+    return (tip.toPenalty === match.penalty) ? 5 : 0;
 
   }
   const countryScore = () => {

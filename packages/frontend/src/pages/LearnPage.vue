@@ -9,8 +9,28 @@
         </div>
         <div class="row justify-center">
           <div class="col-auto q-mb-md q-mr-md-md">
-            <div class="text-h4 text-bold text-deep-orange-8">How to play?</div>
-            <p></p>
+            <div class="text-h4 text-bold text-deep-orange-8">Scoring System</div>
+            <p>
+            <ul>
+              <li>
+                1 point for predicating the winner of a match
+              </li>
+              <li>
+                1 point for predicting a draw
+              </li>
+              <li>
+                5 points for prediction that a match will go into penalty
+              </li>
+              <li>
+                If you predicate the exact score of a match, you will get a point for each goal. <br/>
+                <span style="color:#e64a19">Example</span>: <b>you predicated Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
+                six points.</b>
+              </li>
+              <li>
+                 If you predicate the exact score in a penalty shootout, you will also get 1 point for each goal.
+              </li>
+            </ul>
+            </p>
           </div>
         </div>
       </div>
