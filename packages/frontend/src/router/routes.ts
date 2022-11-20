@@ -39,7 +39,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'matches', component: () => import('pages/admin/MatchesPage.vue'), name: 'admin-matches' },
       { path: 'group-round-points', component: () => import('pages/admin/GroupRoundPointsPage.vue'), name: 'group-round-points' },
       { path: 'notification', component: () => import('pages/admin/PushNotificationPage.vue'), name: 'push-notification' },
-      { path: 'users', component: () => import('pages/admin/UsersPage.vue'), name: 'admin-users' }
+      { path: 'users', component: () => import('pages/admin/UsersPage.vue'), name: 'admin-users' },
+      { path: 'stats', component: () => import('pages/admin/StatsPage.vue'), name: 'admin-stats' }
     ]
   },
 

@@ -265,3 +265,11 @@ export const calculateScore = (tip: Tip) => {
 
   return marks.map((calculator) => calculator()).reduce((n, c) => n + c, 0)
 }
+
+export const countTips = async (year = configYear) => {
+  return await getTipRepo().count({
+    where: {
+      year
+    }
+  });
+}

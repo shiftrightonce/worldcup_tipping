@@ -48,6 +48,8 @@ const routes = [
 
   // - admin
   buildRoute(AdminController, 'sendPushNotificationAction', 'post', '/admin/push-message'),
+  buildRoute(AdminController, 'userCountAction', 'post', '/admin/user-count'),
+  buildRoute(AdminController, 'tipCountAction', 'post', '/admin/tip-count'),
 ];
 
 

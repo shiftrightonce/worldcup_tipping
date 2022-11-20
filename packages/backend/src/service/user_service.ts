@@ -231,3 +231,7 @@ export const sendLoginResonse = (res: Response, user: User) => {
       pushVapid: env('VAPID_PUBLIC_KEY')
     });
 }
+
+export const countUsers = async () => {
+  return await getUserRepo().count();
+}

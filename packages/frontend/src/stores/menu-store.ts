@@ -131,6 +131,12 @@ export const useMenuStore = defineStore('menu', {
         to: { name: 'admin-users' },
         icon: 'people',
         color: 'primary'
+      },
+      {
+        label: 'Statistics',
+        to: { name: 'admin-stats' },
+        icon: 'bar_chart',
+        color: 'primary'
       }
     ] as MenuItem[]
   }),
