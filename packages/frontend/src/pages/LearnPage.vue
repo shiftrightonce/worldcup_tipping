@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="row justify-center">
-          <div class="col-auto q-mb-md q-mr-md-md">
+          <div class="col-auto q-mb-md q-mr-md-md q-pa-md">
             <div class="text-h4 text-bold text-deep-orange-8">Scoring System</div>
             <p>
             <ul>
@@ -39,9 +39,17 @@
 </template>
 
 <script lang="ts">
+import { useLayoutStore } from 'src/stores/layout-store'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'LearnPage'
+  name: 'LearnPage',
+  setup () {
+    const layoutStore = useLayoutStore()
+    layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
+
+    return {}
+  }
 })
 </script>
