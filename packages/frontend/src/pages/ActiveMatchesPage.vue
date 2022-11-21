@@ -50,6 +50,7 @@ export default defineComponent({
     }, 0)
 
     layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
     layoutStore.setTitle('Active Matches')
 
     return {

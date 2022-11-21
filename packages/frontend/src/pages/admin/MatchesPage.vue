@@ -42,6 +42,7 @@ export default defineComponent({
     })
 
     layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
     layoutStore.setTitle('Admin Manage Matches')
 
     return {

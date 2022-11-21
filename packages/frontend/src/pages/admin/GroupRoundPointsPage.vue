@@ -24,7 +24,9 @@ export default defineComponent({
     const countryStore = useCountryStore()
     const layoutStore = useLayoutStore()
     const { state, isReady } = countryStore.fetchCountries()
+
     layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
     layoutStore.setTitle('Admin Manage Group Points')
 
     return {
