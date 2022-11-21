@@ -31,7 +31,7 @@
                 <span style="color:#e64a19">Example</span>: <b>You predictd the score 2 - 2</b>
               </liv>
               <li>
-                 If you predict the exact score in a penalty shootout, you will also get 1 point for each goal.
+                 If you predicted the exact score in a penalty shootout, you will also get 1 point for each goal.
               </li>
             </ul>
             </p>
