@@ -68,7 +68,17 @@ export default defineComponent({
     })()
 
     setTimeout(() => {
-      userStore.setupNotificationSubscription()
+      if (Notification.permission !== 'denied' && Notification.permission !== 'granted') {
+        q.dialog({
+          title: 'Get Notification',
+          message: 'Don\'t miss a beat. Get reminder notification🎊',
+          cancel: true
+        }).onOk(() => {
+          userStore.setupNotificationSubscription()
+        })
+      } else {
+        userStore.setupNotificationSubscription()
+      }
     }, 2000)
 
     layoutStore.onAppUpdate(() => {
