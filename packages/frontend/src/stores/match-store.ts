@@ -132,7 +132,8 @@ export const useMatchStore = defineStore('matchStore', {
 
               if (match.timestamp <= 0) {
                 match.isMatchOpen = false
-                match.countdown = 'close'
+                match.countdown = ''
+                return
               }
 
               const days = Math.floor(match.timestamp / (1000 * 60 * 60 * 24))
