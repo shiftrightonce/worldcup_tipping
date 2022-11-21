@@ -185,7 +185,7 @@ export const useUserStore = defineStore('userStore', {
         }
       }
 
-      if (Notification.permission !== 'granted') {
+      if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         Notification.requestPermission().then((response) => {
           if (response === 'granted') {
             channel.postMessage({ type: 'service:subscribe_to_notification', data: { vapid: this.vapid } })
