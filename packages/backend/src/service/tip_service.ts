@@ -255,12 +255,17 @@ export const calculateScore = (tip: Tip) => {
     return (match.winner && tip.toWin && match.winner.id === tip.toWin.id) ? 1 : 0;
   }
 
+  const matchScore = () => {
+    return (tip.countryAToScore === match.countryAGoals && tip.countryBToScore === match.countryBGoals) ? 2 : 0
+  }
+
   const marks: Array<() => number> = [
     toPenalty,
     countryScore,
     countryPenalTyScore,
     isLevel,
-    toWin
+    toWin,
+    matchScore
   ];
 
   return marks.map((calculator) => calculator()).reduce((n, c) => n + c, 0)
