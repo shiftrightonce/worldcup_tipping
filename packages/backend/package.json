@@ -60,6 +60,8 @@
       "simulate:final-matches": "ts-node ./src/simulate/simulate_final.ts -m",
       "generate:push-key": "npx web-push generate-vapid-keys",
       "queue:start": "ts-node src/jobs/queue.ts",
+      "tip:calculate-points": "ts-node src/tools/tip/points.ts",
+      "cron:start": "ts-node src/cron/index.ts",
       "bot:group": "ts-node src/bot/group_round_bot.ts",
       "db:setup": "ts-node src/tools/setup.ts",
       "db:seed": "ts-node src/seeds/index.ts",
