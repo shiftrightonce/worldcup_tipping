@@ -145,9 +145,11 @@ export const updateUser = async (userId: number, data: Record<string, unknown>) 
       user.token = generateToken();
     }
 
+    await getUserRepo().update(user.id, user)
+
     return {
       success: true,
-      user: await getUserRepo().update(user.id, user)
+      user: user
     }
   }
 
