@@ -12,10 +12,10 @@ export type PushMessage = {
 export const useAdminStore = defineStore('adminStore', {
   state: () => ({}),
   actions: {
-    async sendPushMessage (message: PushMessage) {
+    async sendPushMessage (message: PushMessage, viaWebsocket = false) {
       const userStore = useUserStore()
       if (userStore.isAdmin) {
-        return await userStore.api.post(`${adminEndpoint}/push-message`, { message })
+        return await userStore.api.post(`${adminEndpoint}/push-message`, { message, viaWebsocket })
       }
       throw Error('You don\'t have permission to send push notification')
     },
