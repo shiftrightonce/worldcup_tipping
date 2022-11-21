@@ -40,10 +40,18 @@ export default defineComponent({
     const { isLoading, isReady, state, execute } = tipStore.fetchScoreboard()
     const myScore = ref<Score | null>(null)
     const router = useRouter()
+    let positionCounter = 1
+    const positions: {[key:number]: number } = {}
 
     const q = useQuasar()
     q.loading.show()
     execute().then(() => {
+      state.value.forEach((s) => {
+        if (!positions[s.totalPoints]) {
+          positions[s.totalPoints] = positionCounter++
+        }
+        s.position = positions[s.totalPoints]
+      })
       q.loading.hide()
     }).catch((e) => {
       q.loading.hide()
@@ -57,11 +65,16 @@ export default defineComponent({
     })
 
     layoutStore.activeLeftDrawer(false)
+    layoutStore.activeRightDrawer(false)
     layoutStore.setTitle('Scoreboard');
 
     (async () => {
       try {
         myScore.value = await tipStore.fetchMyTotalScore()
+        if (!positions[myScore.value.totalPoints]) {
+          positions[myScore.value.totalPoints] = positionCounter++
+        }
+        myScore.value.position = positions[myScore.value.totalPoints]
       } catch (_) {
         // do nothing
       }
