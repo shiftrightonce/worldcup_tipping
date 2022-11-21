@@ -43,15 +43,23 @@ export type ChatRoom = {
 }
 
 const liveChannel = makeLiveServerChannel()
+// let lastMessageTimestamp = 0
 
 function pushNewRoomMessages (roomId: string, messages: ChatMessage[]) {
   if (!useChatStore().messages[roomId]) {
-    useChatStore().messages[roomId] = {}
+    useChatStore().messages[roomId] = []
   }
   messages.forEach((msg) => {
-    const date = new Date(msg.createdAt)
-    msg.createdAt = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
-    useChatStore().messages[roomId][msg.internalId] = msg
+    if (useChatStore().lastSentMessage !== msg.internalId) {
+      const date = new Date(msg.createdAt)
+      msg.createdAt = `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+      // lastMessageTimestamp = date.getTime()
+      useChatStore().messages[roomId].push(msg)
+
+      if (useChatStore().messages[roomId].length > 200) {
+        useChatStore().messages[roomId].pop()
+      }
+    }
   })
 }
 
@@ -68,8 +76,10 @@ liveChannel.addEventListener('message', (e) => {
 export const useChatStore = defineStore('chatStore', {
   state: () => ({
     rooms: [] as ChatRoom[],
-    messages: {} as { [key: string]: Record<string, ChatMessage> },
-    currentRoom: {} as ChatRoom
+    // messages: {} as { [key: string]: Record<string, ChatMessage> },
+    messages: {} as { [key: string]: ChatMessage[] },
+    currentRoom: {} as ChatRoom,
+    lastSentMessage: ''
   }),
   actions: {
     fetchRooms (option: UseAsyncStateOptions<true> | undefined = undefined) {
@@ -103,6 +113,7 @@ export const useChatStore = defineStore('chatStore', {
       if (response.data.success) {
         const message = response.data.message as ChatMessage
         pushNewRoomMessages(message.room.internalId, [message])
+        this.lastSentMessage = message.internalId
       }
 
       return response

@@ -1,6 +1,6 @@
 <template>
   <div class="WAL position-relative" :style="style">
-    <q-layout view="lHr lpR lFr" container v-if="isReady">
+    <q-layout view="lHr LpR lFr" v-if="isReady">
       <q-header elevated>
         <q-toolbar>
           <q-btn round flat icon="menu" class="WAL__drawer-open q-mr-sm" @click="toggleLeftDrawer" />
@@ -71,9 +71,9 @@
       </q-drawer>
 
       <q-page-container>
-        <q-page class="q-pa-md">
-          <router-view />
-        </q-page>
+        <!-- <q-page class="q-pa-md"> -->
+            <router-view />
+        <!-- </q-page> -->
       </q-page-container>
 
       <q-footer>
@@ -115,7 +115,7 @@ export default defineComponent({
     const message = ref('')
     const currentConversationIndex = ref(0)
     const chatStore = useChatStore()
-    const { isReady, state, execute } = chatStore.fetchRooms({
+    const { isReady, state } = chatStore.fetchRooms({
       onError: (e) => {
         if ((e as Error).message.indexOf('401') >= 0) {
           console.log('very good')
@@ -209,8 +209,6 @@ export default defineComponent({
 .WAL
   width: 100%
   height: 100%
-  padding-top: 20px
-  padding-bottom: 20px
 
   &__layout
     margin: 0 auto

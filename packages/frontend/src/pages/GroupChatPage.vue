@@ -1,24 +1,23 @@
 <template>
-  <transition appear enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
-    <div class="row">
-      <div class="col-md-12 col-xs-12 q-pb-lg">
-        <!-- <q-infinite-scroll @load="onLoad" reverse :style="{ height: height }" style="overflow-y:auto" ref="board" -->
-        <div  ref="board" v-if="chatStore.currentRoom && chatStore.messages[chatStore.currentRoom.internalId]">
-          <q-infinite-scroll @load="onLoad" reverse>
-            <template v-slot:loading>
-              <div class="row justify-center q-my-md">
-                <q-spinner color="primary" name="dots" size="40px" />
-              </div>
-            </template>
+  <div class="row">
+    <div class="col-md-12 col-xs-12 q-pb-lg">
+      <!-- <q-infinite-scroll @load="onLoad" reverse :style="{ height: height }" style="overflow-y:auto" ref="board" -->
+      <div>
+        <q-infinite-scroll @load="onLoad" reverse>
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner color="primary" name="dots" size="40px" />
+            </div>
+          </template>
 
-            <ChatBubble v-for="message in chatStore.messages[chatStore.currentRoom.internalId]"
-              :key="message.internalId" :data="message">
-            </ChatBubble>
-          </q-infinite-scroll>
-        </div>
+          <ChatBubble v-for="message in chatStore.messages[chatStore.currentRoom.internalId]" :key="message.internalId"
+            :data="message">
+          </ChatBubble>
+        </q-infinite-scroll>
       </div>
     </div>
-  </transition>
+    <div ref="board">&nbsp;</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -43,9 +42,10 @@ export default defineComponent({
     watch(chatStore.messages, () => {
       setTimeout(() => {
         if (board.value) {
-          board.value.scrollTop = board.value.scrollHeight + 100
+          board.value.scrollTop = board.value.scrollHeight
+          board.value.scrollIntoView()
         }
-      }, 500)
+      }, 0)
     })
 
     const onLoad = (index: number, done: (b: boolean) => void) => {
