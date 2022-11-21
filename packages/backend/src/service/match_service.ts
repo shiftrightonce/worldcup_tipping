@@ -3,7 +3,7 @@ import { AppDataSource } from "../data-source"
 import { Match, MatchStatus, MatchRound } from "../entity/Match";
 import { queueProcessMatch } from '../jobs'
 import { year as configYear } from '../games/parser/parse_config'
-import { createTip } from './tip_service';
+import { createTip, getTipRepo } from './tip_service';
 import { User } from '../entity/User';
 import { Tip } from '../entity/Tip';
 
@@ -60,11 +60,22 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
     .addOrderBy('match.time', 'ASC')
     .getMany()
 
+  const tips = {};
+  (await getTipRepo().createQueryBuilder('tip')
+    .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+    .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+    .leftJoinAndSelect('tip.match', 'match', 'match.id = tip.matchId')
+    .leftJoinAndSelect('tip.toWin', 'toWin', 'toWin.id = tip.toWinId')
+    .getMany()).forEach((tip) => {
+      tips[tip.match.id] = tip
+    })
+
   for (const index in result) {
     if (result[index].tips.length <= 0) {
       (result[index] as Match & { tip: Tip }).tip = await createTip(year)
     } else {
       (result[index] as Match & { tip: Tip }).tip = result[index].tips.pop();
+      (result[index] as Match & { tip: Tip }).tip.toWin = tips[result[index].id].toWin || await createTip(year);
     }
   }
 
@@ -82,11 +93,23 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
       .orderBy('match.number', 'ASC')
       .getMany();
 
+    const tips = {};
+    (await getTipRepo().createQueryBuilder('tip')
+      .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+      .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+      .leftJoinAndSelect('tip.match', 'match', 'match.id = tip.matchId')
+      .leftJoinAndSelect('tip.toWin', 'toWin', 'toWin.id = tip.toWinId')
+      .getMany()).forEach((tip) => {
+        tips[tip.match.id] = tip
+      })
+
+
     for (const index in result) {
       if (result[index].tips.length <= 0) {
         (result[index] as Match & { tip: Tip }).tip = await createTip(year)
       } else {
         (result[index] as Match & { tip: Tip }).tip = result[index].tips.pop();
+        (result[index] as Match & { tip: Tip }).tip.toWin = tips[result[index].id].toWin || await createTip(year);
       }
     }
     return result;
