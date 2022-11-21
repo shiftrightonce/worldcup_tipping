@@ -38,22 +38,22 @@ export const useUserTipStore = defineStore('userTipStore', {
     },
     countryAGoalTip: (state) => {
       return (matchId: number): number | string => {
-        return (state.tips[matchId]) ? state.tips[matchId].tip.countryAToScore || '' : ''
+        return (state.tips[matchId]) ? state.tips[matchId].tip.countryAToScore || 0 : 0
       }
     },
     countryBGoalTip: (state) => {
       return (matchId: number): number | string => {
-        return (state.tips[matchId]) ? state.tips[matchId].tip.countryBToScore || '' : ''
+        return (state.tips[matchId]) ? state.tips[matchId].tip.countryBToScore || 0 : 0
       }
     },
     countryAPenaltyGoalTip: (state) => {
       return (matchId: number): number | string => {
-        return (state.tips[matchId]) ? state.tips[matchId].tip.countryAPenaltyToScore || '' : ''
+        return (state.tips[matchId]) ? state.tips[matchId].tip.countryAPenaltyToScore || 0 : 0
       }
     },
     countryBPenaltyGoalTip: (state) => {
       return (matchId: number): number | string => {
-        return (state.tips[matchId]) ? state.tips[matchId].tip.countryBPenaltyToScore || '' : ''
+        return (state.tips[matchId]) ? state.tips[matchId].tip.countryBPenaltyToScore || 0 : 0
       }
     }
   },
@@ -96,7 +96,7 @@ export const useUserTipStore = defineStore('userTipStore', {
           return this.countryAGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryAGoalTip(matchId, goals)
+          this.setCountryAGoalTip(matchId, Number(goals))
         }
       })
     },
@@ -106,7 +106,7 @@ export const useUserTipStore = defineStore('userTipStore', {
           return this.countryBGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryBGoalTip(matchId, goals)
+          this.setCountryBGoalTip(matchId, Number(goals))
         }
       })
     },
@@ -116,7 +116,7 @@ export const useUserTipStore = defineStore('userTipStore', {
           return this.countryAPenaltyGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryAPenaltyGoalTip(matchId, goals)
+          this.setCountryAPenaltyGoalTip(matchId, Number(goals))
         }
       })
     },
@@ -126,7 +126,7 @@ export const useUserTipStore = defineStore('userTipStore', {
           return this.countryBPenaltyGoalTip(matchId)
         },
         set: (goals: string | number) => {
-          this.setCountryBPenaltyGoalTip(matchId, goals)
+          this.setCountryBPenaltyGoalTip(matchId, Number(goals))
         }
       })
     },
