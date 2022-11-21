@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated, OneToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, AfterInsert, OneToMany, AfterLoad, DeleteDateColumn, CreateDateColumn, UpdateDateColumn, Generated, OneToOne, Unique } from "typeorm"
 import { cleanUsernameForAvatar, generateAvatar, generateToken, hashPassword } from "../service/user_service";
 import { ChatMessage } from "./ChatMessage";
 import { Scoreboard } from "./Scoreboard";
@@ -43,7 +43,7 @@ export class User {
     @Column({ length: 255 })
     username: string
 
-    @Column({ length: 255, default: '' })
+    @Column({ length: 255,  unique: true })
     email: string;
 
     @Column({ length: 128 })
