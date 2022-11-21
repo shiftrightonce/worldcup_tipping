@@ -13,13 +13,16 @@ AppDataSource.initialize().then(async () => {
       stream.on('data', async (data) => {
         const d = JSON.parse(JSON.stringify(data))
         const tip = await getTipById(d['tip_id'])
+
+        console.log('updating : ' + d['tip_id']);
+
         tip.points = calculateScore(tip);
         await updateTip(tip)
       });
 
       stream.on('close', async () => {
         console.log(`tips for match ${match.id} have been updated`);
-        AppDataSource.destroy();
+        // AppDataSource.destroy();
       });
     }
   }
