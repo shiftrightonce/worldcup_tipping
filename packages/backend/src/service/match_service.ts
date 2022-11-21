@@ -212,5 +212,11 @@ export const getRoundMatchWithEmptyCountries = async (round: MatchRound, year = 
       number: 'ASC'
     }
   })
+}
 
+export const getMatchByNumber = async (num: number, year = configYear) => {
+  return await getMatchRepo().findOneBy({
+    number: num,
+    year
+  });
 }
