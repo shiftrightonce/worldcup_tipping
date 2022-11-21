@@ -147,7 +147,7 @@ export const updateUser = async (userId: number, data: Record<string, unknown>) 
 
     return {
       success: true,
-      user: await getUserRepo().save(user)
+      user: await getUserRepo().update(user.id, user)
     }
   }
 
