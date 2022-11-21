@@ -22,10 +22,14 @@
                 5 points for prediction that a match will go into penalty
               </li>
               <li>
-                If you predicate the exact score of a match, you will get a point for each goal. <br/>
-                <span style="color:#e64a19">Example</span>: <b>you predicated Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
+                If you predicate the exact goal for each team, you will get a point for each goal. <br/>
+                <span style="color:#e64a19">Example</span>: <b>You predicated Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
                 six points.</b>
               </li>
+              <liv>
+                2 points for predicting the exact score of the match. <br/>
+                <span style="color:#e64a19">Example</span>: <b>You predicated the score 2 - 2</b>
+              </liv>
               <li>
                  If you predicate the exact score in a penalty shootout, you will also get 1 point for each goal.
               </li>
