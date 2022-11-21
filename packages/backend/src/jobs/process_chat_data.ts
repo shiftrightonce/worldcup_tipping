@@ -1,6 +1,6 @@
 import { queueJob, createRegisterer } from './general'
 import { getRedisConnection } from '../redis_client'
-import { CHAT_MESSAGE_REDIS_QUEUE, CHAT_ACTION_ROOM_MESSAGE } from '../socketio'
+import { CHAT_MESSAGE_REDIS_QUEUE, CHAT_ACTION_ROOM_MESSAGE, NOTIFICATION_MESSAGE, NOTIFICATION_ROOM } from '../socketio'
 import { ChatMessage } from '../entity/ChatMessage';
 
 
@@ -36,6 +36,14 @@ export const queueRoomMessage = (roomId: string, message: ChatMessage ) => {
   addToQueue({
     roomId,
     action: CHAT_ACTION_ROOM_MESSAGE,
+    data: message
+  })
+}
+
+export const queueNotification = (message: { title: string, body: string, icon?: string, options?: { body: string, title: string, icon?: string } }) => {
+  addToQueue({
+    roomId: NOTIFICATION_ROOM,
+    action: NOTIFICATION_MESSAGE,
     data: message
   })
 }

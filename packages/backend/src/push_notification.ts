@@ -2,10 +2,13 @@ import { env } from './data-source'
 import * as webPush from "web-push"
 import { getUserById, getUsersStream } from './service/user_service';
 import { User } from './entity/User';
+import { queueNotification } from './jobs/process_chat_data';
 
 let setupSuccessfully = false;
 
 const USER_SUBSCRIPTION_DATA_KEY = 'push_subscription';
+
+type Payload = { title: string, body: string, icon?: string, options?: { body: string, title: string, icon?: string } }
 
 export const setupPushNotification = () => {
   const vapidPublicKey = env('VAPID_PUBLIC_KEY');
@@ -29,7 +32,7 @@ export const getSubscription = (user: User) => {
   return user.getData(USER_SUBSCRIPTION_DATA_KEY);
 }
 
-export const sendNotification = async (payload: { title: string, body: string, icon?: string, options?: { body: string, title: string, icon?: string } }, userOrId: User | number = 0) => {
+export const sendNotification = async (payload: Payload, userOrId: User | number = 0, viaWebsocket = false) => {
   if (userOrId) {
     const user = (typeof userOrId === 'object') ? userOrId : await getUserById(userOrId)
     if (user) {
@@ -48,7 +51,11 @@ export const sendNotification = async (payload: { title: string, body: string, i
       }
 
       try {
-        return await webPush.sendNotification(subscription as webPush.PushSubscription, JSON.stringify(payload))
+        if (viaWebsocket) {
+          queueNotification(payload)
+        } else {
+          return await webPush.sendNotification(subscription as webPush.PushSubscription, JSON.stringify(payload))
+        }
       } catch (e) {
         return true
       }
@@ -57,7 +64,7 @@ export const sendNotification = async (payload: { title: string, body: string, i
     const stream = await getUsersStream()
     stream.on('data', async (data) => {
       const d = JSON.parse(JSON.stringify(data));
-      sendNotification(payload, d.user_id);
+      sendNotification(payload, d.user_id, viaWebsocket);
     })
   }
   return true

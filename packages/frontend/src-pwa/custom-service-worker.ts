@@ -27,7 +27,7 @@ self.addEventListener('push', (event) => {
   if (data && Notification.permission === 'granted') {
     // console.log('we got push notification', data)
     event.waitUntil(
-      self.registration.showNotification(data.title, data)
+      self.registration.showNotification(data.title, { ...data, silent: false, vibrate: 200 })
     )
   }
 })

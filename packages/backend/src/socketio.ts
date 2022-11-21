@@ -9,13 +9,17 @@ import { env } from "./data-source";
 export const CHAT_MESSAGE_REDIS_QUEUE = 'chat:redis_queue';
 
 export const CHAT_ACTION_ROOM_MESSAGE = 'room_message';
+export const NOTIFICATION_MESSAGE = 'notification_message';
+export const NOTIFICATION_ROOM = 'notification';
 
 const inDevMode = env('ENV') === 'development';
 
 export default async (io: Server) => {
     const redisConnection = await getRedisConnection();
     const rooms: Record<string, ChatRoomType> = {};
-    const publicRooms: string[] = [];
+    const publicRooms: string[] = [
+        NOTIFICATION_ROOM  // notification room
+    ];
 
     (await getPublicRooms()).forEach((room) => {
         rooms[room.internalId] = room.type;
@@ -24,9 +28,11 @@ export default async (io: Server) => {
 
     const onChatMessage = (data: JobPayload) => {
         switch (data.action) {
-            // @todo handle specific action types
+            case NOTIFICATION_MESSAGE:
+                io.to(NOTIFICATION_ROOM).emit(`server:${NOTIFICATION_MESSAGE}`, data);
+                break;
             default:
-            io.to(data.roomId).emit('server:room_event', data);
+                io.to(data.roomId).emit('server:room_event', data);
         }
     }
 

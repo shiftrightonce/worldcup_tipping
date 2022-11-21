@@ -16,6 +16,9 @@
         <q-checkbox label="Test" v-model="test"></q-checkbox>
       </div>
       <div class="col-md-6 col-xs-12 q-pa-sm">
+        <q-checkbox label="Via Websocket" v-model="viaWebsocket"></q-checkbox>
+      </div>
+      <div class="col-md-6 col-xs-12 q-pa-sm">
         <q-btn label="Push" @click="onSubmit" color="primary"></q-btn>
       </div>
     </div>
@@ -32,6 +35,7 @@ export default defineComponent({
   name: 'PushNotificationPage',
   setup () {
     const test = ref(false)
+    const viaWebsocket = ref(false)
     const q = useQuasar()
     const message = reactive<PushMessage>({
       title: '',
@@ -69,7 +73,7 @@ export default defineComponent({
         doNotificationTest()
       } else {
         try {
-          void await useAdminStore().sendPushMessage(message)
+          void await useAdminStore().sendPushMessage(message, viaWebsocket.value)
         } catch (e) {
           // @todo Make error message more helpful
           q.notify((e as Error).message)
@@ -80,6 +84,7 @@ export default defineComponent({
     return {
       message,
       test,
+      viaWebsocket,
       onSubmit
     }
   }

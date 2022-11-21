@@ -11,11 +11,12 @@ export type JobPayload = {
     body: string,
     icon?: string
   },
+  viaWebsocket?: boolean,
   user?: number
 }
 
 const processQueuedJob = async (job: JobPayload) => {
-  await sendNotification(job.message, job.user)
+  await sendNotification(job.message, job.user, job.viaWebsocket)
   return true
 }
 
