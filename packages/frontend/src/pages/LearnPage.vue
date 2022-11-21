@@ -26,10 +26,10 @@
                 <span style="color:#e64a19">Example</span>: <b>You predicted Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
                 six points.</b>
               </li>
-              <liv>
+              <li>
                 2 points for predicting the exact score of the match. <br/>
                 <span style="color:#e64a19">Example</span>: <b>You predictd the score 2 - 2</b>
-              </liv>
+              </li>
               <li>
                  If you predicted the exact score in a penalty shootout, you will also get 1 point for each goal.
               </li>
