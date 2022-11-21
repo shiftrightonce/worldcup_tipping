@@ -14,7 +14,6 @@ COPY --from=frontend /frontend/dist/pwa/ ./src/public/
 
 RUN yarn global add pm2
 RUN yarn install
-RUN apt install vim
 
 
 EXPOSE 3000
