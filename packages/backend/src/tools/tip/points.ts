@@ -19,9 +19,8 @@ AppDataSource.initialize().then(async () => {
 
       stream.on('close', async () => {
         console.log(`tips for match ${match.id} have been updated`);
+        AppDataSource.destroy();
       });
     }
   }
-
-  AppDataSource.destroy();
 });
