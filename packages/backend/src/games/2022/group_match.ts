@@ -3,7 +3,7 @@
 export default [
   {
     number: 1,
-    date: '2022-11-21',
+    date: '2022-11-20',
     time: '19:00+03:00',
     match: "A1 v. A2",
     penalty: false
@@ -11,7 +11,7 @@ export default [
   {
     number: 2,
     date: '2022-11-21',
-    time: '13:00+03:00',
+    time: '19:00+03:00',
     match: 'A3 v. A4',
     penalty: false
   },
