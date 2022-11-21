@@ -13,7 +13,7 @@
             <p>
             <ul>
               <li>
-                1 point for predicating the winner of a match
+                1 point for predicting the winner of a match
               </li>
               <li>
                 1 point for predicting a draw
@@ -22,16 +22,16 @@
                 5 points for prediction that a match will go into penalty
               </li>
               <li>
-                If you predicate the exact goal for each team, you will get a point for each goal. <br/>
-                <span style="color:#e64a19">Example</span>: <b>You predicated Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
+                If you predict the exact goal for each team, you will get a point for each goal. <br/>
+                <span style="color:#e64a19">Example</span>: <b>You predicted Australia to score 5 goals 😜 and France to score 1 😒. You will get a total of
                 six points.</b>
               </li>
               <liv>
                 2 points for predicting the exact score of the match. <br/>
-                <span style="color:#e64a19">Example</span>: <b>You predicated the score 2 - 2</b>
+                <span style="color:#e64a19">Example</span>: <b>You predictd the score 2 - 2</b>
               </liv>
               <li>
-                 If you predicate the exact score in a penalty shootout, you will also get 1 point for each goal.
+                 If you predict the exact score in a penalty shootout, you will also get 1 point for each goal.
               </li>
             </ul>
             </p>
