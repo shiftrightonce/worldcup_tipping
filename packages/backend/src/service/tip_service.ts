@@ -12,6 +12,7 @@ export const getTipRepo = () => {
 
 export const createTip = async (year = configYear) => {
   let tip = new Tip();
+  tip.id = 0;
   tip.year = year;
   tip.countryAToScore = 0;
   tip.countryBToScore = 0;

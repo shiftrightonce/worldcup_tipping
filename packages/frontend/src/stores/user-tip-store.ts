@@ -81,6 +81,7 @@ export const useUserTipStore = defineStore('userTipStore', {
       if (!tip.toWin) {
         tip.toWin = { id: 0 }
       }
+
       if (!this.tips[matchId]) {
         const state: UserTipState = setupUserTipState()
         this.tips[matchId] = { tip, state }
