@@ -74,7 +74,7 @@ let intervalId: ReturnType<typeof setInterval> | null = null
 export const useMatchStore = defineStore('matchStore', {
   state: () => ({
     activeMatches: [] as Array<Match>,
-    completedMatches: {} as Record<number, Match>
+    completedMatches: [] as Array<Match>
   }),
   getters: {
     today: (state) => state.activeMatches,
@@ -161,7 +161,14 @@ export const useMatchStore = defineStore('matchStore', {
       if (index >= 0) {
         return this.today[index]
       } else {
-        return this.completedMatches[matchId]
+        this.completedMatches.every((m, i) => {
+          if (m.id === matchId) {
+            index = i
+            return false
+          }
+          return true
+        })
+        return this.completedMatches[index]
       }
     },
     fetchCompletedMatches () {
@@ -170,8 +177,9 @@ export const useMatchStore = defineStore('matchStore', {
         const userStore = useUserStore()
         userStore.api.get(`${matchEndpoint}/completed`)
           .then((response) => {
+            console.log(response.data);
             (response.data.completedMatches as Match[]).forEach((match) => {
-              this.completedMatches[match.id] = match
+              this.completedMatches.push(match)
               userTipStore.setTip(match.id, (match as Match & { tip: Tip }).tip)
             })
 

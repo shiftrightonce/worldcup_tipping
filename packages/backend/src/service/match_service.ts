@@ -33,13 +33,15 @@ export const getAllMatches = async (status: MatchStatus | null, year = configYea
         year
       },
       order: {
-        number: 'ASC'
+        date: 'ASC',
+        time: 'ASC'
       }
     })
   } else {
     return await getMatchRepo().find({
       order: {
-        number: 'ASC'
+        date: 'ASC',
+        time: 'ASC'
       }
     })
   }
@@ -90,7 +92,8 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
       .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
       .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
       .leftJoinAndSelect('match.winner', 'winner', 'winner.id = match.winnerId')
-      .orderBy('match.number', 'ASC')
+      .orderBy('match.date', 'ASC')
+      .addOrderBy('match.time', 'ASC')
       .getMany();
 
     const tips = {};
@@ -121,7 +124,8 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
       year,
     },
     order: {
-      number: 'DESC'
+      date: 'ASC',
+      time: 'ASC'
     }
   })
 }
