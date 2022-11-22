@@ -16,7 +16,7 @@
   </q-page>
   <q-page v-if="!myScore && isReady && state.length === 0" class="row items-evenly items-center flex-center">
     <div class="col-12" style="text-align:center">
-      <img src="/img/first.svg" style="width:200px" /><br/>
+      <img src="/img/first.svg" style="width:200px" /><br />
       <span class="text-h6">Top position is still up for grabs!</span>
     </div>
   </q-page>
@@ -41,7 +41,7 @@ export default defineComponent({
     const myScore = ref<Score | null>(null)
     const router = useRouter()
     let positionCounter = 1
-    const positions: {[key:number]: number } = {}
+    const positions: { [key: number]: number } = {}
 
     const q = useQuasar()
     q.loading.show()
@@ -52,7 +52,17 @@ export default defineComponent({
         }
         s.position = positions[s.totalPoints]
       })
-      q.loading.hide()
+
+      tipStore.fetchMyTotalScore().then((score) => {
+        if (!positions[score.totalPoints]) {
+          positions[score.totalPoints] = positionCounter++
+        }
+        score.position = positions[score.totalPoints]
+        myScore.value = score
+        q.loading.hide()
+      }).catch(() => {
+        q.loading.hide()
+      })
     }).catch((e) => {
       q.loading.hide()
       if ((e as Error).message.indexOf('401') >= 0) {
@@ -66,19 +76,7 @@ export default defineComponent({
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.activeRightDrawer(false)
-    layoutStore.setTitle('Scoreboard');
-
-    (async () => {
-      try {
-        myScore.value = await tipStore.fetchMyTotalScore()
-        if (!positions[myScore.value.totalPoints]) {
-          positions[myScore.value.totalPoints] = positionCounter++
-        }
-        myScore.value.position = positions[myScore.value.totalPoints]
-      } catch (_) {
-        // do nothing
-      }
-    })()
+    layoutStore.setTitle('Scoreboard')
 
     setTimeout(() => {
       if (Notification.permission !== 'denied' && Notification.permission !== 'granted') {
