@@ -31,5 +31,15 @@ export const getScoreboard = async (limit = 200, year = configYear) => {
     .limit(limit)
     .getMany()
 
-  return result.map((r) => r.toDto());
+  let position = 1;
+  const positionPlaces = {}
+
+  return result.map((r) => {
+    const d = r.toDto()
+    if (!positionPlaces[d.totalPoints]) {
+      positionPlaces[d.totalPoints] = position++;
+    }
+    d.position = positionPlaces[d.totalPoints];
+    return d;
+  });
 }
