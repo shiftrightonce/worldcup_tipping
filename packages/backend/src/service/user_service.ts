@@ -95,6 +95,10 @@ export const getUserById = async (userId: number) => {
   return await getUserRepo().findOneBy({ id: userId })
 }
 
+export const getUserByInternalId = async (internalId: string) => {
+  return await getUserRepo().findOneBy({ internalId })
+}
+
 export const getUserByEmail = async (email: string) => {
   return await getUserRepo().findOneBy({ email })
 }

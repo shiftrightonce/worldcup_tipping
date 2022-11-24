@@ -3,7 +3,7 @@ import { Tip } from "../entity/Tip"
 import { year as configYear } from "../games/parser"
 import { MatchStatus, MatchRound, Match } from "../entity/Match";
 import { getMatchById, matchHasNotExpire } from "./match_service"
-import { cleanUserData, getUserById } from "./user_service"
+import { cleanUserData, getUserById, getUserByInternalId } from "./user_service"
 import { User } from "../entity/User";
 
 export const getTipRepo = () => {
@@ -56,6 +56,36 @@ export const getUserMatchTip = async (matchId: number, userId: number, year = co
   }
 
   return tip;
+}
+
+export const getUserClosedTips = async (userInternalId: string, year = configYear) => {
+  const user = await getUserByInternalId(userInternalId);
+  if (user) {
+    const tips = await getTipRepo().find({
+      where: {
+        user: {
+          id: user.id
+        },
+        match: {
+          status: MatchStatus.COMPLETED
+        }
+      },
+      order: {
+        match: {
+          number: 'ASC'
+        }
+      }
+    });
+    return tips.map((tip) => {
+      if (typeof tip.user === 'object') {
+        tip.user = cleanUserData(tip.user)
+      }
+
+      return tip;
+    })
+  }
+
+  return []
 }
 
 export const getTipById = async (tipId: number) => {

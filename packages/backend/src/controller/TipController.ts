@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
 import { env } from "../data-source";
 import { getUserScore } from "../service/scoreboard_service";
-// import { getScoreboard, getUserTotalScore } from "../service/tip_service"
 import { getScoreboard } from '../service/scoreboard_service'
 import { pluckUserFromRequest } from "../service/user_service";
 import { year as configYear } from "../games/parser"
+import { getUserClosedTips } from "../service/tip_service";
 
 export class TipController {
 
@@ -46,5 +46,12 @@ export class TipController {
       message: 'Could not find a score for the user'
     })
     return;
+  }
+
+  public async userClosedTipsAction (req: Request, res: Response) {
+    return {
+       success: true,
+       tips: await getUserClosedTips(req.params.userInternalId || '')
+    }
   }
 }

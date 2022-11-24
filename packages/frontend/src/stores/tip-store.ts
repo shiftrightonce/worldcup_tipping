@@ -1,5 +1,6 @@
 import { useAsyncState } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import { Tip } from './match-store'
 import { useUserStore } from './user-store'
 
 export type Score = {
@@ -29,6 +30,10 @@ export const useTipStore = defineStore('useTipStore', {
     async fetchMyTotalScore () {
       const response = await useUserStore().api.get(`${tipEndpoint}/my-score`)
       return response.data.score as Score
+    },
+    async fetchUserClosedTips (userInternalId: string) {
+      const response = await useUserStore().api.get(`${tipEndpoint}/user-closed-tips/${userInternalId}`)
+      return response.data.tips as Tip[]
     }
   }
 })

@@ -107,7 +107,7 @@ export const useUserStore = defineStore('userStore', {
         this.socket.on('server:notification_message', (data) => {
           if (Notification.permission === 'granted') {
             const message = data.data as { title: string, icon: string, body: string }
-            const notification = new Notification(message.title, { ...message, silent: false, vibrate: 200 })
+            const notification = new Notification(message.title, message)
           }
         })
       }

@@ -55,6 +55,7 @@ export type Match = {
 
 export type Tip = {
   id: number,
+  internalId: string,
   countryAPenaltyToScore: number,
   countryAToScore: number,
   countryBPenaltyToScore: number,
