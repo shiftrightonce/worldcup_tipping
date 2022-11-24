@@ -51,9 +51,9 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
   const date = new Date();
 
   const result = await getMatchRepo().createQueryBuilder('match')
-    .where('match.date >= :date', { date })
-    .where('match.year = :year', { year })
-    .where('match.status = :status', { status: MatchStatus.OPEN })
+    .where('match.date >= :date', { date: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` })
+    .andWhere('match.year = :year', { year })
+    .andWhere('match.status = :status', { status: MatchStatus.OPEN })
     .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
     .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
     .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
