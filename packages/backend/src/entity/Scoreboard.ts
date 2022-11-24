@@ -4,7 +4,7 @@ import { cleanUserData } from "../service/user_service";
 import { User } from "./User";
 
 @ViewEntity({
-  expression: `select userId, sum(points) as totalPoints, rank() over (order by totalPoints desc) as position, year from tip 
+  expression: `select userId, sum(points) as totalPoints, rank() over (order by totalPoints desc) as position, year, count(userId) as totalTips from tip 
  where year = ${configYear} group by userId`
 })
 export class Scoreboard {
@@ -18,6 +18,9 @@ export class Scoreboard {
   @ViewColumn()
   year: number
 
+  @ViewColumn()
+  totalTips: number
+
   @ManyToOne(() => User, { eager: true })
   user: User;
 
@@ -26,6 +29,7 @@ export class Scoreboard {
       year: this.year,
       totalPoints: this.totalPoints,
       position: this.position,
+      totalTips: this.totalTips,
       user: cleanUserData(this.user, ['id'])
     };
   }

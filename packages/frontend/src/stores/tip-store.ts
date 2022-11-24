@@ -5,7 +5,8 @@ import { useUserStore } from './user-store'
 export type Score = {
   user: { internalId: string, username: string, avatar: string },
   totalPoints: number,
-  position: number
+  position: number,
+  totalTips: number
 }
 
 const tipEndpoint = '/api/v1/tip'

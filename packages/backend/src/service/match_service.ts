@@ -64,8 +64,7 @@ export const getTodayOpenMatches = async (userOrId: number | User, year = config
 
   const tips = {};
   (await getTipRepo().createQueryBuilder('tip')
-    .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
-    .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+    .where('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
     .leftJoinAndSelect('tip.match', 'match', 'match.id = tip.matchId')
     .leftJoinAndSelect('tip.toWin', 'toWin', 'toWin.id = tip.toWinId')
     .getMany()).forEach((tip) => {

@@ -36,10 +36,10 @@
           </q-item>
           <q-item>
             <q-item-section>
-              <q-item-label>Position</q-item-label>
+              <q-item-label>Total Tips</q-item-label>
             </q-item-section>
             <q-item-section side>
-              <q-item-label >{{ score.position }}</q-item-label>
+              <q-item-label >{{ score.totalTips}}</q-item-label>
               </q-item-section>
           </q-item>
         </q-list>
