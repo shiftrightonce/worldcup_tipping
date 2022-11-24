@@ -108,6 +108,9 @@ export const useUserStore = defineStore('userStore', {
           if (Notification.permission === 'granted') {
             const message = data.data as { title: string, icon: string, body: string }
             const notification = new Notification(message.title, message)
+            notification.addEventListener('error', (e) => {
+              console.log('notification error', e)
+            })
           }
         })
       }
