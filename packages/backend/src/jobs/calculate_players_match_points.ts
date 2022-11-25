@@ -22,13 +22,21 @@ const processQueuedJob = async (job: { matchId: number }) => {
       // mark match as completed
       updateMatch(match.id, { status: MatchStatus.COMPLETED })
 
+      let position = 1;
+      const positionPlaces = {}
+
       // notify all the users that have tip regarding their 
       // current position on the board
       const scoreboardStream = await getScoreboardStream()
       scoreboardStream.on('data', async (data) => {
         const d = JSON.parse(JSON.stringify(data));
         let surface = '';
-        const lastDigit = parseInt(d.totalPoints[d.totalPoints.length - 1], 10);
+        if (!positionPlaces[d.totalPoints]) {
+          positionPlaces[d.totalPoints] = position++;
+        }
+        const userPosition = positionPlaces[d.totalPoints];
+        const lastDigit = parseInt(userPosition.toString()[userPosition.length - 1], 10);
+        
         if (lastDigit === 1) {
           surface = 'st'
         } else if (lastDigit === 2) {
@@ -38,7 +46,7 @@ const processQueuedJob = async (job: { matchId: number }) => {
         } else {
           surface = 'th';
         }
-        const body = `Your current position: ${d.totalPoints}${surface}`;
+        const body = `Your current position: ${userPosition}${surface}`;
         const icon = ''; //@todo put a sick icon here 😂
         queuePushMessage({
           message: {
