@@ -231,8 +231,9 @@ export const getMatchesByRound = async (round: MatchRound, year = configYear) =>
 export const getRoundMatchWithEmptyCountries = async (round: MatchRound, year = configYear) => {
   return await getMatchRepo().find({
     where: [
-      { countryA: IsNull(), round, year },
-      { countryB: IsNull(), round, year }
+      // { countryA: IsNull(), round, year },
+      // { countryB: IsNull(), round, year }
+      { round, year }
     ],
     order: {
       number: 'ASC'
