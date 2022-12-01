@@ -51,7 +51,7 @@ export const getCountriesByIdsSortedByPoints = async (ids: number[]) => {
       id: In(ids)
     },
     order: {
-      groupPoints: 'ASC'
+      groupPoints: 'DESC'
     }
   })  
 }
