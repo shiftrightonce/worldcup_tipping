@@ -109,7 +109,8 @@ export const useMatchStore = defineStore('matchStore', {
     async getTodayMatches () {
       const userStore = useUserStore()
       const response = await userStore.api.get(`${matchEndpoint}/todays`)
-      const userTipStore = useUserTipStore();
+      const userTipStore = useUserTipStore()
+      this.activeMatches = [];
 
       (response.data.todayMatches as Match[]).forEach((match) => {
         const matchDate = new Date(`${match.date}T${match.time}Z`)
@@ -178,7 +179,7 @@ export const useMatchStore = defineStore('matchStore', {
         const userStore = useUserStore()
         userStore.api.get(`${matchEndpoint}/completed`)
           .then((response) => {
-            console.log(response.data);
+            this.completedMatches = [];
             (response.data.completedMatches as Match[]).forEach((match) => {
               this.completedMatches.push(match)
               userTipStore.setTip(match.id, (match as Match & { tip: Tip }).tip)
