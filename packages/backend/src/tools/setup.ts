@@ -16,6 +16,7 @@ import {
   getParsedFinalMatches
 } from '../games/parser'
 import { createChatRoom, findChatRoomByName } from "../service/chat_room_service";
+import { getAllCountries } from "../service/country_service";
 
 
 const countries = {};
@@ -36,7 +37,7 @@ const setupAdminUser = async () => {
 
 const setupCountries = async (yearData: YearData) => {
   const countryRepo = AppDataSource.getRepository(Country);
-  const totalCountries = await countryRepo.count();
+  const totalCountries = (await getAllCountries()).length;
 
   if (totalCountries === 0) {
     const countries = Object.values(getParsedCountries(yearData));
@@ -93,7 +94,8 @@ const setupGroupMatches = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
 
   const totalGroupMatches = await matchRepo.countBy({
-    round: MatchRound.GROUP
+    round: MatchRound.GROUP,
+    year
   });
 
   if (totalGroupMatches === 0) {
@@ -106,7 +108,8 @@ const setupGroupMatches = async (yearData: YearData) => {
 const setupRound16Matches = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
   const totalRound16Matches = await matchRepo.countBy({
-    round: MatchRound.ROUND_16
+    round: MatchRound.ROUND_16,
+    year
   });
 
   if (totalRound16Matches === 0) {
@@ -118,7 +121,8 @@ const setupRound16Matches = async (yearData: YearData) => {
 const setupRound8Matches = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
   const total = await matchRepo.countBy({
-    round: MatchRound.ROUND_8
+    round: MatchRound.ROUND_8,
+    year
   });
 
   if (total === 0) {
@@ -130,7 +134,8 @@ const setupRound8Matches = async (yearData: YearData) => {
 const setupRound4Matches = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
   const total = await matchRepo.countBy({
-    round: MatchRound.ROUND_4
+    round: MatchRound.ROUND_4,
+    year
   });
   if (total === 0) {
     const fakeRound8Winners = {}
@@ -141,7 +146,8 @@ const setupRound4Matches = async (yearData: YearData) => {
 const setup3rdPlaceMatch = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
   const total = await matchRepo.countBy({
-    round: MatchRound.THIRD_PLACE
+    round: MatchRound.THIRD_PLACE,
+    year
   });
   if (total === 0) {
     const fakeRound4WinnersAndLoosers = { 1000: { winner: '', looser: '' } };
@@ -152,7 +158,8 @@ const setup3rdPlaceMatch = async (yearData: YearData) => {
 const setupFinalMatch = async (yearData: YearData) => {
   const matchRepo = AppDataSource.getRepository(Match)
   const total = await matchRepo.countBy({
-    round: MatchRound.FINAL
+    round: MatchRound.FINAL,
+    year
   });
 
   if (total === 0) {

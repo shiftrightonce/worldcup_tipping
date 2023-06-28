@@ -27,8 +27,8 @@ const routes = [
   buildRoute(UserController, 'vapidKeyAction', 'get', '/user/vapid-token'),
 
   // - match
-  buildRoute(MatchController, 'todayMatchesAction', 'get', '/match/todays'),
-  buildRoute(MatchController, 'allMatchesAction', 'get', '/match/all'),
+  buildRoute(MatchController, 'todayMatchesAction', 'get', '/match/todays'), // done
+  buildRoute(MatchController, 'allMatchesAction', 'get', '/match/all'), // done
   buildRoute(MatchController, 'placeTipAction', 'post', '/match/place-tip'),
   buildRoute(MatchController, 'updateMatchAction', 'put', '/match/:matchId'),
   buildRoute(MatchController, 'completedMatchesAction', 'get', '/match/completed'),
@@ -38,9 +38,9 @@ const routes = [
   buildRoute(CountryController, 'updateCountryAction', 'put', '/country/:countryId'),
 
   // - tip
-  buildRoute(TipController, 'scoreboardAction', 'get', '/tip/scoreboard'),
-  buildRoute(TipController, 'myTotalScoreAction', 'get', '/tip/my-score'),
-  buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user/:year?'),
+  buildRoute(TipController, 'scoreboardAction', 'get', '/tip/scoreboard'), // done
+  buildRoute(TipController, 'myTotalScoreAction', 'get', '/tip/my-score'), // done
+  buildRoute(TipController, 'userTotalScoreAction', 'get', '/tip/user-score/:user/:year?'), // done
   buildRoute(TipController, 'userClosedTipsAction', 'get', '/tip/user-closed-tips/:userInternalId'),
 
   // - chat
