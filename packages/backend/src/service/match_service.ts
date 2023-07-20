@@ -39,6 +39,9 @@ export const getAllMatches = async (status: MatchStatus | null, year = configYea
     })
   } else {
     return await getMatchRepo().find({
+      where: {
+        year
+      },
       order: {
         date: 'ASC',
         time: 'ASC'
@@ -87,6 +90,7 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
   if (userOrId) {
     const result = await getMatchRepo().createQueryBuilder('match')
       .where('match.status = :status', { status })
+      .andWhere('match.year = :year', { year })
       .leftJoinAndSelect('match.tips', 'tips', 'tips.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
       .leftJoinAndSelect('match.countryA', 'countryA', 'countryA.id = match.countryAId')
       .leftJoinAndSelect('match.countryB', 'countryB', 'countryB.id = match.countryBId')
@@ -98,7 +102,8 @@ export const getMatchesByStatus = async (status: MatchStatus, userOrId: User | n
     const tips = {};
     (await getTipRepo().createQueryBuilder('tip')
       .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
-      .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
+      .andWhere('tip.year = :year', { year })
+      // .andWhere('tip.userId = :userId', { userId: (typeof userOrId === 'object') ? userOrId.id : userOrId })
       .leftJoinAndSelect('tip.match', 'match', 'match.id = tip.matchId')
       .leftJoinAndSelect('tip.toWin', 'toWin', 'toWin.id = tip.toWinId')
       .getMany()).forEach((tip) => {
