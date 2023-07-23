@@ -8,7 +8,7 @@
 
       <q-item-section>
         <q-item-label>Game #{{ match.number }} <span v-if="match.isMatchOpen" style="font-size: 9px;"> - {{
-            match.fullDate?.toLocaleString()
+          match.fullDate?.toLocaleString()
         }}</span> </q-item-label>
         <q-item-label caption>
           {{ match.countryA.name }} vs {{ match.countryB.name }}
@@ -25,7 +25,10 @@
     </div>
     <q-separator />
     <q-card-actions>
-      <div v-if="match.countdown" class="text-red-4 q-pl-sm text-bold">{{ match.countdown }}</div>
+      <transition appear enter-active-class="animated flipInY" leave-active-class="animated fadeOutUp">
+        <div v-show="match.countdown" class="text-red-4 q-pl-sm text-bold">{{ match.countdown }}
+        </div>
+      </transition>
       <q-space v-if="match.isMatchOpen" />
       <BotTipBtn :match="match" :user-tip-and-state="state" class="q-mr-md">
       </BotTipBtn>
