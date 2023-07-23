@@ -32,7 +32,7 @@
           </div>
         </div>
 
-          <router-view />
+        <router-view />
 
         <div class="col-12" style="background-color: #056480;">
           <FooterComponent></FooterComponent>
