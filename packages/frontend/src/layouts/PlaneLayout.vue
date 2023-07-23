@@ -17,7 +17,7 @@
     </q-header>
 
     <!-- <q-drawer show-if-above v-model="layoutStore.leftDrawer" side="left" bordered> -->
-      <!-- drawer content -->
+    <!-- drawer content -->
     <!-- </q-drawer> -->
 
     <q-drawer show-if-above v-model="layoutStore.rightDrawer" side="right" bordered>
@@ -44,6 +44,14 @@ export default defineComponent({
   name: 'PlaneLayout',
   components: { MainMenu, AppLogo },
   setup () {
+    // refresh some data when we are active
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        (async () => {
+          await layoutStore.refreshData()
+        })()
+      }
+    })
     const router = useRouter()
     const userStore = useUserStore()
     const menuStore = useMenuStore()
