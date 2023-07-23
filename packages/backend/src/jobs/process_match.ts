@@ -18,7 +18,7 @@ const processQueuedJob = async (job: { matchId: number }) => {
     }
 
     if (match.round === MatchRound.GROUP) {
-      updateRound16MatchCountries(); 
+      updateRound16MatchCountries();
     }
 
     if (match.round === MatchRound.ROUND_16) {

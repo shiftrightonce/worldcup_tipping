@@ -2,10 +2,10 @@ import { getRedisConnection } from '../redis_client'
 
 export const QUEUE_NAME = 'queue:match';
 
-export type Processor = (data: Record<string, unknown>) => Promise<boolean> 
+export type Processor = (data: Record<string, unknown>) => Promise<boolean>
 
 export type ProcessorList = {
-  [key:string]: Processor
+  [key: string]: Processor
 }
 
 export type Job = { handler: string, data: Record<string, unknown> }
