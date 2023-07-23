@@ -22,7 +22,7 @@ const processQueuedJob = async (job: { matchId: number }) => {
       // mark match as completed
       updateMatch(match.id, { status: MatchStatus.COMPLETED })
 
-      let position = 1;
+      let position = 0;
       const positionPlaces = {}
 
       // notify all the users that have tip regarding their 
@@ -34,9 +34,9 @@ const processQueuedJob = async (job: { matchId: number }) => {
         if (!positionPlaces[d.totalPoints]) {
           positionPlaces[d.totalPoints] = position++;
         }
-        const userPosition = positionPlaces[d.totalPoints];
+        const userPosition = positionPlaces[d.totalPoints] + 1;
         const lastDigit = parseInt(userPosition.toString()[userPosition.length - 1], 10);
-        
+
         if (lastDigit === 1) {
           surface = 'st'
         } else if (lastDigit === 2) {
