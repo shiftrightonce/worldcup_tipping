@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { LoadingBar } from 'quasar'
-import { useMatchStore } from './match-store'
-import { useTipStore } from './tip-store'
 
 // only hijack api requests
 LoadingBar.setDefaults({
@@ -11,10 +9,8 @@ LoadingBar.setDefaults({
   }
 })
 
-const APP_VERSION = '0.0.1'
+const APP_VERSION = '0.0.5'
 let watchingForUpdate = false
-
-const refreshingData = ref(false)
 
 export const useLayoutStore = defineStore('layoutStore', {
   state: () => ({
@@ -66,20 +62,6 @@ export const useLayoutStore = defineStore('layoutStore', {
             callback()
           }
         }
-      }
-    },
-
-    async refreshData () {
-      if (!refreshingData.value) {
-        refreshingData.value = true
-        // await matchStore.getTodayMatches()
-        await useMatchStore().getTodayMatches()
-        await useTipStore().fetchScoreboard()
-
-        setTimeout(() => {
-          console.log('refreshing finished')
-          refreshingData.value = false
-        })
       }
     }
   }

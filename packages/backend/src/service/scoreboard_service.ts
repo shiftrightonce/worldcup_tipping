@@ -31,15 +31,22 @@ export const getScoreboard = async (limit = 200, year = configYear) => {
     .limit(limit)
     .getMany()
 
-  let position = 1;
-  const positionPlaces = {}
+  // let position = 1;
+  // const positionPlaces = {}
 
   return result.map((r) => {
     const d = r.toDto()
-    if (!positionPlaces[d.totalPoints]) {
-      positionPlaces[d.totalPoints] = position++;
-    }
-    d.position = positionPlaces[d.totalPoints];
+    // if (!positionPlaces[d.totalPoints]) {
+    //   positionPlaces[d.totalPoints] = position++;
+    // }
+    // d.position = positionPlaces[d.totalPoints];
     return d;
   });
+}
+
+export const getFullScoreboardStream = async (year = configYear) => {
+  return await getScoreboardRepo().createQueryBuilder('scoreboard')
+    .where('scoreboard.year = :year', { year })
+    .orderBy('scoreboard.totalPoints', 'DESC')
+    .stream()
 }

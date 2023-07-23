@@ -21,7 +21,7 @@ import { useLayoutStore } from '../stores/layout-store'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 import { useQuasar } from 'quasar'
 import { useUserStore } from 'src/stores/user-store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
   setup () {
@@ -30,24 +30,36 @@ export default defineComponent({
     const userStore = useUserStore()
     const q = useQuasar()
     const router = useRouter()
+    const route = useRoute()
 
-    q.loading.show()
-    setTimeout(() => {
-      (async () => {
-        try {
-          await matchStore.getTodayMatches()
-          q.loading.hide()
-        } catch (e) {
-          q.loading.hide()
-          if ((e as Error).message.indexOf('401') >= 0) {
-            void await userStore.logout()
-            router.push({
-              name: 'home'
-            })
+    const fetchData = () => {
+      q.loading.show()
+      setTimeout(() => {
+        (async () => {
+          try {
+            await matchStore.getTodayMatches()
+            q.loading.hide()
+          } catch (e) {
+            q.loading.hide()
+            if ((e as Error).message.indexOf('401') >= 0) {
+              void await userStore.logout()
+              router.push({
+                name: 'home'
+              })
+            }
           }
-        }
-      })()
-    }, 0)
+        })()
+      }, 0)
+    }
+
+    // refresh the data
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && route.name === 'active-matches') {
+        fetchData()
+      }
+    })
+
+    fetchData()
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.activeRightDrawer(false)

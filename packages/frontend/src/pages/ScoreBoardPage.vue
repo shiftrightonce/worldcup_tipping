@@ -30,49 +30,55 @@ import { defineComponent, ref } from 'vue'
 import ScrollUpMessage from 'src/components/general/ScrollUpMessage.vue'
 import ScoreboardCard from 'src/components/general/ScoreboardCard.vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
   setup () {
     const layoutStore = useLayoutStore()
     const userStore = useUserStore()
     const tipStore = useTipStore()
-    const { isLoading, isReady, state, execute } = tipStore.fetchScoreboard()
     const myScore = ref<Score | null>(null)
     const router = useRouter()
-    let positionCounter = 1
-    const positions: { [key: number]: number } = {}
+    const route = useRoute()
+    const isReady = ref(false)
+    const state = ref<Score[]>([])
 
     const q = useQuasar()
-    q.loading.show()
-    execute().then(() => {
-      state.value.forEach((s) => {
-        if (!positions[s.totalPoints]) {
-          positions[s.totalPoints] = positionCounter++
-        }
-        s.position = positions[s.totalPoints]
-      })
+    const fetchData = () => {
+      const { isReady: loading, state: data, execute } = tipStore.fetchScoreboard()
 
-      tipStore.fetchMyTotalScore().then((score) => {
-        if (!positions[score.totalPoints]) {
-          positions[score.totalPoints] = positionCounter++
-        }
-        score.position = positions[score.totalPoints]
-        myScore.value = score
-        q.loading.hide()
-      }).catch(() => {
-        q.loading.hide()
-      })
-    }).catch((e) => {
-      q.loading.hide()
-      if ((e as Error).message.indexOf('401') >= 0) {
-        userStore.logout().then(() => {
-          router.push({
-            name: 'home'
-          })
+      q.loading.show()
+      state.value = []
+      execute().then(() => {
+        isReady.value = loading.value
+        state.value = data.value
+
+        tipStore.fetchMyTotalScore().then((score) => {
+          myScore.value = score
+          q.loading.hide()
+        }).catch(() => {
+          q.loading.hide()
         })
+      }).catch((e) => {
+        q.loading.hide()
+        if ((e as Error).message.indexOf('401') >= 0) {
+          userStore.logout().then(() => {
+            router.push({
+              name: 'home'
+            })
+          })
+        }
+      })
+    }
+
+    // refresh the data
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && route.name === 'scoreboard') {
+        fetchData()
       }
     })
+
+    fetchData()
 
     layoutStore.activeLeftDrawer(false)
     layoutStore.activeRightDrawer(false)
@@ -103,7 +109,6 @@ export default defineComponent({
     })
 
     return {
-      isLoading,
       isReady,
       state,
       myScore

@@ -1,5 +1,6 @@
 import { MatchStatus } from '../entity/Match';
 import { getMatchById, updateMatch } from '../service/match_service';
+import { getFullScoreboardStream } from '../service/scoreboard_service';
 import { calculateScore, getScoreboardStream, getTipById, getTipsStreamByMatchId, updateTip } from '../service/tip_service';
 import { queueJob, createRegisterer } from './general'
 import { addToQueue as queuePushMessage } from './notify_users'
@@ -22,20 +23,14 @@ const processQueuedJob = async (job: { matchId: number }) => {
       // mark match as completed
       updateMatch(match.id, { status: MatchStatus.COMPLETED })
 
-      let position = 0;
-      const positionPlaces = {}
+      const scoreboardStream = await getFullScoreboardStream();
 
-      // notify all the users that have tip regarding their 
-      // current position on the board
-      const scoreboardStream = await getScoreboardStream()
       scoreboardStream.on('data', async (data) => {
         const d = JSON.parse(JSON.stringify(data));
         let surface = '';
-        if (!positionPlaces[d.totalPoints]) {
-          positionPlaces[d.totalPoints] = position++;
-        }
-        const userPosition = positionPlaces[d.totalPoints] + 1;
+        const userPosition = d.scoreboard_position
         const lastDigit = parseInt(userPosition.toString()[userPosition.length - 1], 10);
+
 
         if (lastDigit === 1) {
           surface = 'st'
@@ -48,13 +43,14 @@ const processQueuedJob = async (job: { matchId: number }) => {
         }
         const body = `Your current position: ${userPosition}${surface}`;
         const icon = ''; //@todo put a sick icon here 😂
+
         queuePushMessage({
           message: {
             title: 'The scores are in!',
             body,
             icon
           },
-          user: d.user_id
+          user: parseInt(d.scoreboard_userId, 10)
         })
       })
     })
