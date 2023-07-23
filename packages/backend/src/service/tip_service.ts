@@ -66,6 +66,7 @@ export const getUserClosedTips = async (userInternalId: string, year = configYea
         user: {
           id: user.id
         },
+        year,
         match: {
           status: MatchStatus.COMPLETED
         }
