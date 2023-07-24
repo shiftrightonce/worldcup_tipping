@@ -25,12 +25,20 @@ const processQueuedJob = async (job: { matchId: number }) => {
 
       const scoreboardStream = await getFullScoreboardStream();
 
+      let position = 1;
+      const positionPlaces = {}
+
       scoreboardStream.on('data', async (data) => {
         const d = JSON.parse(JSON.stringify(data));
         let surface = '';
-        const userPosition = d.scoreboard_position
-        const lastDigit = parseInt(userPosition.toString()[userPosition.length - 1], 10);
 
+
+        if (!positionPlaces[d.scoreboard_totalPoints]) {
+          positionPlaces[d.scoreboard_totalPoints] = position++;
+        }
+
+        const userPosition = positionPlaces[d.scoreboard_totalPoints]
+        const lastDigit = parseInt(userPosition.toString()[userPosition.length - 1], 10);
 
         if (lastDigit === 1) {
           surface = 'st'
