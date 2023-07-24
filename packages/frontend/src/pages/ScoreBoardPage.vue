@@ -53,12 +53,13 @@ export default defineComponent({
         isReady.value = loading.value
         state.value = data.value
 
-        tipStore.fetchMyTotalScore().then((score) => {
-          myScore.value = score
-          q.loading.hide()
-        }).catch(() => {
-          q.loading.hide()
+        data.value.forEach((user) => {
+          if (userStore.user?.internalId === user.user.internalId) {
+            myScore.value = user
+          }
         })
+
+        q.loading.hide()
       }).catch((e) => {
         q.loading.hide()
         if ((e as Error).message.indexOf('401') >= 0) {
