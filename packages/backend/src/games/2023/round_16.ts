@@ -45,14 +45,14 @@ export default [
   },
   {
     number: 55,
-    match: "Winner:F v. Runner-up:2H",
+    match: "Winner:F v. Runner-up:H",
     date: '2023-08-08',
     time: '20:30+09:30',
     penalty: true
   },
   {
     number: 56,
-    match: "Winner:H v. Runner-up:2F",
+    match: "Winner:H v. Runner-up:F",
     date: '2023-08-08',
     time: '18:00+10:00',
     penalty: true
